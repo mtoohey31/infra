@@ -23,4 +23,9 @@
   # TODO: tweak ssh settings to make things more secure
   services.openssh.enable = true;
   system.stateVersion = "21.11";
+
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 14d";
+  };
 }

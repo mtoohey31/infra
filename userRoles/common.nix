@@ -151,13 +151,11 @@
       # TODO: this section's sway branch should be gui only
       loginShellInit = ''
         if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$TMUX"
-            if test -n "$SSH_CONNECTION" -o -f /.dockerenv && status --is-interactive
+            if test -n "$SSH_CONNECTION" -o -f /.dockerenv
                 exec tmux
             else if test -n "$TERMUX_VERSION"
                 cat ~/.cache/wal/sequences
                 exec tmux
-            else
-                exec sway
             end
         end
       '';

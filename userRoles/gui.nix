@@ -40,6 +40,13 @@ in {
       enable = true;
       # TODO: figure out how to add profile sync stuff
     };
+    fish = {
+      loginShellInit = ''
+        if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$SSH_CONNECTION" -a ! -f /.dockerenv
+          exec sway
+        end
+      '';
+    };
     kitty = {
       enable = true;
       # TODO: split the raw config up into the appropriate options

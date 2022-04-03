@@ -101,6 +101,11 @@ in {
       for_window [title="Bitwarden"] floating enable
     '';
     config = rec {
+      fonts = {
+        names = [ "JetBrainsMono Nerd Font" ];
+        style = "Regular";
+        size = 12.0;
+      };
       modifier = "Mod4";
       terminal = "${pkgs.kitty}/bin/kitty";
       gaps = {
@@ -195,6 +200,7 @@ in {
         passthrough = { "${modifier}+Escape" = ''mode "default"''; };
       };
       bars = [{
+        inherit fonts;
         mode = "hide";
         position = "top";
         statusCommand = "~/.scripts/status"; # TODO: write status command
@@ -230,7 +236,6 @@ in {
         };
         extraConfig = ''
           height 22
-          font "pango:JetBrainsMono Nerd Font Regular 16px" # TODO: make default font name a variable
         '';
       }];
       input = {

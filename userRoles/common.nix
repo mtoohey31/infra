@@ -40,7 +40,6 @@
         dcdu = "docker compose -f docker-compose-dev.yaml up --remove-orphans";
         dcdd =
           "docker compose -f docker-compose-dev.yaml down --remove-orphans";
-        e = "$EDITOR";
         g = "git";
         hi = "himalaya";
         music = musicCmdStr;
@@ -215,6 +214,9 @@
         if test -z "$SSH_CONNECTION" -a -z "$TMUX"
             cat ~/.cache/wal/sequences
         end
+
+        alias e "$EDITOR"
+        abbr e "$EDITOR"
       '';
     });
     kakoune = {

@@ -1,13 +1,33 @@
 { config, lib, pkgs, ... }:
 
+# TODO:
+#
+# kmonad
+# wob
+# mako
+# autotiling
+# scripts
+# check dotfiles repo for any other configs that need to get picked up
+
+with builtins;
+
 let
   monoFontPrefix = "JetBrainsMono";
   monoFont = "${monoFontPrefix} Nerd Font";
 in {
+  xdg.configFile."kitty/search".source = fetchTarball {
+    url =
+      "https://github.com/trygveaa/kitty-kitten-search/archive/8cc3237e6a995b6e7e101cba667fcda5439d96e2.tar.gz";
+    sha256 = "0h4zryamysalv80dgdwrlfqanx45xl7llmlmag0limpa3mqs0hs3";
+  };
+
   home.packages = with pkgs; [
     nsxiv
     pywal
     mpv # TODO: add configuration
+    wofi # TODO: remove after fuzzel is working
+    # fuzzel TODO: depends on https://gitlab.gnome.org/GNOME/librsvg/-/issues/856
+    flashfocus
 
     noto-fonts
     noto-fonts-cjk
@@ -16,6 +36,7 @@ in {
   ];
 
   programs = {
+    # TODO: add qutebrowser and profiles too
     brave = {
       enable = true;
       # TODO: figure out how to add profile sync stuff
@@ -70,18 +91,22 @@ in {
       export WLR_RENDERER_ALLOW_SOFTWARE=1
     '';
     # TODO: extraPackages = with pkgs; [ swaylock-effects swaybg swayidle sway-contrib.grimshot ];
-    extraConfig = "default_border none";
-    config = {
+    extraConfig = ''
+      default_border none
+      mouse_warping container
+      exec_always pkill flashfocus; ${pkgs.flashfocus}/bin/flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
+
+      for_window [title="floatme"] floating enable
+      for_window [title="Bitwarden"] floating enable
+    '';
+    config = rec {
       modifier = "Mod4";
       terminal = "${pkgs.kitty}/bin/kitty";
       gaps = {
         inner = 16;
         outer = -16;
       };
-      focus = {
-        followMouse = true;
-        mouseWarping = true;
-      };
+      focus = { followMouse = true; };
       seat = { "*" = { hide_cursor = "1000"; }; };
       # TODO: outputs
       output = {
@@ -93,7 +118,100 @@ in {
         };
       };
       # TODO: inhibit idle and floats
-      # TODO: keybinds
+      # TODO: media, apps, and config keybinds: https://github.com/mtoohey31/dotfiles/blob/main/.config/sway/config
+      keybindings = {
+        "${modifier}+h" = "focus left";
+        "${modifier}+j" = "focus down";
+        "${modifier}+k" = "focus up";
+        "${modifier}+l" = "focus right";
+
+        "${modifier}+Shift+h" =
+          "exec swaymsg -- mark --replace focused && swaymsg focus left && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused";
+        "${modifier}+Shift+j" =
+          "exec swaymsg -- mark --replace focused && swaymsg focus down && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused";
+        "${modifier}+Shift+k" =
+          "exec swaymsg -- mark --replace focused && swaymsg focus up && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused";
+        "${modifier}+Shift+l" =
+          "exec swaymsg -- mark --replace focused && swaymsg focus right && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused";
+
+        # TODO: generate these with sequences and mapping so they're not so gross
+        "${modifier}+1" = "workspace number 1";
+        "${modifier}+2" = "workspace number 2";
+        "${modifier}+3" = "workspace number 3";
+        "${modifier}+4" = "workspace number 4";
+        "${modifier}+5" = "workspace number 5";
+        "${modifier}+6" = "workspace number 6";
+        "${modifier}+7" = "workspace number 7";
+        "${modifier}+8" = "workspace number 8";
+        "${modifier}+9" = "workspace number 9";
+        "${modifier}+0" = "workspace number 10";
+
+        "${modifier}+Shift+1" =
+          "move container to workspace number 1, workspace number 1";
+        "${modifier}+Shift+2" =
+          "move container to workspace number 2, workspace number 2";
+        "${modifier}+Shift+3" =
+          "move container to workspace number 3, workspace number 3";
+        "${modifier}+Shift+4" =
+          "move container to workspace number 4, workspace number 4";
+        "${modifier}+Shift+5" =
+          "move container to workspace number 5, workspace number 5";
+        "${modifier}+Shift+6" =
+          "move container to workspace number 6, workspace number 6";
+        "${modifier}+Shift+7" =
+          "move container to workspace number 7, workspace number 7";
+        "${modifier}+Shift+8" =
+          "move container to workspace number 8, workspace number 8";
+        "${modifier}+Shift+9" =
+          "move container to workspace number 9, workspace number 9";
+        "${modifier}+Shift+0" =
+          "move container to workspace number 10, workspace number 10";
+
+        "${modifier}+Shift+tab" = "floating toggle";
+        "${modifier}+tab" = "focus mode_toggle";
+
+        "${modifier}+r" = ''mode "resize"'';
+        "${modifier}+v" = ''mode "move"'';
+        "${modifier}+Escape" = ''mode "passthrough"'';
+
+        "${modifier}+Shift+q" = "quit";
+        "${modifier}+q" = "kill";
+        "${modifier}+w" = "kill";
+
+        "${modifier}+Space" = "exec ${pkgs.wofi}/bin/wofi --show drun";
+        "${modifier}+Return" = "exec ${terminal}";
+        "${modifier}+Slash" =
+          "exec ${terminal} -e ${pkgs.fish}/bin/fish -C lfcd";
+      };
+      modes = {
+        resize = {
+          "h" = "resize shrink width 50px";
+          "j" = "resize grow height 50px";
+          "k" = "resize shrink height 50px";
+          "l" = "resize grow width 50px";
+
+          "Mod1+h" = "resize shrink width 5px";
+          "Mod1+j" = "resize grow height 5px";
+          "Mod1+k" = "resize shrink height 5px";
+          "Mod1+l" = "resize grow width 5px";
+
+          "Escape" = ''mode "default"'';
+        };
+        move = {
+          "h" = "move left 50px";
+          "j" = "move down 50px";
+          "k" = "move up 50px";
+          "l" = "move right 50px";
+
+          "Mod1+h" = "move left 5px";
+          "Mod1+j" = "move down 5px";
+          "Mod1+k" = "move up 5px";
+          "Mod1+l" = "move right 5px";
+
+          "Escape" = ''mode "default"'';
+        };
+        passthrough = { "${modifier}+Escape" = ''mode "default"''; };
+      };
       bars = [{
         mode = "hide";
         position = "top";

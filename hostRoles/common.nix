@@ -1,10 +1,19 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }: {
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
   };
+
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+      "nvidia-x11"
+      "nvidia-settings"
+      "steam"
+      "steam-original"
+      "cudatoolkit"
+    ];
 
   boot.loader.systemd-boot.enable = true;
 

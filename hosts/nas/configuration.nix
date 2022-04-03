@@ -35,9 +35,7 @@ in {
 
   networking.hostId = "977b87b2";
   boot = {
-      supportedFilesystems = [ "zfs" ];
-      zfs = {
-        enableUnstable = true;
-      };
+    supportedFilesystems = [ "zfs" ];
+    zfs = { enableUnstable = true; };
   };
 }

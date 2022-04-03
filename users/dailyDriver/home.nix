@@ -3,5 +3,8 @@
     # TODO: taskmatter
     himalaya # TODO: add configuration
     pandoc # TODO: add configuration with defaults
+    discord
+    bitwarden
+    bitwarden-cli
   ];
 }

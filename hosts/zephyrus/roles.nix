@@ -1,1 +1,1 @@
-[ "wifi" "bluetooth" "sound" "opengl" "printing" ]
+[ "wifi" "bluetooth" "sound" "opengl" "printing" "gaming" ]

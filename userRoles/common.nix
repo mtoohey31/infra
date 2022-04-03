@@ -3,9 +3,12 @@
 {
   home.stateVersion = "21.11";
 
-  home.packages = with pkgs; [ trash-cli exa ripgrep wget ];
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [ "discord" ];
 
-  home.file.".config/lf/cleaner" = {
+  home.packages = with pkgs; [ trash-cli exa ripgrep fzf wget gotop ];
+
+  xdg.configFile."lf/cleaner" = {
     text = ''
       #!${pkgs.bash}/bin/sh
       kitty +kitten icat --transfer-mode file --clear

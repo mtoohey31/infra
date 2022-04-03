@@ -6,6 +6,9 @@
       packages = with rPackages; [ ggplot2 ];
     }) # TODO: add configuration
     nixfmt
+    gcc
+    gnumake
+    cargo
   ];
 
   programs = {

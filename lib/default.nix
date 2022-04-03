@@ -41,7 +41,7 @@ rec {
               };
           }) { } systems)) { } usernames)) { } (attrNames (readDir ../users));
 
-  mkHostCfgs = { nixpkgs, home-manager }:
+  mkHostCfgs = { nixpkgs, nixos-hardware, home-manager }:
     foldl' (s: hostName:
       s // {
         "${hostName}" = nixpkgs.lib.nixosSystem {
@@ -53,8 +53,14 @@ rec {
               (../hosts + "/${hostName}/configuration.nix")
               (../hosts + "/${hostName}/hardware-configuration.nix")
               home-manager.nixosModule
-            ];
-          system = let sysPath = ../hosts + "${hostName}system.nix";
+            ] ++ (let
+              hardwareProfilePath = ../hosts
+                + "/${hostName}/hardware-profile.nix";
+            in if (pathExists hardwareProfilePath) then
+              [ nixos-hardware.nixosModules."${import hardwareProfilePath}" ]
+            else
+              [ ]);
+          system = let sysPath = ../hosts + "/${hostName}/system.nix";
           in if (pathExists sysPath) then import sysPath else "x86_64-linux";
         };
       }) { } (attrNames (readDir ../hosts));

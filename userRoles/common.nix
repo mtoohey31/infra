@@ -24,6 +24,8 @@
       config = { theme = "base16"; };
     };
     fish = (let
+      musicCmdStr =
+        "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket";
       abbrsAndAliases = ((if pkgs.stdenv.hostPlatform.isDarwin then {
         copy = "pbcopy";
         paste = "pbpaste";
@@ -41,6 +43,7 @@
         e = "$EDITOR";
         g = "git";
         hi = "himalaya";
+        music = musicCmdStr;
         pcp = "rsync -r --info=progress2";
         rm = "trash";
         se = "sudoedit";
@@ -129,12 +132,12 @@
             gcc -Wall -g -o "$tmp" $argv && valgrind "$tmp" $argv
           '';
         };
-        music = {
+        tmux-music = {
           body = ''
             if tmux has-session -t music &>/dev/null
                 tmux attach -t music
             else
-                tmux new-session -d -s music -c ~/music fish -C "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket ."
+                tmux new-session -d -s music -c ~/music fish -C "${musicCmdStr} ."
             end
           '';
         };

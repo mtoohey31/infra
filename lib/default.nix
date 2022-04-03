@@ -1,6 +1,9 @@
 with builtins;
 
 rec {
+  intSeq = min: max:
+    if min <= max then ([ min ] ++ (intSeq (min + 1) max)) else [ ];
+
   mkPrimaryUser = { username, groups ? [ "wheel" ] }:
     pkgs: {
       groups."${username}".gid = 1000;

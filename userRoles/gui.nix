@@ -10,10 +10,7 @@
 # check dotfiles repo for any other configs that need to get picked up
 
 with builtins;
-
-let
-  monoFontPrefix = "JetBrainsMono";
-  monoFont = "${monoFontPrefix} Nerd Font";
+let lib = import ../lib;
 in {
   xdg.configFile."kitty/search".source = fetchTarball {
     url =
@@ -32,7 +29,9 @@ in {
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
-    (nerdfonts.override { fonts = [ monoFontPrefix ]; })
+    (nerdfonts.override {
+      fonts = [ "JetBrainsMono" ];
+    }) # TODO: reconsider making this a variable
   ];
 
   programs = {
@@ -133,56 +132,37 @@ in {
           "exec swaymsg -- mark --replace focused && swaymsg focus up && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused";
         "${modifier}+Shift+l" =
           "exec swaymsg -- mark --replace focused && swaymsg focus right && swaymsg swap container with mark focused && swaymsg [con_mark='^focused$'] focus && swaymsg unmark focused";
+      } // (foldl' (s: i:
+        s // {
+          "${modifier}+${toString i}" = "workspace number ${toString i}";
+        }) { } (lib.intSeq 0 9)) // (foldl' (s: i:
+          s // {
+            "${modifier}+Shift+${toString i}" =
+              "move container to workspace number ${
+                toString i
+              }, workspace number ${toString i}";
+          }) { } (lib.intSeq 0 9)) //
 
-        # TODO: generate these with sequences and mapping so they're not so gross
-        "${modifier}+1" = "workspace number 1";
-        "${modifier}+2" = "workspace number 2";
-        "${modifier}+3" = "workspace number 3";
-        "${modifier}+4" = "workspace number 4";
-        "${modifier}+5" = "workspace number 5";
-        "${modifier}+6" = "workspace number 6";
-        "${modifier}+7" = "workspace number 7";
-        "${modifier}+8" = "workspace number 8";
-        "${modifier}+9" = "workspace number 9";
-        "${modifier}+0" = "workspace number 10";
+        {
 
-        "${modifier}+Shift+1" =
-          "move container to workspace number 1, workspace number 1";
-        "${modifier}+Shift+2" =
-          "move container to workspace number 2, workspace number 2";
-        "${modifier}+Shift+3" =
-          "move container to workspace number 3, workspace number 3";
-        "${modifier}+Shift+4" =
-          "move container to workspace number 4, workspace number 4";
-        "${modifier}+Shift+5" =
-          "move container to workspace number 5, workspace number 5";
-        "${modifier}+Shift+6" =
-          "move container to workspace number 6, workspace number 6";
-        "${modifier}+Shift+7" =
-          "move container to workspace number 7, workspace number 7";
-        "${modifier}+Shift+8" =
-          "move container to workspace number 8, workspace number 8";
-        "${modifier}+Shift+9" =
-          "move container to workspace number 9, workspace number 9";
-        "${modifier}+Shift+0" =
-          "move container to workspace number 10, workspace number 10";
+          "${modifier}+Shift+tab" = "floating toggle";
+          "${modifier}+tab" = "focus mode_toggle";
 
-        "${modifier}+Shift+tab" = "floating toggle";
-        "${modifier}+tab" = "focus mode_toggle";
+          "${modifier}+r" = ''mode "resize"'';
+          "${modifier}+v" = ''mode "move"'';
+          "${modifier}+Escape" = ''mode "passthrough"'';
 
-        "${modifier}+r" = ''mode "resize"'';
-        "${modifier}+v" = ''mode "move"'';
-        "${modifier}+Escape" = ''mode "passthrough"'';
+          "${modifier}+Shift+q" = "quit";
+          "${modifier}+q" = "kill";
+          "${modifier}+w" = "kill";
 
-        "${modifier}+Shift+q" = "quit";
-        "${modifier}+q" = "kill";
-        "${modifier}+w" = "kill";
+          "${modifier}+Shift+d" = "exec systemctl restart --user kanshi";
 
-        "${modifier}+Space" = "exec ${pkgs.wofi}/bin/wofi --show drun";
-        "${modifier}+Return" = "exec ${terminal}";
-        "${modifier}+Slash" =
-          "exec ${terminal} -e ${pkgs.fish}/bin/fish -C lfcd";
-      };
+          "${modifier}+Space" = "exec ${pkgs.wofi}/bin/wofi --show drun";
+          "${modifier}+Return" = "exec ${terminal}";
+          "${modifier}+Slash" =
+            "exec ${terminal} -e ${pkgs.fish}/bin/fish -C lfcd";
+        };
       modes = {
         resize = {
           "h" = "resize shrink width 50px";

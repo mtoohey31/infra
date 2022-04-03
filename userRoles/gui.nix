@@ -49,41 +49,36 @@ in {
     };
     kitty = {
       enable = true;
-      # TODO: split the raw config up into the appropriate options
+      environment = { SHLVL = "0"; };
+      settings = {
+        cursor = "none";
+        cursor_text_color = "background";
+        cursor_blink_interval = 0;
+        window_padding_width = 8;
+        hide_window_decorations = true;
+        background_opacity = "0.8";
+        remember_window_size = false;
+        enable_audio_bell = false;
+        update_check_interval = 0;
+        macos_quit_when_last_window_closed = true;
+        touch_scroll_multiplier = 9;
+      };
+      keybindings = {
+        "shift+enter" = "send_text all \\x1b[13;2u";
+        "ctrl+enter" = "send_text all \\x1b[13;5u";
+        "ctrl+l" =
+          "combine : clear_terminal scrollback active : send_text normal,application \\x0c";
+        "ctrl+shift+f" =
+          "launch --location=hsplit --allow-remote-control kitty +kitten search/search.py @active-kitty-window-id";
+      };
       extraConfig = ''
-        # visuals
         font_family JetBrains Mono Regular Nerd Font Complete
         bold_font JetBrains Mono Bold Nerd Font Complete
         italic_font JetBrains Mono Italic Nerd Font Complete
         bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
         font_size 12
-        # TODO: re-enable once this is in the release
-        # cursor none
-        cursor_text_color background
-        cursor_blink_interval 0
-        window_padding_width 8
-        hide_window_decorations yes
-        background_opacity 0.8
-        remember_window_size no
-        enable_audio_bell no
+
         include $HOME/.cache/wal/colors-kitty.conf
-
-        # environment
-        env SHLVL=0
-        env TERM_PROGRAM=kitty
-
-        # no updates
-        update_check_interval 0
-
-        # prevent a million kitty processes
-        macos_quit_when_last_window_closed yes
-
-        # interaction
-        map shift+enter send_text all \x1b[13;2u
-        map ctrl+enter send_text all \x1b[13;5u
-        touch_scroll_multiplier 9.0
-        map ctrl+shift+f launch --location=hsplit --allow-remote-control kitty +kitten search/search.py @active-kitty-window-id
-        map ctrl+l combine : clear_terminal scrollback active : send_text normal,application \x0c
       '';
     };
   };

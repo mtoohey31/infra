@@ -37,6 +37,8 @@ in {
   };
   services.asusctl.enable = true;
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   users = lib.mkPrimaryUser { username = "mtoohey"; } pkgs;
   home-manager.users.mtoohey = lib.mkHomeCfg {
     user = "dailyDriver";

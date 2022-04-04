@@ -21,7 +21,6 @@ in {
   home.packages = with pkgs; [
     nsxiv
     pywal
-    mpv # TODO: add configuration
     wofi # TODO: remove after fuzzel is working
     # fuzzel TODO: depends on https://gitlab.gnome.org/GNOME/librsvg/-/issues/856
     flashfocus
@@ -80,6 +79,59 @@ in {
 
         include $HOME/.cache/wal/colors-kitty.conf
       '';
+    };
+    mpv = {
+      enable = true;
+      config = {
+        osc = false;
+        script-opts-add = "osc-visibility=always";
+        osd-font = "JetBrainsMono Nerd Font";
+        ytdl-format =
+          ''ytdl-format="bestvideo[height<=1440]+bestaudio/best[height<=1440]'';
+        input-default-bindings = false;
+      };
+      bindings = {
+        SPACE = "cycle pause";
+
+        LEFT = "seek -5";
+        DOWN = "add volume -2";
+        UP = "add volume 2";
+        RIGHT = "seek 5";
+
+        h = "seek -5";
+        j = "add volume -2";
+        k = "add volume 2";
+        l = "seek 5";
+
+        WHEEL_DOWN = "add volume -2";
+        WHEEL_UP = "add volume 2";
+
+        "(" = "add speed -0.25";
+        ")" = "add speed +0.25";
+
+        n = "playlist-next";
+        N = "playlist-prev";
+
+        g = "seek 0 absolute-percent";
+        "0" = "seek 0 absolute-percent";
+        "1" = "seek 10 absolute-percent";
+        "2" = "seek 20 absolute-percent";
+        "3" = "seek 30 absolute-percent";
+        "4" = "seek 40 absolute-percent";
+        "5" = "seek 50 absolute-percent";
+        "6" = "seek 60 absolute-percent";
+        "7" = "seek 70 absolute-percent";
+        "8" = "seek 80 absolute-percent";
+        "9" = "seek 90 absolute-percent";
+        G = "seek 100 absolute-percent";
+
+        L = ''cycle-values loop-file "inf" "no"'';
+        f = "cycle fullscreen";
+        c = "cycle sub";
+        ":" = "cycle osc";
+
+        q = "quit";
+      };
     };
   };
 

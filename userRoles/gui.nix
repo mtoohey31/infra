@@ -4,7 +4,6 @@
 #
 # kmonad
 # wob
-# mako
 # scripts
 # check dotfiles repo for any other configs that need to get picked up
 
@@ -78,6 +77,19 @@ in {
         font_size 12
 
         include $HOME/.cache/wal/colors-kitty.conf
+      '';
+    };
+    # TODO: get pywal colours working
+    mako = {
+      enable = true;
+      font = "JetBrainsMono Nerd Font Regular 16px";
+      layer = "overlay";
+      anchor = "bottom-right";
+      borderSize = 0;
+      margin = "16";
+      extraConfig = ''
+        [urgency=critical]
+        background-color=#EE0000CC
       '';
     };
     mpv = {

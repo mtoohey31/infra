@@ -221,7 +221,7 @@ in {
     extraOptions = [ "--unsupported-gpu" ];
     extraConfigEarly = ''
       include $HOME/.cache/wal/colors-sway
-      exec_always rm -f ${wobsock}; mkfifo ${wobsock} && tail -f ${wobsock} | ${pkgs.wob}/bin/wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
+      exec_always rm -f ${wobsock}; mkfifo ${wobsock} && tail -f ${wobsock} | wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
     '';
     extraSessionCommands = ''
       export _JAVA_AWT_WM_NONREPARENTING=1
@@ -231,8 +231,8 @@ in {
     extraConfig = ''
       default_border none
       mouse_warping container
-      exec_always pkill flashfocus; ${pkgs.flashfocus}/bin/flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
-      exec_always pkill autotiling; ${pkgs.autotiling}/bin/autotiling
+      exec_always pkill flashfocus; flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
+      exec_always pkill autotiling; autotiling
       exec_always systemctl restart --user kanshi
 
       bindsym --locked XF86MonBrightnessUp exec light -A 2 && light -G | cut -d'.' -f1 > ${wobsock}
@@ -256,7 +256,7 @@ in {
         size = 12.0;
       };
       modifier = "Mod4";
-      terminal = "${pkgs.kitty}/bin/kitty";
+      terminal = "kitty";
       gaps = {
         inner = 16;
         outer = -16;
@@ -306,23 +306,21 @@ in {
 
           "${modifier}+Shift+d" = "exec systemctl restart --user kanshi";
 
-          "${modifier}+space" = "exec ${pkgs.wofi}/bin/wofi --show drun";
+          "${modifier}+space" = "exec wofi --show drun";
           "${modifier}+return" = "exec ${terminal}";
-          "${modifier}+slash" =
-            "exec ${terminal} -e ${pkgs.fish}/bin/fish -C lfcd";
+          "${modifier}+slash" = "exec ${terminal} -e fish -C lfcd";
 
           "${modifier}+Shift+space" = ''
-            exec test -S ${mpvsock} && echo '{ "command": ["cycle", "pause"] }' | ${pkgs.socat}/bin/socat - ${mpvsock} || ${pkgs.fish}/bin/fish -C "tmux-music"'';
-          "${modifier}+Shift+return" =
-            "exec ${pkgs.tmux}/bin/tmux kill-session -t music";
+            exec test -S ${mpvsock} && echo '{ "command": ["cycle", "pause"] }' | socat - ${mpvsock} || fish -C "tmux-music"'';
+          "${modifier}+Shift+return" = "exec tmux kill-session -t music";
           "${modifier}+Shift+right" = ''
-            exec echo '{ "command": ["playlist-next"] }' | ${pkgs.socat}/bin/socat - ${mpvsock}'';
+            exec echo '{ "command": ["playlist-next"] }' | socat - ${mpvsock}'';
           "${modifier}+Shift+left" = ''
-            exec echo '{ "command": ["playlist-prev"] }' | ${pkgs.socat}/bin/socat - ${mpvsock}'';
+            exec echo '{ "command": ["playlist-prev"] }' | socat - ${mpvsock}'';
           "${modifier}+Shift+down" = ''
-            exec echo '{ "command": ["add", "volume", "-2"] }' | ${pkgs.socat}/bin/socat - ${mpvsock}'';
+            exec echo '{ "command": ["add", "volume", "-2"] }' | socat - ${mpvsock}'';
           "${modifier}+Shift+up" = ''
-            exec echo '{ "command": ["add", "volume", "2"] }' | ${pkgs.socat}/bin/socat - ${mpvsock}'';
+            exec echo '{ "command": ["add", "volume", "2"] }' | socat - ${mpvsock}'';
         };
       modes = {
         resize = {

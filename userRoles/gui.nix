@@ -5,7 +5,6 @@
 # kmonad
 # wob
 # mako
-# autotiling
 # scripts
 # check dotfiles repo for any other configs that need to get picked up
 
@@ -24,6 +23,7 @@ in {
     wofi # TODO: remove after fuzzel is working
     # fuzzel TODO: depends on https://gitlab.gnome.org/GNOME/librsvg/-/issues/856
     flashfocus
+    autotiling
 
     noto-fonts
     noto-fonts-cjk
@@ -210,6 +210,7 @@ in {
       default_border none
       mouse_warping container
       exec_always pkill flashfocus; ${pkgs.flashfocus}/bin/flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
+      exec_always pkill autotiling; ${pkgs.autotiling}/bin/autotiling
       exec_always systemctl restart --user kanshi
 
       for_window [title="floatme"] floating enable

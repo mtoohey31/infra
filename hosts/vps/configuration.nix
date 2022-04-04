@@ -3,10 +3,7 @@
 let lib = import ../../lib;
 in {
   users = lib.mkPrimaryUser { username = "mtoohey"; } pkgs;
-  home-manager.users.mtoohey = lib.mkHomeCfg {
-    user = "server";
-    username = "mtoohey";
-  };
+  home-manager.users.mtoohey = lib.mkHomeCfg "server";
 
   networking.wg-quick.interfaces = {
     wg0 = {

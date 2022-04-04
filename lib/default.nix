@@ -15,7 +15,7 @@ rec {
       };
     };
 
-  mkHomeCfg = { user, username }: {
+  mkHomeCfg = user: {
     imports = (map (roleName: ../userRoles + "/${roleName}.nix")
       (import (../users + "/${user}/roles.nix"))) ++ [
         ../userRoles/common.nix
@@ -36,7 +36,7 @@ rec {
                   "/Users/${username}"
                 else
                   "/home/${username}";
-                configuration = (mkHomeCfg { inherit user username; });
+                configuration = mkHomeCfg user;
                 pkgs = import nixpkgs { inherit system; };
               };
           }) { } systems)) { } usernames)) { } (attrNames (readDir ../users));

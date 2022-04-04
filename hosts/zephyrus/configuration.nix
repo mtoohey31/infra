@@ -45,10 +45,7 @@ in {
     username = "mtoohey";
     groups = [ "wheel" "video" ];
   } pkgs;
-  home-manager.users.mtoohey = lib.mkHomeCfg {
-    user = "dailyDriver";
-    username = "mtoohey";
-  };
+  home-manager.users.mtoohey = lib.mkHomeCfg "dailyDriver";
 
   services.getty.autologinUser = "mtoohey";
 }

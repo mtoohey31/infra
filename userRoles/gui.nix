@@ -24,6 +24,8 @@ in {
     flashfocus
     autotiling
     wob
+    wl-clipboard
+    sway-contrib.grimshot
     light
     socat
     pulsemixer
@@ -37,10 +39,10 @@ in {
   ];
 
   programs = {
-    # TODO: add qutebrowser and profiles too
+    # TODO: add qutebrowser, profiles, and keybindings
     brave = {
       enable = true;
-      # TODO: figure out how to add profile sync stuff
+      # TODO: figure out how to add profile sync and add keybindings
     };
     fish = {
       loginShellInit = ''
@@ -227,7 +229,7 @@ in {
       export _JAVA_AWT_WM_NONREPARENTING=1
       export WLR_RENDERER_ALLOW_SOFTWARE=1
     '';
-    # TODO: extraPackages = with pkgs; [ swaylock-effects swaybg swayidle sway-contrib.grimshot ];
+    # TODO: extraPackages = with pkgs; [ swaylock-effects swaybg swayidle ];
     extraConfig = ''
       default_border none
       mouse_warping container
@@ -265,7 +267,6 @@ in {
       seat = { "*" = { hide_cursor = "1000"; }; };
       output."*".bg = "~/.config/wallpaper.* fill";
       # TODO: inhibit idle and floats
-      # TODO: apps keybinds: https://github.com/mtoohey31/dotfiles/blob/main/.config/sway/config
       keybindings = {
         "${modifier}+h" = "focus left";
         "${modifier}+j" = "focus down";
@@ -321,6 +322,8 @@ in {
             exec echo '{ "command": ["add", "volume", "-2"] }' | socat - ${mpvsock}'';
           "${modifier}+Shift+up" = ''
             exec echo '{ "command": ["add", "volume", "2"] }' | socat - ${mpvsock}'';
+
+          "${modifier}+Shift+S" = "exec grimshot copy area";
         };
       modes = {
         resize = {

@@ -44,7 +44,6 @@ in {
   ];
 
   programs = {
-    # TODO: add qutebrowser, profiles, and keybindings
     brave = {
       enable = true;
       # TODO: figure out how to add profile sync and add keybindings
@@ -156,6 +155,17 @@ in {
         q = "quit";
       };
     };
+    # TODO: add profiles and keybindings
+    qutebrowser = {
+      enable = true;
+      extraConfig = readFile ./gui/qutebrowser/config.py;
+    };
+  };
+
+  xdg.configFile."qutebrowser/js".source = ./gui/qutebrowser/js;
+  xdg.configFile."qutebrowser/qutewal".source = fetchGit {
+    url = "https://gitlab.com/jjzmajic/qutewal";
+    rev = "ff878423ab251bf764475ab54b28486b957edfd4";
   };
 
   services.kanshi = {

@@ -30,6 +30,11 @@ in {
     socat
     pulsemixer
 
+    (pkgs.writeScriptBin "bar-status" ''
+      #!${pkgs.fish}/bin/fish
+      ${readFile ./gui/status.fish}
+    '')
+
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
@@ -358,7 +363,7 @@ in {
         inherit fonts;
         mode = "hide";
         position = "top";
-        statusCommand = "~/.scripts/status"; # TODO: write status command
+        statusCommand = "bar-status";
         colors = {
           background = "$background";
           statusline = "$foreground";

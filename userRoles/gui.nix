@@ -249,13 +249,13 @@ in {
       } // (foldl' (s: i:
         s // {
           "${modifier}+${toString i}" = "workspace number ${toString i}";
-        }) { } (lib.intSeq 0 9)) // (foldl' (s: i:
+        }) { } (lib.range 0 9)) // (foldl' (s: i:
           s // {
             "${modifier}+Shift+${toString i}" =
               "move container to workspace number ${
                 toString i
               }, workspace number ${toString i}";
-          }) { } (lib.intSeq 0 9)) //
+          }) { } (lib.range 0 9)) //
 
         {
 

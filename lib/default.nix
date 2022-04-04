@@ -1,8 +1,8 @@
 with builtins;
 
 rec {
-  intSeq = min: max:
-    if min <= max then ([ min ] ++ (intSeq (min + 1) max)) else [ ];
+  range = min: max:
+    if min <= max then ([ min ] ++ (range (min + 1) max)) else [ ];
 
   mkPrimaryUser = { username, groups ? [ "wheel" ] }:
     pkgs: {

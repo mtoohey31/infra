@@ -1,3 +1,6 @@
+# TODO: make locked git fetches inputs
+# TODO: add github actions for formatting and building
+
 {
   description = "Infrastructure configuration";
 

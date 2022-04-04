@@ -39,7 +39,11 @@ in {
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  users = lib.mkPrimaryUser { username = "mtoohey"; } pkgs;
+  programs.light.enable = true;
+  users = lib.mkPrimaryUser {
+    username = "mtoohey";
+    groups = [ "wheel" "video" ];
+  } pkgs;
   home-manager.users.mtoohey = lib.mkHomeCfg {
     user = "dailyDriver";
     username = "mtoohey";

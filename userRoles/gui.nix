@@ -3,7 +3,6 @@
 # TODO:
 #
 # kmonad
-# wob
 # scripts
 # check dotfiles repo for any other configs that need to get picked up
 # make cursor not tiny
@@ -24,6 +23,8 @@ in {
     # fuzzel TODO: depends on https://gitlab.gnome.org/GNOME/librsvg/-/issues/856
     flashfocus
     autotiling
+    wob
+    light
 
     noto-fonts
     noto-fonts-cjk
@@ -213,7 +214,11 @@ in {
   wayland.windowManager.sway = {
     enable = pkgs.stdenv.hostPlatform.isLinux;
     extraOptions = [ "--unsupported-gpu" ];
-    extraConfigEarly = "include $HOME/.cache/wal/colors-sway";
+    extraConfigEarly = ''
+      include $HOME/.cache/wal/colors-sway
+      set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+      exec_always rm -f $WOBSOCK; mkfifo $WOBSOCK && tail -f $WOBSOCK | ${pkgs.wob}/bin/wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
+    '';
     extraSessionCommands = ''
       export _JAVA_AWT_WM_NONREPARENTING=1
       export WLR_RENDERER_ALLOW_SOFTWARE=1
@@ -225,6 +230,9 @@ in {
       exec_always pkill flashfocus; ${pkgs.flashfocus}/bin/flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
       exec_always pkill autotiling; ${pkgs.autotiling}/bin/autotiling
       exec_always systemctl restart --user kanshi
+
+      bindsym --locked XF86MonBrightnessUp exec light -A 2 && light -G | cut -d'.' -f1 > $WOBSOCK
+      bindsym --locked XF86MonBrightnessDown exec light -U 2 && light -G | cut -d'.' -f1 > $WOBSOCK
 
       for_window [title="floatme"] floating enable
       for_window [title="Bitwarden"] floating enable

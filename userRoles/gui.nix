@@ -7,6 +7,9 @@
 # scripts
 # check dotfiles repo for any other configs that need to get picked up
 # make cursor not tiny
+# make things that are os-specific conditional
+# move things that are machine specific such as output configuration elsewhere
+# split into gui applications and wm roles
 
 with builtins;
 let lib = import ../lib;

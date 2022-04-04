@@ -37,6 +37,7 @@ in {
   };
   services.asusctl.enable = true;
 
+  # TODO: add kernel patch for profile support as per https://gitlab.com/asus-linux/asusctl/-/issues/134
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   programs.light.enable = true;

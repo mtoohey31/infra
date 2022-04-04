@@ -268,7 +268,6 @@
         # set-option global auto_pairs ( ) { } [ ] '"' '"' "'" "'" ` `
       '';
       plugins = with pkgs.kakounePlugins; [
-        kak-lsp # TODO: make this and its configuration and servers dev stuff only
         kakoune-state-save
         kakboard
         auto-pairs-kak

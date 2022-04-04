@@ -200,6 +200,7 @@ with builtins; {
           "${modifier}+escape" = ''mode "passthrough"'';
 
           "${modifier}+Shift+q" = "quit";
+          "${modifier}+Shift+r" = "reload";
           "${modifier}+q" = "kill";
           "${modifier}+w" = "kill";
 

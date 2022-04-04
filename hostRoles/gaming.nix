@@ -1,1 +1,5 @@
-{ lib, ... }: { programs.steam.enable = true; }
+{ pkgs, ... }: {
+  programs.steam.enable = true;
+
+  environment.systemPackages = [ pkgs.rpcs3 ];
+}

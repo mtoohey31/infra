@@ -3,6 +3,7 @@
 # TODO:
 #
 # kmonad
+# zathura
 # scripts
 # check dotfiles repo for any other configs that need to get picked up
 # make cursor not tiny
@@ -29,11 +30,7 @@ in {
     light
     socat
     pulsemixer
-
-    (pkgs.writeScriptBin "bar-status" ''
-      #!${pkgs.fish}/bin/fish
-      ${readFile ./gui/status.fish}
-    '')
+    headsetcontrol
 
     noto-fonts
     noto-fonts-cjk
@@ -230,6 +227,20 @@ in {
     };
   };
 
+  xdg.configFile."sway/status" = {
+    text = ''
+      #!${pkgs.fish}/bin/fish
+      ${readFile ./gui/status.fish}
+    '';
+    executable = true;
+    # TODO: figure out how to source this from xdg.configFile."sway/config".onChange cause it's identical
+    onChange = ''
+      swaySocket=''${XDG_RUNTIME_DIR:-/run/user/$UID}/sway-ipc.$UID.$(${pkgs.procps}/bin/pgrep -x sway || true).sock
+      if [ -S $swaySocket ]; then
+        ${pkgs.sway}/bin/swaymsg -s $swaySocket reload
+      fi
+    '';
+  };
   wayland.windowManager.sway = let
     wobsock = "$XDG_RUNTIME_DIR/wob.sock";
     mpvsock = "$XDG_RUNTIME_DIR/mpv.sock";
@@ -373,7 +384,8 @@ in {
         inherit fonts;
         mode = "hide";
         position = "top";
-        statusCommand = "bar-status";
+        # TODO: figure out how to source ~/.config from xdg.configHome in home-manager
+        statusCommand = "~/.config/sway/status";
         colors = {
           background = "$background";
           statusline = "$foreground";

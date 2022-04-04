@@ -6,7 +6,7 @@
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [ "discord" ];
 
-  home.packages = with pkgs; [ trash-cli exa ripgrep fzf wget gotop ];
+  home.packages = with pkgs; [ trash-cli exa ripgrep fzf jq wget gotop ];
 
   xdg.configFile."lf/cleaner" = {
     text = ''

@@ -19,7 +19,7 @@ while true
         set -a output " misbehaving |"
     end
 
-    set -a output  (btrfs filesystem usage -H / 2> /dev/null | string match -e "Free (estimated):" | string replace -r '\s*Free \(estimated\):\s+' '' | string replace -r '\s+\(min: [\d\.]+\w+\)' '')" |"
+    set -a output  (df -h / | tail -n1 | awk '{ print $4 }')" |"
 
     set hs_bat (headsetcontrol -cb 2> /dev/null)
     if test "$status" -eq 0
@@ -41,16 +41,16 @@ while true
         set -a output 墳 (pulsemixer --get-volume | awk '{ print $1 }')"% |"
     end
 
-    if test -S /tmp/mpv-socket && set state (echo '{ "command": ["get_property", "pause"] }' | socat - /tmp/mpv-socket 2> /dev/null)
+    if test -S $XDG_RUNTIME_DIR/mpv.sock && set state (echo '{ "command": ["get_property", "pause"] }' | socat - $XDG_RUNTIME_DIR/mpv.sock 2> /dev/null)
         if test (echo "$state" | jq -r '.data') = true
             set -a output 契
         else
             set -a output 
         end
 
-        set -a output (echo '{ "command": ["get_property", "media-title"] }' | socat - /tmp/mpv-socket | jq -r '.data')
+        set -a output (echo '{ "command": ["get_property", "media-title"] }' | socat - $XDG_RUNTIME_DIR/mpv.sock | jq -r '.data')
 
-        set artist (echo '{ "command": ["get_property", "metadata/artist"] }' | socat - /tmp/mpv-socket | jq -r '.data')
+        set artist (echo '{ "command": ["get_property", "metadata/artist"] }' | socat - $XDG_RUNTIME_DIR/mpv.sock | jq -r '.data')
 
         if test "$artist" != null
             set -a output "- $artist"

@@ -278,11 +278,13 @@
     lf = {
       enable = true;
       commands = {
-        touch = ''
-          &{{
+        edit = ''
+          ''${{
               set IFS " "
-              touch "$argv"
-              lf -remote "send $id select \"$argv\""
+              $EDITOR -- "$argv"
+              if test -e "$argv"
+                  lf -remote "send $id select \"$argv\""
+              end
           }}
         '';
         mkdir = ''
@@ -292,11 +294,19 @@
               lf -remote "send $id select \"$argv\""
           }}
         '';
+        touch = ''
+          &{{
+              set IFS " "
+              touch "$argv"
+              lf -remote "send $id select \"$argv\""
+          }}
+        '';
       };
       extraConfig = ''
         set cleaner ~/.config/lf/cleaner
       '';
       keybindings = {
+        E = "push :edit<space>";
         t = "push :touch<space>";
         "<esc>" = "clear";
         # source: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
@@ -315,7 +325,7 @@
               while test -e "card$n.md"
                   set n (math $n + 1)
               end
-              $EDITOR -c "startinsert" "card$n.md" && lf -remote "send $id select \"card$n.md\""
+              $EDITOR -c "startinsert" "card$n.md" && test -e "card$n.md" && lf -remote "send $id select \"card$n.md\""
           }}
         '';
       };

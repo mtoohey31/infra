@@ -1,5 +1,11 @@
 { ... }: {
-  sound.enable = true;
-  # TODO: switch to pipewire (and remove pulsemixer from gui user role)
-  hardware.pulseaudio.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa = {
+      enable = true;
+      support32Bit = true;
+    };
+    pulse.enable = true;
+  };
 }

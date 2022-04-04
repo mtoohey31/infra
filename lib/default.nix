@@ -30,12 +30,13 @@ rec {
         s // (foldl' (s: system:
           s // {
             "${username}-${user}-${system}" =
-              home-manager.lib.homeManagerConfiguration {
+              home-manager.lib.homeManagerConfiguration rec {
                 inherit username system;
-                homeDirectory = if system == "x86_64-darwin" then
-                  "/Users/${username}"
-                else
-                  "/home/${username}";
+                homeDirectory =
+                  if system == pkgs.stdenv.hostPlatform.isDarwin then
+                    "/Users/${username}"
+                  else
+                    "/home/${username}";
                 configuration = mkHomeCfg user;
                 pkgs = import nixpkgs { inherit system; };
               };

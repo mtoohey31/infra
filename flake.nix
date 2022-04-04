@@ -1,6 +1,5 @@
 # TODO: make locked git fetches inputs
 # TODO: add github actions for formatting and building
-# TODO: should I be using pkgs.stdenv.hostPlatform.is<osname>? does this reflect what we're building for or what we're building on?
 
 {
   description = "Infrastructure configuration";

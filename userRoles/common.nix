@@ -25,7 +25,7 @@
     };
     fish = (let
       musicCmdStr =
-        "mpv --shuffle --loop-playlist --no-audio-display --volume=40 --input-ipc-server=/tmp/mpv-socket";
+        "mpv --shuffle --loop-playlist --no-audio-display --volume=35 --input-ipc-server=$XDG_RUNTIME_DIR/mpv.sock";
       abbrsAndAliases = ((if pkgs.stdenv.hostPlatform.isDarwin then {
         copy = "pbcopy";
         paste = "pbpaste";

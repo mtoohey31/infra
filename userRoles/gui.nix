@@ -25,6 +25,7 @@ in {
     autotiling
     wob
     light
+    socat
     pulsemixer
 
     noto-fonts
@@ -212,13 +213,15 @@ in {
     };
   };
 
-  wayland.windowManager.sway = {
+  wayland.windowManager.sway = let
+    wobsock = "$XDG_RUNTIME_DIR/wob.sock";
+    mpvsock = "$XDG_RUNTIME_DIR/mpv.sock";
+  in {
     enable = pkgs.stdenv.hostPlatform.isLinux;
     extraOptions = [ "--unsupported-gpu" ];
     extraConfigEarly = ''
       include $HOME/.cache/wal/colors-sway
-      set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
-      exec_always rm -f $WOBSOCK; mkfifo $WOBSOCK && tail -f $WOBSOCK | ${pkgs.wob}/bin/wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
+      exec_always rm -f ${wobsock}; mkfifo ${wobsock} && tail -f ${wobsock} | ${pkgs.wob}/bin/wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
     '';
     extraSessionCommands = ''
       export _JAVA_AWT_WM_NONREPARENTING=1
@@ -232,8 +235,16 @@ in {
       exec_always pkill autotiling; ${pkgs.autotiling}/bin/autotiling
       exec_always systemctl restart --user kanshi
 
-      bindsym --locked XF86MonBrightnessUp exec light -A 2 && light -G | cut -d'.' -f1 > $WOBSOCK
-      bindsym --locked XF86MonBrightnessDown exec light -U 2 && light -G | cut -d'.' -f1 > $WOBSOCK
+      bindsym --locked XF86MonBrightnessUp exec light -A 2 && light -G | cut -d'.' -f1 > ${wobsock}
+      bindsym --locked XF86MonBrightnessDown exec light -U 2 && light -G | cut -d'.' -f1 > ${wobsock}
+
+      bindsym --locked Mod4+Up exec /bin/sh -c "pulsemixer --change-volume +2; pulsemixer --get-volume | awk '{ print \$1 }' > ${wobsock}"
+      bindsym --locked XF86AudioRaiseVolume exec /bin/sh -c "pulsemixer --change-volume +2; pulsemixer --get-volume | awk '{ print \$1 }' > ${wobsock}"
+      bindsym --locked Mod4+Down exec /bin/sh -c "pulsemixer --change-volume -2; pulsemixer --get-volume | awk '{ print \$1 }' > ${wobsock}"
+      bindsym --locked XF86AudioLowerVolume exec /bin/sh -c "pulsemixer --change-volume -2; pulsemixer --get-volume | awk '{ print \$1 }' > ${wobsock}"
+
+      bindsym --locked XF86KbdBrightnessUp exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 48; asusctl -k low; case 49; asusctl -k med; case 50; asusctl -k high; end"
+      bindsym --locked XF86KbdBrightnessDown exec fish -c "switch (asusctl -k | sed 's/^Current keyboard led brightness: //'); case 49; asusctl -k off; case 50; asusctl -k low; case 51; asusctl -k med; end"
 
       for_window [title="floatme"] floating enable
       for_window [title="Bitwarden"] floating enable
@@ -254,7 +265,7 @@ in {
       seat = { "*" = { hide_cursor = "1000"; }; };
       output."*".bg = "~/.config/wallpaper.* fill";
       # TODO: inhibit idle and floats
-      # TODO: media, apps, and config keybinds: https://github.com/mtoohey31/dotfiles/blob/main/.config/sway/config
+      # TODO: apps keybinds: https://github.com/mtoohey31/dotfiles/blob/main/.config/sway/config
       keybindings = {
         "${modifier}+h" = "focus left";
         "${modifier}+j" = "focus down";
@@ -287,7 +298,7 @@ in {
 
           "${modifier}+r" = ''mode "resize"'';
           "${modifier}+v" = ''mode "move"'';
-          "${modifier}+Escape" = ''mode "passthrough"'';
+          "${modifier}+escape" = ''mode "passthrough"'';
 
           "${modifier}+Shift+q" = "quit";
           "${modifier}+q" = "kill";
@@ -295,10 +306,23 @@ in {
 
           "${modifier}+Shift+d" = "exec systemctl restart --user kanshi";
 
-          "${modifier}+Space" = "exec ${pkgs.wofi}/bin/wofi --show drun";
-          "${modifier}+Return" = "exec ${terminal}";
-          "${modifier}+Slash" =
+          "${modifier}+space" = "exec ${pkgs.wofi}/bin/wofi --show drun";
+          "${modifier}+return" = "exec ${terminal}";
+          "${modifier}+slash" =
             "exec ${terminal} -e ${pkgs.fish}/bin/fish -C lfcd";
+
+          "${modifier}+Shift+space" = ''
+            exec test -S ${mpvsock} && echo '{ "command": ["cycle", "pause"] }' | ${pkgs.socat}/bin/socat - ${mpvsock} || ${pkgs.fish}/bin/fish -C "tmux-music"'';
+          "${modifier}+Shift+return" =
+            "exec ${pkgs.tmux}/bin/tmux kill-session -t music";
+          "${modifier}+Shift+right" = ''
+            exec echo '{ "command": ["playlist-next"] }' | ${pkgs.socat}/bin/socat - ${mpvsock}'';
+          "${modifier}+Shift+left" = ''
+            exec echo '{ "command": ["playlist-prev"] }' | ${pkgs.socat}/bin/socat - ${mpvsock}'';
+          "${modifier}+Shift+down" = ''
+            exec echo '{ "command": ["add", "volume", "-2"] }' | ${pkgs.socat}/bin/socat - ${mpvsock}'';
+          "${modifier}+Shift+up" = ''
+            exec echo '{ "command": ["add", "volume", "2"] }' | ${pkgs.socat}/bin/socat - ${mpvsock}'';
         };
       modes = {
         resize = {

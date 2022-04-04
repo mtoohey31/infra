@@ -3,6 +3,7 @@
     # TODO: taskmatter
     himalaya # TODO: add configuration
     pandoc # TODO: add configuration with defaults
+    gimp
     discord
     bitwarden
     bitwarden-cli

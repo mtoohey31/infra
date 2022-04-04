@@ -25,6 +25,7 @@ in {
     autotiling
     wob
     light
+    pulsemixer
 
     noto-fonts
     noto-fonts-cjk

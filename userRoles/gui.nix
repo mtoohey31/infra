@@ -83,6 +83,68 @@ in {
     };
   };
 
+  services.kanshi = {
+    enable = true;
+    profiles = let
+      criteria = "Unknown TL140BDXP01-0 0x00000000";
+      mode = "2560x1440@120Hz";
+    in {
+      docked-acer = {
+        outputs = [
+          {
+            criteria = "Acer Technologies XV340CK P THQAA0013P00";
+            mode = "3440x1440";
+            position = "0,0";
+            scale = 1.25;
+          }
+          {
+            inherit criteria mode;
+            scale = 1.75;
+            position = "2752,960";
+          }
+        ];
+      };
+      docked-lg = {
+        outputs = [
+          {
+            criteria = "Goldstar Company Ltd LG ULTRAWIDE 0x00000B3E";
+            mode = "2560x1080@60Hz";
+            position = "0,0";
+            scale = 1.0;
+          }
+          {
+            inherit criteria mode;
+            position = "549,1080";
+            scale = 1.75;
+          }
+        ];
+      };
+      docked-samsung = {
+        outputs = [
+          {
+            criteria = "Samsung Electric Company S24B350 0x00007F58";
+            mode = "1920x1080@60Hz";
+            position = "0,0";
+            scale = 1.15;
+          }
+          {
+            inherit criteria mode;
+            position = "103,939";
+            scale = 1.75;
+          }
+        ];
+      };
+      undocked = {
+        outputs = [{
+          inherit criteria;
+          mode = "2560x1440@60.001Hz";
+          position = "0,0";
+          scale = 1.5;
+        }];
+      };
+    };
+  };
+
   wayland.windowManager.sway = {
     enable = pkgs.stdenv.hostPlatform.isLinux;
     extraOptions = [ "--unsupported-gpu" ];
@@ -96,6 +158,7 @@ in {
       default_border none
       mouse_warping container
       exec_always pkill flashfocus; ${pkgs.flashfocus}/bin/flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
+      exec_always systemctl restart --user kanshi
 
       for_window [title="floatme"] floating enable
       for_window [title="Bitwarden"] floating enable
@@ -114,15 +177,7 @@ in {
       };
       focus = { followMouse = true; };
       seat = { "*" = { hide_cursor = "1000"; }; };
-      # TODO: outputs
-      output = {
-        "*" = { bg = "~/.config/wallpaper.* fill"; };
-        "Acer Technologies XV340CK P THQAA0013P00" = {
-          scale = "1.25";
-          mode = "3440x1440";
-          position = "0 0";
-        };
-      };
+      output."*".bg = "~/.config/wallpaper.* fill";
       # TODO: inhibit idle and floats
       # TODO: media, apps, and config keybinds: https://github.com/mtoohey31/dotfiles/blob/main/.config/sway/config
       keybindings = {

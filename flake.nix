@@ -5,8 +5,8 @@
   description = "Infrastructure configuration";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "nixpkgs/nixos-unstable";
 
     nixos-hardware = {
       url = "nixos-hardware";
@@ -39,8 +39,8 @@
     };
   };
 
-  outputs =
-    { nixpkgs, nixos-hardware, home-manager, helix, taskmatter, qbpm, ... }:
+  outputs = { flake-utils, nixpkgs, nixos-hardware, home-manager, helix
+    , taskmatter, qbpm, ... }:
     let
       lib = import ./lib;
       overlays = [
@@ -60,5 +60,9 @@
       nixosConfigurations = lib.mkHostCfgs {
         inherit nixpkgs overlays nixos-hardware home-manager;
       };
-    };
+
+    } // (flake-utils.lib.eachDefaultSystem (system:
+      with import nixpkgs { inherit overlays system; }; {
+        devShell = mkShell { buildInputs = [ rnix-lsp nixfmt ]; };
+      }));
 }

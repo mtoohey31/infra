@@ -1,21 +1,21 @@
 { config, lib, pkgs, ... }:
 
-# TODO: setup direnv, and make sure it works with lf
-
 {
   home.packages = with pkgs; [
     (rWrapper.override {
       packages = with rPackages; [ ggplot2 ];
     }) # TODO: add configuration
 
-    # TODO: extract these into a devShell for the current workspace after setting up direnv
-    nixfmt
     gcc
     gnumake
     cargo
   ];
 
   programs = {
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
     fish = rec {
       shellAbbrs = {
         dc = "docker compose";
@@ -39,9 +39,12 @@
         branch = { autosetuprebase = "always"; };
         init = { defaultBranch = "main"; };
       };
+      ignores = [ ".direnv/" ".envrc" ];
       aliases = {
         a = "add --verbose";
         aa = "add --all --verbose";
+        af = "add --force --verbose";
+        afp = "add --force --patch --verbose";
         ah = "add --verbose .";
         ap = "add --patch --verbose";
         add = "add --verbose";

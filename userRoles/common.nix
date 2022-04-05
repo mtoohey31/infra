@@ -153,7 +153,7 @@
             if test -n "$SSH_CONNECTION" -o -f /.dockerenv
                 exec tmux
             else if test -n "$TERMUX_VERSION"
-                cat ~/.cache/wal/sequences
+                cat ${config.xdg.cacheHome}/wal/sequences
                 exec tmux
             end
         end
@@ -209,7 +209,7 @@
         set fish_greeting
 
         if test -z "$SSH_CONNECTION" -a -z "$TMUX"
-            cat ~/.cache/wal/sequences
+            cat ${config.xdg.cacheHome}/wal/sequences
         end
 
         alias e "$EDITOR"
@@ -302,7 +302,7 @@
         '';
       };
       extraConfig = ''
-        set cleaner ~/.config/lf/cleaner
+        set cleaner ${config.xdg.configHome}/lf/cleaner
       '';
       keybindings = {
         E = "push :edit<space>";

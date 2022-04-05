@@ -76,7 +76,7 @@ in {
         bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
         font_size 12
 
-        include $HOME/.cache/wal/colors-kitty.conf
+        include ${config.xdg.cacheHome}/wal/colors-kitty.conf
       '';
     };
     mpv = {

@@ -120,7 +120,7 @@ with builtins; {
     enable = true;
     extraOptions = [ "--unsupported-gpu" ];
     extraConfigEarly = ''
-      include $HOME/.cache/wal/colors-sway
+      include ${config.xdg.cacheHome}/wal/colors-sway
       exec_always rm -f ${wobsock}; mkfifo ${wobsock} && tail -f ${wobsock} | wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
     '';
     extraSessionCommands = ''
@@ -163,7 +163,7 @@ with builtins; {
       };
       focus = { followMouse = true; };
       seat = { "*" = { hide_cursor = "1000"; }; };
-      output."*".bg = "~/.config/wallpaper.* fill";
+      output."*".bg = "${config.xdg.configHome}/wallpaper.* fill";
       # TODO: inhibit idle and floats
       keybindings = {
         "${modifier}+h" = "focus left";
@@ -262,8 +262,7 @@ with builtins; {
         inherit fonts;
         mode = "hide";
         position = "top";
-        # TODO: figure out how to source ~/.config from xdg.configHome in home-manager
-        statusCommand = "~/.config/sway/status";
+        statusCommand = "${config.xdg.configHome}/sway/status";
         colors = {
           background = "$background";
           statusline = "$foreground";

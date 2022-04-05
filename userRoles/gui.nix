@@ -10,7 +10,8 @@
 
 with builtins;
 let lib = import ../lib;
-in {
+in
+{
   xdg.configFile."kitty/search".source = fetchTarball {
     url =
       "https://github.com/trygveaa/kitty-kitten-search/archive/8cc3237e6a995b6e7e101cba667fcda5439d96e2.tar.gz";
@@ -29,16 +30,18 @@ in {
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
 
-  xdg.dataFile = (foldl' (s: name:
-    s // {
-      "qutebrowser-profiles/${name}/config/config.py".text = ''
-        config.load_autoconfig(False);
-        config.source('${config.xdg.configHome}/qutebrowser/config.py')
-      '';
-      "qutebrowser-profiles/${name}/config/greasemonkey".source =
-        config.lib.file.mkOutOfStoreSymlink
-        "${config.xdg.configHome}/qutebrowser/greasemonkey";
-    }) { } [ "personal" "gaming" "university" "mod" ]);
+  xdg.dataFile = (foldl'
+    (s: name:
+      s // {
+        "qutebrowser-profiles/${name}/config/config.py".text = ''
+          config.load_autoconfig(False);
+          config.source('${config.xdg.configHome}/qutebrowser/config.py')
+        '';
+        "qutebrowser-profiles/${name}/config/greasemonkey".source =
+          config.lib.file.mkOutOfStoreSymlink
+            "${config.xdg.configHome}/qutebrowser/greasemonkey";
+      })
+    { } [ "personal" "gaming" "university" "mod" ]);
 
   programs = {
     brave = {

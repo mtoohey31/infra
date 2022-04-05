@@ -1,7 +1,8 @@
 { config, pkgs, stdenv, ... }:
 
 let lib = import ../../lib;
-in {
+in
+{
   users = lib.mkPrimaryUser { username = "tooheys"; } pkgs;
 
   # services.caddy = {

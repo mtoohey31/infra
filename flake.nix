@@ -39,8 +39,16 @@
     };
   };
 
-  outputs = { flake-utils, nixpkgs, nixos-hardware, home-manager, helix
-    , taskmatter, qbpm, ... }:
+  outputs =
+    { flake-utils
+    , nixpkgs
+    , nixos-hardware
+    , home-manager
+    , helix
+    , taskmatter
+    , qbpm
+    , ...
+    }:
     let
       lib = import ./lib;
       overlays = [
@@ -49,7 +57,8 @@
         (self: super: { qbpm = qbpm.defaultPackage."${self.system}"; })
         # TODO: add plover overlay to use the wayland branch
       ];
-    in {
+    in
+    {
       homeManagerConfigurations = lib.mkHomeCfgs {
         inherit home-manager;
         pkgs = import nixpkgs { inherit overlays; };
@@ -63,6 +72,6 @@
 
     } // (flake-utils.lib.eachDefaultSystem (system:
       with import nixpkgs { inherit overlays system; }; {
-        devShell = mkShell { buildInputs = [ rnix-lsp nixfmt ]; };
+        devShell = mkShell { buildInputs = [ rnix-lsp nixpkgs-fmt ]; };
       }));
 }

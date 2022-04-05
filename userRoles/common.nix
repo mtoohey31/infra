@@ -26,184 +26,187 @@
       enable = true;
       config = { theme = "base16"; };
     };
-    fish = (let
-      musicCmdStr =
-        "mpv --shuffle --loop-playlist --no-audio-display --volume=35 --input-ipc-server=$XDG_RUNTIME_DIR/mpv.sock";
-    in rec {
-      shellAbbrs = ((if pkgs.stdenv.hostPlatform.isDarwin then {
-        copy = "pbcopy";
-        paste = "pbpaste";
-      } else
-        { }) // {
+    fish = (
+      let
+        musicCmdStr =
+          "mpv --shuffle --loop-playlist --no-audio-display --volume=35 --input-ipc-server=$XDG_RUNTIME_DIR/mpv.sock";
+      in
+      rec {
+        shellAbbrs = ((if pkgs.stdenv.hostPlatform.isDarwin then {
+          copy = "pbcopy";
+          paste = "pbpaste";
+        } else
+          { }) // {
           music = musicCmdStr;
           pcp = "rsync -r --info=progress2";
           rm = "trash";
           se = "sudoedit";
           zth = "zathura --fork";
         });
-      shellAliases = shellAbbrs // {
-        # source: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
-        trash-undo =
-          "echo '' | trash-restore 2>/dev/null | sed '$d' | sort -k2,3 -k1,1n | awk 'END {print $1}' | trash-restore >/dev/null 2>&1";
-        ls = "exa -a --icons --group-directories-first";
-        lsd = "exa -al --icons --group-directories-first";
-        lst = "exa -aT -L 5 --icons --group-directories-first";
-        lsta = "exa -aT --icons --group-directories-first";
-      };
-      functions = {
-        lfcd = {
-          body = ''
-            set tmp (mktemp)
-            lf -last-dir-path=$tmp $argv
-            if test -f "$tmp"
-                set dir (cat $tmp)
-                rm -f $tmp
-                if test -d "$dir"
-                    if test "$dir" != (pwd)
-                        cd $dir
-                    end
-                end
-            end
-          '';
-          wraps = "lf";
+        shellAliases = shellAbbrs // {
+          # source: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
+          trash-undo =
+            "echo '' | trash-restore 2>/dev/null | sed '$d' | sort -k2,3 -k1,1n | awk 'END {print $1}' | trash-restore >/dev/null 2>&1";
+          ls = "exa -a --icons --group-directories-first";
+          lsd = "exa -al --icons --group-directories-first";
+          lst = "exa -aT -L 5 --icons --group-directories-first";
+          lsta = "exa -aT --icons --group-directories-first";
         };
-        mv = {
-          body = ''
-            if test (count $argv) -ge 2 -a ! -d "$argv[-1]"
-                trash "$argv[-1]" 2>/dev/null
-            end
-            command mv $argv
-          '';
-          wraps = "mv";
+        functions = {
+          lfcd = {
+            body = ''
+              set tmp (mktemp)
+              lf -last-dir-path=$tmp $argv
+              if test -f "$tmp"
+                  set dir (cat $tmp)
+                  rm -f $tmp
+                  if test -d "$dir"
+                      if test "$dir" != (pwd)
+                          cd $dir
+                      end
+                  end
+              end
+            '';
+            wraps = "lf";
+          };
+          mv = {
+            body = ''
+              if test (count $argv) -ge 2 -a ! -d "$argv[-1]"
+                  trash "$argv[-1]" 2>/dev/null
+              end
+              command mv $argv
+            '';
+            wraps = "mv";
+          };
+          # TODO: figure out how to determine this at build time
+          python = {
+            body = ''
+              # Intelligently determines which startup silencing method to use by testing paths of python instances
+              if test (command -v python2) -a (realpath (command -v python)) = (realpath (command -v python2))
+                  python2 $argv
+              else if test (command -v python3) -a (realpath (command -v python)) = (realpath (command -v python3))
+                  python3 $argv
+              else
+                  eval (command -v python) $argv
+              end
+            '';
+            wraps = "python";
+          };
+          python2 = {
+            body = ''
+              if test -z "$argv"
+                  eval (command -v python2) -i -c "''''"
+              else
+                  eval (command -v python2) $argv
+              end
+            '';
+            wraps = "python2";
+          };
+          gce = {
+            body = ''
+              set tmp (mktemp)
+              gcc -Wall -o "$tmp" "$argv[1]" && "$tmp" $argv[2..]
+            '';
+          };
+          gde = {
+            body = ''
+              set tmp (mktemp)
+              gcc -Wall -g -o "$tmp" $argv && gdb --quiet --args "$tmp" $argv
+            '';
+          };
+          gve = {
+            body = ''
+              set tmp (mktemp)
+              gcc -Wall -g -o "$tmp" $argv && valgrind "$tmp" $argv
+            '';
+          };
+          tmux-music = {
+            body = ''
+              if tmux has-session -t music &>/dev/null
+                  tmux attach -t music
+              else
+                  tmux new-session -d -s music -c ~/music fish -C "${musicCmdStr} ."
+              end
+            '';
+          };
         };
-        # TODO: figure out how to determine this at build time
-        python = {
-          body = ''
-            # Intelligently determines which startup silencing method to use by testing paths of python instances
-            if test (command -v python2) -a (realpath (command -v python)) = (realpath (command -v python2))
-                python2 $argv
-            else if test (command -v python3) -a (realpath (command -v python)) = (realpath (command -v python3))
-                python3 $argv
-            else
-                eval (command -v python) $argv
-            end
-          '';
-          wraps = "python";
-        };
-        python2 = {
-          body = ''
-            if test -z "$argv"
-                eval (command -v python2) -i -c "''''"
-            else
-                eval (command -v python2) $argv
-            end
-          '';
-          wraps = "python2";
-        };
-        gce = {
-          body = ''
-            set tmp (mktemp)
-            gcc -Wall -o "$tmp" "$argv[1]" && "$tmp" $argv[2..]
-          '';
-        };
-        gde = {
-          body = ''
-            set tmp (mktemp)
-            gcc -Wall -g -o "$tmp" $argv && gdb --quiet --args "$tmp" $argv
-          '';
-        };
-        gve = {
-          body = ''
-            set tmp (mktemp)
-            gcc -Wall -g -o "$tmp" $argv && valgrind "$tmp" $argv
-          '';
-        };
-        tmux-music = {
-          body = ''
-            if tmux has-session -t music &>/dev/null
-                tmux attach -t music
-            else
-                tmux new-session -d -s music -c ~/music fish -C "${musicCmdStr} ."
-            end
-          '';
-        };
-      };
-      enable = true;
-      shellInit = ''
-        export EDITOR=hx
-        export VISUAL="$EDITOR"
-        export PAGER="bat --plain"
-        export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-      '';
-      # TODO: this section's sway branch should be gui only
-      loginShellInit = ''
-        if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$TMUX"
-            if test -n "$SSH_CONNECTION" -o -f /.dockerenv
-                exec tmux
-            else if test -n "$TERMUX_VERSION"
-                cat ${config.xdg.cacheHome}/wal/sequences
-                exec tmux
-            end
-        end
-      '';
-      interactiveShellInit = ''
-        fish_vi_key_bindings
+        enable = true;
+        shellInit = ''
+          export EDITOR=hx
+          export VISUAL="$EDITOR"
+          export PAGER="bat --plain"
+          export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+        '';
+        # TODO: this section's sway branch should be gui only
+        loginShellInit = ''
+          if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$TMUX"
+              if test -n "$SSH_CONNECTION" -o -f /.dockerenv
+                  exec tmux
+              else if test -n "$TERMUX_VERSION"
+                  cat ${config.xdg.cacheHome}/wal/sequences
+                  exec tmux
+              end
+          end
+        '';
+        interactiveShellInit = ''
+          fish_vi_key_bindings
 
-        # TODO: make pasting work in visual mode
-        # TODO: make d and x keys work with this
-        bind -s p 'commandline -C (math (commandline -C) + 1); fish_clipboard_paste; commandline -f backward-char repaint-mode'
-        bind -s P 'fish_clipboard_paste; commandline -f repaint-mode'
-        bind -s -M visual -m default y 'fish_clipboard_copy; commandline -f swap-selection-start-stop end-selection repaint-mode'
+          # TODO: make pasting work in visual mode
+          # TODO: make d and x keys work with this
+          bind -s p 'commandline -C (math (commandline -C) + 1); fish_clipboard_paste; commandline -f backward-char repaint-mode'
+          bind -s P 'fish_clipboard_paste; commandline -f repaint-mode'
+          bind -s -M visual -m default y 'fish_clipboard_copy; commandline -f swap-selection-start-stop end-selection repaint-mode'
 
-        bind -s -M visual e forward-single-char forward-word backward-char
-        bind -s -M visual E forward-bigword backward-char
+          bind -s -M visual e forward-single-char forward-word backward-char
+          bind -s -M visual E forward-bigword backward-char
 
-        # bind -s -M normal V beginning-of-line begin-selection end-of-line
-        # bind -s -M normal yy 'commandline -f kill-whole-line; fish_clipboard_copy'
+          # bind -s -M normal V beginning-of-line begin-selection end-of-line
+          # bind -s -M normal yy 'commandline -f kill-whole-line; fish_clipboard_copy'
 
-        bind -s -M insert \cf 'set old_tty (stty -g); stty sane; lfcd; stty $old_tty; commandline -f repaint'
+          bind -s -M insert \cf 'set old_tty (stty -g); stty sane; lfcd; stty $old_tty; commandline -f repaint'
 
-        set fish_cursor_default block
-        set fish_cursor_insert line
-        set fish_cursor_replace_one underscore
+          set fish_cursor_default block
+          set fish_cursor_insert line
+          set fish_cursor_replace_one underscore
 
-        set -U fish_color_autosuggestion brblack
-        set -U fish_color_cancel -r
-        set -U fish_color_command brgreen
-        set -U fish_color_comment brmagenta
-        set -U fish_color_cwd green
-        set -U fish_color_cwd_root red
-        set -U fish_color_end brmagenta
-        set -U fish_color_error brred
-        set -U fish_color_escape brcyan
-        set -U fish_color_history_current --bold
-        set -U fish_color_host normal
-        set -U fish_color_match --background=brblue
-        set -U fish_color_normal normal
-        set -U fish_color_operator cyan
-        set -U fish_color_param brblue
-        set -U fish_color_quote yellow
-        set -U fish_color_redirection bryellow
-        set -U fish_color_search_match bryellow '--background=brblack'
-        set -U fish_color_selection white --bold '--background=brblack'
-        set -U fish_color_status red
-        set -U fish_color_user brgreen
-        set -U fish_color_valid_path --underline
-        set -U fish_pager_color_completion normal
-        set -U fish_pager_color_description yellow
-        set -U fish_pager_color_prefix white --bold --underline
-        set -U fish_pager_color_progress brwhite '--background=cyan'
+          set -U fish_color_autosuggestion brblack
+          set -U fish_color_cancel -r
+          set -U fish_color_command brgreen
+          set -U fish_color_comment brmagenta
+          set -U fish_color_cwd green
+          set -U fish_color_cwd_root red
+          set -U fish_color_end brmagenta
+          set -U fish_color_error brred
+          set -U fish_color_escape brcyan
+          set -U fish_color_history_current --bold
+          set -U fish_color_host normal
+          set -U fish_color_match --background=brblue
+          set -U fish_color_normal normal
+          set -U fish_color_operator cyan
+          set -U fish_color_param brblue
+          set -U fish_color_quote yellow
+          set -U fish_color_redirection bryellow
+          set -U fish_color_search_match bryellow '--background=brblack'
+          set -U fish_color_selection white --bold '--background=brblack'
+          set -U fish_color_status red
+          set -U fish_color_user brgreen
+          set -U fish_color_valid_path --underline
+          set -U fish_pager_color_completion normal
+          set -U fish_pager_color_description yellow
+          set -U fish_pager_color_prefix white --bold --underline
+          set -U fish_pager_color_progress brwhite '--background=cyan'
 
-        set fish_greeting
+          set fish_greeting
 
-        if test -z "$SSH_CONNECTION" -a -z "$TMUX"
-            cat ${config.xdg.cacheHome}/wal/sequences
-        end
+          if test -z "$SSH_CONNECTION" -a -z "$TMUX"
+              cat ${config.xdg.cacheHome}/wal/sequences
+          end
 
-        alias e "$EDITOR"
-        abbr e "$EDITOR"
-      '';
-    });
+          alias e "$EDITOR"
+          abbr e "$EDITOR"
+        '';
+      }
+    );
     helix = {
       enable = true;
       settings = {

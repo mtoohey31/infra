@@ -129,7 +129,7 @@
       };
       enable = true;
       shellInit = ''
-        export EDITOR=kak
+        export EDITOR=hx
         export VISUAL="$EDITOR"
         export PAGER="bat --plain"
         export MANPAGER="sh -c 'col -bx | bat -l man -p'"
@@ -203,6 +203,22 @@
         abbr e "$EDITOR"
       '';
     });
+    helix = {
+      enable = true;
+      settings = {
+        theme = "base16_default";
+        editor = {
+          scrolloff = 7;
+          line-number = "relative";
+          cursor-shape = {
+            insert = "bar";
+            normal = "block";
+            select = "underline";
+          };
+          # lsp.display-messages = true;
+        };
+      };
+    };
     kakoune = {
       enable = true;
       config = {

@@ -18,6 +18,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    helix = {
+      # TODO: unpin this once https://github.com/helix-editor/helix/issues/1779 is resolved
+      url =
+        "github:helix-editor/helix?rev=24352b2729559533948da92098529e59cd6562fd";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
     taskmatter = {
       url = "github:mtoohey31/taskmatter";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -31,12 +39,15 @@
     };
   };
 
-  outputs = { nixpkgs, nixos-hardware, home-manager, taskmatter, qbpm, ... }:
+  outputs =
+    { nixpkgs, nixos-hardware, home-manager, helix, taskmatter, qbpm, ... }:
     let
       lib = import ./lib;
       overlays = [
+        (self: super: { helix = helix.defaultPackage."${self.system}"; })
         taskmatter.overlay
         (self: super: { qbpm = qbpm.defaultPackage."${self.system}"; })
+        # TODO: add plover overlay to use the wayland branch
       ];
     in {
       homeManagerConfigurations = lib.mkHomeCfgs {

@@ -26,7 +26,8 @@
     fish = (let
       musicCmdStr =
         "mpv --shuffle --loop-playlist --no-audio-display --volume=35 --input-ipc-server=$XDG_RUNTIME_DIR/mpv.sock";
-      abbrsAndAliases = ((if pkgs.stdenv.hostPlatform.isDarwin then {
+    in rec {
+      shellAbbrs = ((if pkgs.stdenv.hostPlatform.isDarwin then {
         copy = "pbcopy";
         paste = "pbpaste";
       } else {
@@ -49,9 +50,7 @@
         tm = "taskmatter";
         zth = "zathura --fork";
       });
-    in {
-      shellAbbrs = abbrsAndAliases // { };
-      shellAliases = abbrsAndAliases // {
+      shellAliases = shellAbbrs // {
         # source: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
         trash-undo =
           "echo '' | trash-restore 2>/dev/null | sed '$d' | sort -k2,3 -k1,1n | awk 'END {print $1}' | trash-restore >/dev/null 2>&1";

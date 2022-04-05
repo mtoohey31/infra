@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }:
 
+# TODO: setup direnv
+
 {
   home.packages = with pkgs; [
     (rWrapper.override {

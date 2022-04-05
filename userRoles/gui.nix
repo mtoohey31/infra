@@ -25,9 +25,7 @@ in {
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
-    (nerdfonts.override {
-      fonts = [ "JetBrainsMono" ];
-    }) # TODO: reconsider making this a variable
+    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
 
   programs = {

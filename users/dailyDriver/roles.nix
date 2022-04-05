@@ -1,1 +1,1 @@
-[ "gui" "wm" "devel" ]
+[ "gui" "wm" "devel" "school" ]

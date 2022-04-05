@@ -28,7 +28,7 @@ in {
     package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
 
-  environment.systemPackages = with pkgs; [ nvtop ];
+  environment.systemPackages = [ pkgs.nvtop ];
 
   services.supergfxctl = {
     enable = true;
@@ -45,7 +45,7 @@ in {
     username = "mtoohey";
     groups = [ "wheel" "video" ];
   } pkgs;
-  home-manager.users.mtoohey = lib.mkHomeCfg "dailyDriver";
+  home-manager.users.mtoohey = lib.mkHomeCfg "dailyDriver" pkgs;
 
   services.getty.autologinUser = "mtoohey";
 }

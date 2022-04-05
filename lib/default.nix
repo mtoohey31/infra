@@ -15,41 +15,46 @@ rec {
       };
     };
 
-  mkHomeCfg = user: {
+  mkHomeCfg = user: pkgs: {
     imports = (map (roleName: ../userRoles + "/${roleName}.nix")
       (import (../users + "/${user}/roles.nix"))) ++ [
         ../userRoles/common.nix
+
+        { nixpkgs.overlays = pkgs.overlays; }
 
         (../users + "/${user}/home.nix")
       ];
   };
 
-  mkHomeCfgs = { nixpkgs, home-manager, usernames, systems }:
+  mkHomeCfgs = { pkgs, home-manager, usernames, systems }:
     foldl' (s: user:
       s // (foldl' (s: username:
         s // (foldl' (s: system:
           s // {
             "${username}-${user}-${system}" =
               home-manager.lib.homeManagerConfiguration rec {
-                inherit username system;
+                inherit pkgs system username;
                 homeDirectory =
                   if system == pkgs.stdenv.hostPlatform.isDarwin then
                     "/Users/${username}"
                   else
                     "/home/${username}";
                 configuration = mkHomeCfg user;
-                pkgs = import nixpkgs { inherit system; };
               };
           }) { } systems)) { } usernames)) { } (attrNames (readDir ../users));
 
-  mkHostCfgs = { nixpkgs, nixos-hardware, home-manager }:
+  mkHostCfgs = { nixpkgs, overlays, nixos-hardware, home-manager }:
     foldl' (s: hostName:
       s // {
-        "${hostName}" = nixpkgs.lib.nixosSystem {
+        "${hostName}" = nixpkgs.lib.nixosSystem rec {
           modules = (map (roleName: ../hostRoles + "/${roleName}.nix")
             (import (../hosts + "/${hostName}/roles.nix"))) ++ [
               ../hostRoles/common.nix
-              { networking.hostName = hostName; }
+
+              {
+                nixpkgs.overlays = overlays;
+                networking.hostName = hostName;
+              }
 
               (../hosts + "/${hostName}/configuration.nix")
               (../hosts + "/${hostName}/hardware-configuration.nix")

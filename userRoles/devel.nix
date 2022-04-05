@@ -86,7 +86,7 @@
         mso = "remote set-url origin";
         msu = "remote set-url upstream";
         o = "clone";
-        ob = "clone";
+        ob = "clone --bare";
         p = "push";
         pf = "push --force";
         pu =

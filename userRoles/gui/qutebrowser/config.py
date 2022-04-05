@@ -22,7 +22,7 @@ c.statusbar.show = 'never'
 c.auto_save.session = True
 c.editor.command = command_prefix_list + \
     [command_prefix_string +
-        'fish -c \'cat ".cache/wal/sequences" && nvim +"set nonumber norelativenumber" {file}\'']
+        'fish -c \'cat ".cache/wal/sequences" && $EDITOR {file}\'']
 c.content.fullscreen.window = True
 c.tabs.show = 'switching'
 c.tabs.show_switching_delay = 1500
@@ -57,7 +57,6 @@ config.bind('v', 'hint all hover')
 config.bind('V', 'mode-enter caret')
 config.bind('<Ctrl-F>', 'hint --rapid all tab-bg')
 config.bind('<Ctrl-e>', 'fake-key <Ctrl-a><Ctrl-c><Ctrl-Shift-e>')
-config.bind('<Ctrl-Shift-e>', f'spawn {term_program} --title "floatme" -o background_opacity=0.8 -e /bin/fish -c \'cat ~/.cache/wal/sequences && nvim +"nnoremap Z ggVG\\"+yZQ|normal!\\"+p:" && qbpm launch (echo "$QTWEBENGINE_DICTIONARIES_PATH" | sed "s/^.*qutebrowser-profiles\\///" | sed "\\/.*//g") ":fake-key <Ctrl-v>"\'')
 config.unbind('<Ctrl-v>')
 config.unbind('<Ctrl-a>')
 

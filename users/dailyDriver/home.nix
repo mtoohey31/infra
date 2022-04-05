@@ -7,4 +7,9 @@
     bitwarden
     bitwarden-cli
   ];
+
+  programs.fish = rec {
+    shellAbbrs.hi = "himalaya";
+    shellAliases = shellAbbrs;
+  };
 }

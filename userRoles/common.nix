@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }:
 
+# TODO: split music into its own role
+
 {
   home.stateVersion = "21.11";
 
@@ -30,37 +32,22 @@
       shellAbbrs = ((if pkgs.stdenv.hostPlatform.isDarwin then {
         copy = "pbcopy";
         paste = "pbpaste";
-      } else {
-        copy = "wl-copy";
-        paste = "wl-paste";
-      }) // {
-        # TODO: some of these are dev and personal only
-        dc = "docker compose";
-        dcu = "docker compose up -d --remove-orphans";
-        dcd = "docker compose down --remove-orphans";
-        dcdu = "docker compose -f docker-compose-dev.yaml up --remove-orphans";
-        dcdd =
-          "docker compose -f docker-compose-dev.yaml down --remove-orphans";
-        g = "git";
-        hi = "himalaya";
-        music = musicCmdStr;
-        pcp = "rsync -r --info=progress2";
-        rm = "trash";
-        se = "sudoedit";
-        tm = "taskmatter";
-        zth = "zathura --fork";
-      });
+      } else
+        { }) // {
+          music = musicCmdStr;
+          pcp = "rsync -r --info=progress2";
+          rm = "trash";
+          se = "sudoedit";
+          zth = "zathura --fork";
+        });
       shellAliases = shellAbbrs // {
         # source: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
         trash-undo =
           "echo '' | trash-restore 2>/dev/null | sed '$d' | sort -k2,3 -k1,1n | awk 'END {print $1}' | trash-restore >/dev/null 2>&1";
-        R = "R --quiet --save";
-        python3 = "python3 -q";
         ls = "exa -a --icons --group-directories-first";
         lsd = "exa -al --icons --group-directories-first";
         lst = "exa -aT -L 5 --icons --group-directories-first";
         lsta = "exa -aT --icons --group-directories-first";
-        nsxiv = "nsxiv -a";
       };
       functions = {
         lfcd = {
@@ -327,6 +314,10 @@
               $EDITOR -c "startinsert" "card$n.md" && test -e "card$n.md" && lf -remote "send $id select \"card$n.md\""
           }}
         '';
+        gc = "cd ~/courses";
+        gi = "cd ~/.infra";
+        gm = "cd ~/music";
+        gr = "cd ~/repos";
       };
       previewer = { source = "${pkgs.pistol}/bin/pistol"; };
       settings = {

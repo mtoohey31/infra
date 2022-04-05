@@ -14,6 +14,21 @@
   ];
 
   programs = {
+    fish = rec {
+      shellAbbrs = {
+        dc = "docker compose";
+        dcu = "docker compose up -d --remove-orphans";
+        dcd = "docker compose down --remove-orphans";
+        dcdu = "docker compose -f docker-compose-dev.yaml up --remove-orphans";
+        dcdd =
+          "docker compose -f docker-compose-dev.yaml down --remove-orphans";
+        g = "git";
+      };
+      shellAliases = shellAbbrs // {
+        R = "R --quiet --save";
+        python3 = "python3 -q";
+      };
+    };
     git = {
       enable = true;
       userName = "Matthew Toohey";

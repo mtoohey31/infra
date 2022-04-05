@@ -15,7 +15,12 @@ with builtins; {
   ];
 
   programs = {
-    fish = {
+    fish = rec {
+      shellAbbrs = {
+        copy = "wl-copy";
+        paste = "wl-paste";
+      };
+      shellAliases = shellAbbrs;
       loginShellInit = ''
         if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$SSH_CONNECTION" -a ! -f /.dockerenv
           exec sway

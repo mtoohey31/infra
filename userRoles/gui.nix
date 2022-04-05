@@ -80,6 +80,7 @@ in {
         include ${config.xdg.cacheHome}/wal/colors-kitty.conf
       '';
     };
+    lf.keybindings.gC = "&kitty -e fish -C lf &>/dev/null &";
     mpv = {
       enable = true;
       config = {

@@ -1,5 +1,8 @@
 { config, pkgs, stdenv, ... }:
 
+# TODO: disable verbose startup messages so I don't scare people in class
+# TODO: fix keyboard flashing during sleep
+
 let
   lib = import ../../lib;
   asusctl_pr_tar = fetchTarball {

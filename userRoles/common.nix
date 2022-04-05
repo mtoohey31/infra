@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
-# TODO: split music into its own role
+# TODO: split music into its own role and wrap the mpv binary in a script that forces certain flags, such as the socket path
+# TODO: add neovim (with dev-stuff in the appropriate) role cause I'll need a fallback while I play with other editors
 
 {
   home.stateVersion = "21.11";
@@ -236,6 +237,7 @@
           {
             mode = "insert";
             key = "<c-backspace>";
+            # TODO: fix this so it doesn't delete following lines
             effect = "<a-;>:exec -draft \\;Bd<ret>";
           }
         ];

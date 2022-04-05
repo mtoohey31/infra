@@ -1,12 +1,14 @@
 { config, lib, pkgs, ... }:
 
-# TODO: setup direnv
+# TODO: setup direnv, and make sure it works with lf
 
 {
   home.packages = with pkgs; [
     (rWrapper.override {
       packages = with rPackages; [ ggplot2 ];
     }) # TODO: add configuration
+
+    # TODO: extract these into a devShell for the current workspace after setting up direnv
     nixfmt
     gcc
     gnumake

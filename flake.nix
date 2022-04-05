@@ -6,6 +6,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
 
     nixos-hardware = {
       url = "nixos-hardware";
@@ -20,13 +21,23 @@
     taskmatter = {
       url = "github:mtoohey31/taskmatter";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
+    qbpm = {
+      url = "github:pvsr/qbpm";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
   };
 
-  outputs = { nixpkgs, nixos-hardware, home-manager, taskmatter, ... }:
+  outputs = { nixpkgs, nixos-hardware, home-manager, taskmatter, qbpm, ... }:
     let
       lib = import ./lib;
-      overlays = [ taskmatter.overlay ];
+      overlays = [
+        taskmatter.overlay
+        (self: super: { qbpm = qbpm.defaultPackage."${self.system}"; })
+      ];
     in {
       homeManagerConfigurations = lib.mkHomeCfgs {
         inherit home-manager;

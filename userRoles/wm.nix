@@ -223,6 +223,11 @@ with builtins; {
             exec echo '{ "command": ["add", "volume", "2"] }' | socat - ${mpvsock}'';
 
           "${modifier}+Shift+S" = "exec grimshot copy area";
+
+          "${modifier}+p" = "exec qbpm launch personal";
+          "${modifier}+g" = "exec qbpm launch gaming";
+          "${modifier}+u" = "exec qbpm launch university";
+          "${modifier}+m" = "exec qbpm launch mod";
         };
       modes = {
         resize = {

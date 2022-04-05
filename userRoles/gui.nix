@@ -21,12 +21,24 @@ in {
     nsxiv
     pywal
     socat
+    qbpm # TODO: add greasemonkey and figure out how to handle bookmarks
 
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
+
+  xdg.dataFile = (foldl' (s: name:
+    s // {
+      "qutebrowser-profiles/${name}/config/config.py".text = ''
+        config.load_autoconfig(False);
+        config.source('${config.xdg.configHome}/qutebrowser/config.py')
+      '';
+      "qutebrowser-profiles/${name}/config/greasemonkey".source =
+        config.lib.file.mkOutOfStoreSymlink
+        "${config.xdg.configHome}/qutebrowser/greasemonkey";
+    }) { } [ "personal" "gaming" "university" "mod" ]);
 
   programs = {
     brave = {
@@ -120,7 +132,6 @@ in {
         q = "quit";
       };
     };
-    # TODO: add profiles and keybindings
     qutebrowser = {
       enable = true;
       extraConfig = readFile ./gui/qutebrowser/config.py;

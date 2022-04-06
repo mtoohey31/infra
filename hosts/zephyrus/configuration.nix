@@ -49,7 +49,7 @@ in
   users = lib.mkPrimaryUser
     {
       username = "mtoohey";
-      groups = [ "wheel" "video" ];
+      groups = [ "wheel" "video" "docker" ];
     }
     pkgs;
   home-manager.users.mtoohey = lib.mkHomeCfg "dailyDriver" pkgs;

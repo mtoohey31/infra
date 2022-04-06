@@ -6,6 +6,7 @@
       packages = with rPackages; [ ggplot2 ];
     }) # TODO: add configuration
 
+    docker
     gcc
     gnumake
     cargo

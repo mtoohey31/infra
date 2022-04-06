@@ -40,8 +40,6 @@ c.content.javascript.can_access_clipboard = True
 config.bind('m', 'spawn --userscript view_in_mpv')
 config.bind('M', 'hint links spawn --userscript view_in_mpv {hint-url}')
 config.bind('D', 'close')
-config.bind('B',
-            'spawn --userscript ~/.config/qutebrowser/userscripts/qute-bitwarden')
 config.bind('so', 'config-source')
 config.bind('e', 'edit-url')
 config.bind('(', 'jseval --world=main -f ~/.config/qutebrowser/js/slowDown.js')

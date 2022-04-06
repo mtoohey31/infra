@@ -24,6 +24,9 @@ in
     socat
     qbpm # TODO: add greasemonkey and figure out how to handle bookmarks
 
+    rofi # TODO: replace this with a wrapper script because it's only used for qute-bitwarden and won't be available on macos
+    keyutils # needed for qute-bitwarden userscript
+
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
@@ -139,7 +142,10 @@ in
     };
     qutebrowser = {
       enable = true;
-      extraConfig = readFile ./gui/qutebrowser/config.py;
+      extraConfig = ''
+        ${readFile ./gui/qutebrowser/config.py}
+        config.bind('B', 'spawn --userscript ${pkgs.qutebrowser}/share/qutebrowser/userscripts/qute-bitwarden')
+      ''; # NOTE: running the command mentioned here might be neccessary: https://github.com/mattydebie/bitwarden-rofi/issues/34#issuecomment-639257565
     };
   };
 

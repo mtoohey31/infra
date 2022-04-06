@@ -20,7 +20,10 @@ rec {
       (import (../users + "/${user}/roles.nix"))) ++ [
       ../userRoles/common.nix
 
-      { nixpkgs.overlays = pkgs.overlays; }
+      {
+        nixpkgs.overlays = pkgs.overlays;
+        programs.fish.shellInit = ''export INFRA_USER="${user}"'';
+      }
 
       (../users + "/${user}/home.nix")
     ];

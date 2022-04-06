@@ -45,6 +45,15 @@ in
       })
     { } [ "personal" "gaming" "university" "mod" ]);
 
+  xdg.desktopEntries =
+    if pkgs.stdenv.hostPlatform.isLinux then {
+      todoist = {
+        name = "Todoist";
+        exec = "brave --profile-direcotory=\"Default\" --app=https://todoist.com";
+        terminal = false;
+      };
+    } else { };
+
   programs = {
     brave = {
       enable = true;

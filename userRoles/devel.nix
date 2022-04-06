@@ -7,9 +7,6 @@
     }) # TODO: add configuration
 
     docker
-    gcc
-    gnumake
-    cargo
   ];
 
   programs = {

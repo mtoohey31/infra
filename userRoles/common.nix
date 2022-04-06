@@ -230,6 +230,25 @@
             select = "underline";
           };
         };
+        keys.normal = {
+          p = "paste_clipboard_after";
+          P = "paste_clipboard_before";
+          y = "yank_joined_to_clipboard";
+          c = "change_selection_noyank";
+          d = "delete_selection_noyank";
+          n = [ "search_next" "align_view_center" ];
+          N = [ "search_prev" "align_view_center" ];
+          # TODO: debug why mode changes don't take effect until after the whole binding sequence
+          # B = [ "select_mode" "move_prev_word_end" "normal_mode" ];
+          # E = [ "select_mode" "move_next_word_end" "normal_mode" ];
+          g.c = "toggle_comments";
+          g.R = "rename_symbol";
+          g.a = "code_action";
+          G = "goto_last_line";
+          Q = ":q!";
+          W = ":w";
+          Z = ":wq";
+        };
       };
     };
     # TODO: add icons

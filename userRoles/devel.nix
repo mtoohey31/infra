@@ -137,6 +137,5 @@
       goPath = ".go";
       package = pkgs.go_1_18;
     };
-    kakoune = { plugins = with pkgs.kakounePlugins; [ kak-lsp ]; };
   };
 }

@@ -219,67 +219,8 @@
             normal = "block";
             select = "underline";
           };
-          # lsp.display-messages = true;
         };
       };
-    };
-    kakoune = {
-      enable = true;
-      config = {
-        hooks = [{
-          name = "WinCreate";
-          option = ".*";
-          commands = "kakboard-enable";
-        }];
-        keyMappings = [
-          {
-            mode = "normal";
-            key = "/";
-            effect = "/(?i)";
-          }
-          {
-            mode = "insert";
-            key = "<c-backspace>";
-            # TODO: fix this so it doesn't delete following lines
-            effect = "<a-;>:exec -draft \\;Bd<ret>";
-          }
-        ];
-        numberLines = {
-          enable = true;
-          relative = true;
-          highlightCursor = true;
-          separator = "' '";
-        };
-        scrollOff = {
-          lines = 7;
-          columns = 20;
-        };
-        wrapLines = {
-          enable = true;
-          word = true;
-          indent = true;
-        };
-      };
-      extraConfig = ''
-        set-face global comment grey
-        set-face global LineNumbers comment
-        set-face global LineNumberCursor red
-        set-face global LineNumbersWrapped black
-        set-face global BufferPadding black
-
-        # TODO: get these enabled
-        # lsp-enable
-        # lsp-inlay-diagnostics-enable global
-        # lsp-inline-diagnostics-enable global
-        # require-module auto-pairs
-        # set-option global auto_pairs ( ) { } [ ] '"' '"' "'" "'" ` `
-      '';
-      plugins = with pkgs.kakounePlugins; [
-        kakoune-state-save
-        kakboard
-        auto-pairs-kak
-        # TODO: surround-kak
-      ];
     };
     # TODO: add icons
     lf = {

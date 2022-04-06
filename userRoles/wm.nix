@@ -243,6 +243,11 @@ with builtins; {
           "${modifier}+g" = "exec qbpm launch gaming";
           "${modifier}+u" = "exec qbpm launch university";
           "${modifier}+m" = "exec qbpm launch mod";
+
+          "${modifier}+Shift+p" = "exec brave --profile-directory=\"Default\"";
+          "${modifier}+Shift+g" = "exec brave --profile-directory=\"Profile 2\"";
+          "${modifier}+Shift+u" = "exec brave --profile-directory=\"Profile 3\"";
+          "${modifier}+Shift+m" = "exec brave --profile-directory=\"Profile 4\"";
         };
         modes = {
           resize = {

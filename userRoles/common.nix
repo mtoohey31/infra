@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 
-# TODO: split music into its own role and wrap the mpv binary in a script that forces certain flags, such as the socket path
+# TODO: split music into its own role and wrap the mpv binary in a script that forces certain flags, such as the socket path. also debug why I can't keep typing after killing the inital mpv run in tmux-music, and make that abbreviation shorter
 # TODO: add neovim (with dev-stuff in the appropriate) role cause I'll need a fallback while I play with other editors
 
 {

@@ -40,6 +40,7 @@
         init = { defaultBranch = "main"; };
       };
       ignores = [ ".direnv/" ".envrc" ];
+      # TODO: add prompts for dangerous stuff that doesn't already include it by default
       aliases = {
         a = "add --verbose";
         aa = "add --all --verbose";

@@ -1,6 +1,5 @@
 { config, pkgs, stdenv, ... }:
 
-# TODO: disable verbose startup messages so I don't scare people in class
 # TODO: fix keyboard flashing during sleep
 
 let
@@ -44,6 +43,11 @@ in
 
   # TODO: add kernel patches to get asusctl profiles working as per https://gitlab.com/asus-linux/asusctl/-/issues/134
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # for quiet startup
+  boot.consoleLogLevel = 0;
+  boot.initrd.verbose = false;
+  boot.kernelParams = [ "quiet" "udev.log_level=3" ];
 
   programs.light.enable = true;
   users = lib.mkPrimaryUser

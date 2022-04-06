@@ -51,7 +51,6 @@
           pcp = "rsync -r --info=progress2";
           rm = "trash";
           se = "sudoedit";
-          zth = "zathura --fork";
         });
         shellAliases = shellAbbrs // {
           # source: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828

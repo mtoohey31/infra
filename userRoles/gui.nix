@@ -50,7 +50,12 @@ in
       enable = true;
       # TODO: figure out how to add profile sync and add keybindings
     };
-    fish.shellAliases.nsxiv = "nsxiv -a";
+    fish = rec {
+      shellAbbrs = {
+        zth = "zathura --fork";
+      };
+      shellAliases = shellAbbrs // { nsxiv = "nsxiv -a"; };
+    };
     kitty = {
       enable = true;
       environment = { SHLVL = "0"; };

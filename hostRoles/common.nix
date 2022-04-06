@@ -16,6 +16,9 @@
       "cudatoolkit"
     ];
 
+  # TODO: figure out how to set password securely in configuration, then enable this
+  # users.mutableUsers = false;
+
   boot.loader.systemd-boot.enable = true;
 
   time.timeZone = "America/Toronto";

@@ -69,6 +69,6 @@
 
     } // (flake-utils.lib.eachDefaultSystem (system:
       with import nixpkgs { inherit overlays system; }; {
-        devShell = mkShell { buildInputs = [ rnix-lsp nixpkgs-fmt ]; };
+        devShell = mkShell { nativeBuildInputs = [ rnix-lsp nixpkgs-fmt ]; };
       }));
 }

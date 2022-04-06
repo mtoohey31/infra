@@ -3,7 +3,6 @@
 # TODO:
 #
 # kmonad
-# zathura
 # scripts
 # check dotfiles repo for any other configs that need to get picked up
 # make cursor not tiny
@@ -147,6 +146,19 @@ in
         config.bind('B', 'spawn --userscript ${pkgs.qutebrowser}/share/qutebrowser/userscripts/qute-bitwarden')
       ''; # NOTE: running the command mentioned here might be neccessary: https://github.com/mattydebie/bitwarden-rofi/issues/34#issuecomment-639257565
     };
+    zathura = {
+      enable = true;
+      extraConfig = ''
+        unmap r
+        include ${config.xdg.cacheHome}/wal/zathuracolours
+      '';
+      options = {
+        guioptions = "";
+        adjust-open = "width";
+        font = "JetBrainsMono Nerd Font 12";
+        selection-clipboard = "clipboard";
+      };
+    };
   };
 
   xdg.configFile."qutebrowser/js".source = ./gui/qutebrowser/js;
@@ -154,4 +166,6 @@ in
     url = "https://gitlab.com/jjzmajic/qutewal";
     rev = "ff878423ab251bf764475ab54b28486b957edfd4";
   };
+
+  xdg.configFile."wal/templates/zathuracolours".source = ./gui/zathuracolours;
 }

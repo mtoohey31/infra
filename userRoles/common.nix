@@ -9,7 +9,17 @@
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [ "discord" ];
 
-  home.packages = with pkgs; [ trash-cli exa ripgrep fzf jq wget gotop ];
+  home.packages = with pkgs; [
+    trash-cli
+    exa
+    ripgrep
+    fzf
+    jq
+    wget
+    gotop
+    poppler_utils
+    ffmpeg
+  ];
 
   xdg.configFile."lf/cleaner" = {
     text = ''
@@ -293,6 +303,8 @@
     pistol = {
       enable = true;
       config = {
+        "text/*" = "bat --paging=never --color=always --style=auto --wrap=character --terminal-width=%pistol-extra0% --line-range=1:%pistol-extra1% %pistol-filename%";
+        "application/json" = "bat --paging=never --color=always --style=auto --wrap=character --terminal-width=%pistol-extra0% --line-range=1:%pistol-extra1% %pistol-filename%";
         "image/*" = ''
           sh: if [ -z "$SSH_CONNECTION" ] || [ -f "/.dockerenv" ]; then kitty +kitten icat --transfer-mode file --place %pistol-extra0%x%pistol-extra1%@%pistol-extra2%x%pistol-extra3% %pistol-filename% && exit 1; else chafa --format symbols --size %pistol-extra0%x%pistol-extra1% %pistol-filename%; fi'';
         "video/*" = ''

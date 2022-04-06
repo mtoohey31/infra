@@ -6,6 +6,7 @@
     discord
     bitwarden
     bitwarden-cli
+    signal-desktop
   ];
 
   programs.fish = rec {

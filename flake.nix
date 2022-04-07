@@ -16,9 +16,7 @@
     };
 
     helix = {
-      # TODO: unpin this once https://github.com/helix-editor/helix/issues/1779 is resolved
-      url =
-        "github:helix-editor/helix?rev=24352b2729559533948da92098529e59cd6562fd";
+      url = "github:helix-editor/helix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };

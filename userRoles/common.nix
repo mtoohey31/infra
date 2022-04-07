@@ -348,6 +348,7 @@
           "$hostname"
           "$kubernetes"
           "$directory"
+          "$sudo"
           "$shlvl"
           "$git_branch"
           "$git_commit"
@@ -446,10 +447,7 @@
           '';
         };
         dart.symbol = " ";
-        directory = {
-          format = "in [$path]($style) ";
-          read_only = " ";
-        };
+        directory.format = "in [$path]($style) ";
         docker_context.symbol = " ";
         elixir.symbol = " ";
         elm.symbol = " ";
@@ -475,7 +473,11 @@
         julia.symbol = " ";
         memory_usage.symbol = " ";
         nim.symbol = " ";
-        nix_shell.symbol = " ";
+        nix_shell = {
+          format = "via $state ";
+          impure_msg = "[ $name](bold purple)";
+          pure_msg = "[ﰕ $name](bold blue)";
+        };
         nodejs.symbol = " ";
         package = {
           symbol = " ";
@@ -494,6 +496,11 @@
         shlvl = {
           format = "at depth [$shlvl]($style) ";
           disabled = false;
+        };
+        sudo = {
+          disabled = false;
+          format = "with [sudo $symbol]($style) ";
+          symbol = "";
         };
         swift.symbol = "ﯣ ";
         username = {

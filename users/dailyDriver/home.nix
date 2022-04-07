@@ -2,6 +2,7 @@
   home.packages = with pkgs; [
     himalaya # TODO: add configuration
     pandoc # TODO: add configuration with defaults
+    texlive.combined.scheme-full
     gimp
     discord
     bitwarden

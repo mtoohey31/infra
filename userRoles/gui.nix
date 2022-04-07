@@ -22,6 +22,7 @@ in
     pywal
     socat
     qbpm # TODO: add greasemonkey and figure out how to handle bookmarks
+    xdg-utils
 
     rofi # TODO: replace this with a wrapper script because it's only used for qute-bitwarden and won't be available on macos
     keyutils # needed for qute-bitwarden userscript
@@ -50,13 +51,34 @@ in
     { } [ "personal" "gaming" "university" "mod" ]);
 
   xdg.desktopEntries =
-    if pkgs.stdenv.hostPlatform.isLinux then {
+    (if pkgs.stdenv.hostPlatform.isLinux then {
       todoist = {
         name = "Todoist";
         exec = "brave --profile-direcotory=\"Default\" --app=https://todoist.com";
         terminal = false;
       };
-    } else { };
+    } else { }) // {
+      qbpm = {
+        type = "Application";
+        name = "qbpm";
+        icon = "qutebrowser";
+        exec = "qbpm choose %u";
+        categories = [ "Network" ];
+        terminal = false;
+      };
+    };
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "application/pdf" = "org.pwmt.zathura.desktop";
+      "image/png" = "nsxiv.desktop";
+      "image/jpeg" = "nsxiv.desktop";
+      "text/html" = "qbpm.desktop";
+      "x-scheme-handler/http" = "qbpm.desktop";
+      "x-scheme-handler/https" = "qbpm.desktop";
+    };
+  };
 
   programs = {
     brave = {

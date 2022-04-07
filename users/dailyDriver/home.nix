@@ -10,6 +10,8 @@
     signal-desktop
   ];
 
+  xdg.mimeApps.associations.added."image/png" = "gimp.desktop";
+
   programs.fish = rec {
     shellAbbrs.hi = "himalaya";
     shellAliases = shellAbbrs;

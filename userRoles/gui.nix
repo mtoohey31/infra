@@ -54,7 +54,7 @@ in
     (if pkgs.stdenv.hostPlatform.isLinux then {
       todoist = {
         name = "Todoist";
-        exec = "brave --profile-direcotory=\"Default\" --app=https://todoist.com";
+        exec = "brave --profile-directory=\"Default\" --app=https://todoist.com";
         terminal = false;
       };
     } else { }) // {

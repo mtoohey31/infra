@@ -47,6 +47,7 @@
           paste = "pbpaste";
         } else
           { }) // {
+          c = "command";
           music = musicCmdStr;
           pcp = "rsync -r --info=progress2";
           rm = "trash";

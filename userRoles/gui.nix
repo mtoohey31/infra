@@ -29,8 +29,12 @@ in
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
+    ibm-plex
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
+
+  # TODO: fix having to force this https://github.com/nix-community/home-manager/issues/1118
+  fonts.fontconfig.enable = pkgs.lib.mkForce true;
 
   xdg.dataFile = (foldl'
     (s: name:

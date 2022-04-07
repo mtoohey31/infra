@@ -1,4 +1,4 @@
-.PHONY: system user install update
+.PHONY: system user install update format
 
 system:
 	sudo nixos-rebuild switch --flake .#
@@ -12,3 +12,6 @@ install:
 	
 update:
 	nix flake update
+	
+format:
+	nixpkgs-fmt .

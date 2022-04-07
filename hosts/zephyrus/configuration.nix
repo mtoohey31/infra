@@ -44,9 +44,14 @@ in
     gfx-mode = "Integrated";
     gfx-vfio-enable = true;
   };
+  services.power-profiles-daemon.enable = true;
+  systemd.services.power-profiles-daemon = {
+    enable = true;
+    wantedBy = [ "multi-user.target" ];
+  };
   services.asusctl.enable = true;
-  environment.etc."asusd/profile.conf".text = "active_profile = \"Quiet\"";
 
+  boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_5_17;
   boot.kernelPatches = map (patch: { inherit patch; }) [
     "${g14_patches}/sys-kernel_arch-sources-g14_files-0004-5.15+--more-uarches-for-kernel.patch"

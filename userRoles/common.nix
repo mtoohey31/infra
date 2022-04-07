@@ -219,37 +219,43 @@
     );
     helix = {
       enable = true;
-      settings = {
-        theme = "base16_default";
-        editor = {
-          scrolloff = 7;
-          line-number = "relative";
-          cursor-shape = {
-            insert = "bar";
-            normal = "block";
-            select = "underline";
-          };
-        };
-        keys.normal = {
+      settings =
+        let clipboard_remaps = rec {
           p = "paste_clipboard_after";
           P = "paste_clipboard_before";
-          y = "yank_joined_to_clipboard";
+          y = "yank_main_selection_to_clipboard";
           c = "change_selection_noyank";
-          d = "delete_selection_noyank";
-          n = [ "search_next" "align_view_center" ];
-          N = [ "search_prev" "align_view_center" ];
-          # TODO: debug why mode changes don't take effect until after the whole binding sequence
-          # B = [ "select_mode" "move_prev_word_end" "normal_mode" ];
-          # E = [ "select_mode" "move_next_word_end" "normal_mode" ];
-          g.c = "toggle_comments";
-          g.R = "rename_symbol";
-          g.a = "code_action";
-          G = "goto_last_line";
-          Q = ":q!";
-          W = ":w";
-          Z = ":wq";
+          d = [ y "delete_selection" ];
+          R = [ "replace_selections_with_clipboard" ];
         };
-      };
+        in
+        {
+          theme = "base16_default";
+          editor = {
+            scrolloff = 7;
+            line-number = "relative";
+            cursor-shape = {
+              insert = "bar";
+              normal = "block";
+              select = "underline";
+            };
+          };
+          keys.normal = clipboard_remaps // {
+            n = [ "search_next" "align_view_center" ];
+            N = [ "search_prev" "align_view_center" ];
+            # TODO: debug why mode changes don't take effect until after the whole binding sequence
+            # B = [ "select_mode" "move_prev_word_end" "normal_mode" ];
+            # E = [ "select_mode" "move_next_word_end" "normal_mode" ];
+            g.c = "toggle_comments";
+            g.R = "rename_symbol";
+            g.a = "code_action";
+            G = "goto_last_line";
+            Q = ":q!";
+            W = [ ":w" "align_view_center" ];
+            Z = ":wq";
+          };
+          keys.select = clipboard_remaps;
+        };
     };
     # TODO: add icons
     lf = {

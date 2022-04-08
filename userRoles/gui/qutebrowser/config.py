@@ -48,7 +48,6 @@ config.bind(
     'c-', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomOut.js')
 config.bind(
     'c+', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomIn.js')
-config.bind('wp', 'hint links spawn ~/.scripts/random_bg -l {hint-url}')
 config.bind('<ESC>', 'fake-key <ESC>')
 config.bind('<Ctrl-Shift-c>', 'yank selection')
 config.bind('v', 'hint all hover')

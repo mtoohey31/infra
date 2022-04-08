@@ -40,6 +40,9 @@ with builtins; {
         background-color=#EE0000CC
       '';
     };
+    qutebrowser.extraConfig = ''
+      config.bind('wp', 'hint all spawn sh -c "wget \\\"{hint-url}\\\" -O ${config.xdg.cacheHome}/wallpaper && wal -c && wal -i ${config.xdg.cacheHome}/wallpaper"')
+    '';
   };
 
   services.kanshi = {
@@ -172,8 +175,7 @@ with builtins; {
         };
         focus = { followMouse = true; };
         seat = { "*" = { hide_cursor = "1000"; }; };
-        output."*".bg = "${config.xdg.configHome}/wallpaper.* fill";
-        # TODO: inhibit idle and floats
+        output."*".bg = "${config.xdg.cacheHome}/wallpaper fill";
         keybindings = {
           "${modifier}+h" = "focus left";
           "${modifier}+j" = "focus down";

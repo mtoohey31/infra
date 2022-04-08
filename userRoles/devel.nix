@@ -7,6 +7,8 @@
     }) # TODO: add configuration
 
     docker
+
+    rnix-lsp
   ];
 
   programs = {

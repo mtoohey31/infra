@@ -16,6 +16,7 @@
     fzf
     jq
     wget
+    unzip
     gotop
     poppler_utils
     ffmpeg

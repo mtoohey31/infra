@@ -78,6 +78,6 @@
           inherit system;
           overlays = [ (self: super: { nix-index = nix-index.defaultPackage."${self.system}"; }) ];
         }; {
-        devShell = mkShell { nativeBuildInputs = [ rnix-lsp nixpkgs-fmt nix-index ]; };
+        devShell = mkShell { nativeBuildInputs = [ rnix-lsp nixpkgs-fmt nix-index gnumake ]; };
       }));
 }

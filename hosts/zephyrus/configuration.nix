@@ -1,7 +1,5 @@
 { config, pkgs, stdenv, ... }:
 
-# TODO: fix keyboard flashing during sleep
-
 let
   lib = import ../../lib;
   asusctl_pr_tar = fetchTarball {
@@ -34,6 +32,10 @@ in
 
   hardware.nvidia = {
     modesetting.enable = true;
+    powerManagement = {
+      enable = true;
+      finegrained = true;
+    };
     package = config.boot.kernelPackages.nvidiaPackages.beta;
   };
 

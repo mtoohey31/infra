@@ -250,6 +250,7 @@
             g.c = "toggle_comments";
             g.R = "rename_symbol";
             g.a = "code_action";
+            g.v = "hover";
             G = "goto_last_line";
             Q = ":q!";
             W = [ ":w" "align_view_center" ];

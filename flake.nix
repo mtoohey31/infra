@@ -15,14 +15,19 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    helix = {
-      url = "github:helix-editor/helix";
+    nix-index = {
+      url = "github:bennofs/nix-index";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
     };
 
     taskmatter = {
       url = "github:mtoohey31/taskmatter";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
+    helix = {
+      url = "github:helix-editor/helix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
@@ -39,6 +44,7 @@
     , nixpkgs
     , nixos-hardware
     , home-manager
+    , nix-index
     , helix
     , taskmatter
     , qbpm
@@ -47,8 +53,9 @@
     let
       lib = import ./lib;
       overlays = [
-        (self: super: { helix = helix.defaultPackage."${self.system}"; })
         taskmatter.overlay
+
+        (self: super: { helix = helix.defaultPackage."${self.system}"; })
         (self: super: { qbpm = qbpm.defaultPackage."${self.system}"; })
         # TODO: add plover overlay to use the wayland branch
       ];
@@ -66,7 +73,11 @@
       };
 
     } // (flake-utils.lib.eachDefaultSystem (system:
-      with import nixpkgs { inherit overlays system; }; {
-        devShell = mkShell { nativeBuildInputs = [ rnix-lsp nixpkgs-fmt ]; };
+      with import nixpkgs
+        {
+          inherit system;
+          overlays = [ (self: super: { nix-index = nix-index.defaultPackage."${self.system}"; }) ];
+        }; {
+        devShell = mkShell { nativeBuildInputs = [ rnix-lsp nixpkgs-fmt nix-index ]; };
       }));
 }

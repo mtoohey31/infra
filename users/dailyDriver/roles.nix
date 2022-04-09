@@ -1,1 +1,1 @@
-[ "gui" "wm" "devel" "school" "audio" ]
+[ "gui" "wm" "devel" "school" "media/audio" ]

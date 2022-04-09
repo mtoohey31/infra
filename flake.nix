@@ -20,14 +20,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    taskmatter = {
-      url = "github:mtoohey31/taskmatter";
+    helix = {
+      url = "github:helix-editor/helix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
 
-    helix = {
-      url = "github:helix-editor/helix";
+    kmonad = {
+      url = "github:kmonad/kmonad?dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
+    taskmatter = {
+      url = "github:mtoohey31/taskmatter";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
@@ -45,6 +51,7 @@
     , nixos-hardware
     , home-manager
     , nix-index
+    , kmonad
     , helix
     , taskmatter
     , qbpm
@@ -53,6 +60,7 @@
     let
       lib = import ./lib;
       overlays = [
+        kmonad.overlay
         taskmatter.overlay
 
         (self: super: { helix = helix.defaultPackage."${self.system}"; })
@@ -69,7 +77,7 @@
       };
 
       nixosConfigurations = lib.mkHostCfgs {
-        inherit nixpkgs overlays nixos-hardware home-manager;
+        inherit nixpkgs overlays nixos-hardware home-manager kmonad;
       };
 
     } // (flake-utils.lib.eachDefaultSystem (system:

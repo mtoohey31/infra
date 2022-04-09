@@ -1,0 +1,57 @@
+(defsrc
+  grv  1 2 3 4 5 7 8 9 0 - =
+  tab  q w e r t u i o p [ ]
+  caps a s d f g j k l ; ' enter
+           x c v n m ,
+)
+
+(defcfg
+  input  (device-file "/dev/input/by-id/usb-ASUSTeK_Computer_Inc._N-KEY_Device-if02-event-kbd")
+  output (uinput-sink "KMonad")
+  fallthrough true
+  allow-cmd true
+)
+
+(defalias
+  ealt (tap-hold-next-release 200 esc lalt)
+  bmet (tap-hold-next-release 200 bspc lmet)
+  dctl (tap-hold-next-release 200 del lctl)
+  enav (tap-hold-next-release 200 ent (layer-toggle nav))
+  tnum (tap-hold-next-release 200 tab (layer-toggle num))
+  bset (tap-hold-next-release 200 \ (layer-toggle settings))
+)
+
+(deflayer qwerty
+  \(    q w e     r     t     y     u   i o p \)
+  @bset a s d     f     g     h     j   k l ; '
+  lsft  z x c     v     b     n     m   , . / rsft
+            @ealt @bmet @dctl @enav spc @tnum
+)
+
+(deflayer nav
+  _ _ home pgup pgdn end _   _    _  _    _ _
+  _ _ _    _    _    _   lft down up rght _ _
+  _ _ _    _    _    _   _   _    _  _    _ _
+           _    _    _   _   _    _
+)
+
+(deflayer num
+  [ F1 F2  F3  F4  ~ / 7 8 9 - ]
+  _ F5 F6  F7  F8  ` * 4 5 6 + menu
+  _ F9 F10 F11 F12 # ^ 1 2 3 = _
+           _   _   _ _ 0 _
+)
+
+(deflayer settings
+  XX XX XX XX XX XX XX XX XX XX XX XX
+  XX XX XX XX XX XX XX XX XX XX XX XX
+  XX XX XX XX (layer-add plover) XX XX XX XX XX XX XX
+           XX XX XX XX XX XX
+)
+
+(deflayer plover
+  XX q w e r t y u i o p [
+  (layer-rem plover) a s d f g h j k l ; '
+  1 1 1 1 1 1 1 1 1 1 1 1
+     XX c v n m XX
+)

@@ -23,6 +23,7 @@ in
     socat
     qbpm # TODO: add greasemonkey and figure out how to handle bookmarks
     xdg-utils
+    kmonad
 
     rofi # TODO: replace this with a wrapper script because it's only used for qute-bitwarden and won't be available on macos
     keyutils # needed for qute-bitwarden userscript

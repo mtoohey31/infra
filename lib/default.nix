@@ -55,7 +55,7 @@ rec {
       { }
       (attrNames (readDir ../users));
 
-  mkHostCfgs = { nixpkgs, overlays, nixos-hardware, home-manager }:
+  mkHostCfgs = { nixpkgs, overlays, nixos-hardware, home-manager, kmonad }:
     foldl'
       (s: hostName:
         s // {
@@ -79,6 +79,24 @@ rec {
               in
               if (pathExists hardwareProfilePath) then
                 [ nixos-hardware.nixosModules."${import hardwareProfilePath}" ]
+              else
+                [ ]
+            ) ++ (
+              let
+                kbdPath = ../hosts
+                + "/${hostName}/default.kbd";
+              in
+              if (pathExists kbdPath) then
+                [
+                  kmonad.nixosModule
+                  {
+                    services.kmonad = {
+                      enable = true;
+                      configfiles = [ kbdPath ];
+                    };
+                    systemd.services."kmonad-defaut".enable = true;
+                  }
+                ]
               else
                 [ ]
             );

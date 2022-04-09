@@ -7,7 +7,7 @@
   home.stateVersion = "21.11";
 
   nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [ "discord" ];
+    builtins.elem (lib.getName pkg) [ "discord" "bitwig-studio" ];
 
   home.packages = with pkgs; [
     trash-cli

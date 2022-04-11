@@ -93,7 +93,7 @@ with builtins; {
             }
             {
               inherit criteria mode;
-              position = "103,939";
+              position = "1671,600";
               scale = 1.75;
             }
           ];

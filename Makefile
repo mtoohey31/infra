@@ -4,7 +4,7 @@ system:
 	sudo nixos-rebuild switch --flake .#
 	
 user:
-	nix build .#homeManagerConfigurations."$$(whoami)-$${INFRA_USER:-${user}}-$$(uname -m)-$$(uname | tr '[:upper:]' '[:lower:]')".activationPackage
+	nix build .#homeManagerConfigurations."$$(whoami)-$$INFRA_USER-$$(uname -m)-$$(uname | tr '[:upper:]' '[:lower:]')".activationPackage
 	result/activate
 	
 install:

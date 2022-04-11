@@ -13,25 +13,18 @@
 )
 
 (defalias
-  asft (tap-hold-next-release 200 a sft)
-  sctl (tap-hold-next-release 200 s ctl)
-  dalt (tap-hold-next-release 200 d alt)
-  fmet (tap-hold-next-release 200 f met)
-  jmet (tap-hold-next-release 200 j met)
-  kalt (tap-hold-next-release 200 k alt)
-  lctl (tap-hold-next-release 200 l ctl)
-  ;sft (tap-hold-next-release 200 ; sft)
-  eset (tap-hold-next-release 200 esc (layer-toggle settings))
-  bnum (tap-hold-next-release 200 bspc (layer-toggle num))
+  ealt (tap-hold-next-release 200 esc alt)
+  bmet (tap-hold-next-release 200 bspc met)
+  dctl (tap-hold-next-release 200 del ctl)
   enav (tap-hold-next-release 200 ent (layer-toggle nav))
   tnum (tap-hold-next-release 200 tab (layer-toggle num))
 )
 
 (deflayer qwerty
-  [ q w e r t y u i o p ]
-  bksl @asft @sctl @dalt @fmet g h @jmet @kalt @lctl @;sft '
-  \( z x c v b n m , . / \)
-  @eset @bnum del @enav spc @tnum
+  \( q w e r t y u i o p \)
+  bksl a s d f g h j k l ; '
+  lsft z x c v b n m , . / rsft
+  @ealt @bmet @dctl @enav spc @tnum
 )
 
 (deflayer nav

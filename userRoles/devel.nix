@@ -109,10 +109,11 @@
         ssh =
           "!git remote set-url origin $(git remote get-url origin | sed -E 's/^https?:\\/\\/github.com\\//git@github.com:/g')";
         t = "stash push --include-untracked";
-        tc = "stash clear";
         td = "stash drop";
         tl = "stash list";
-        tp = "stash pop";
+        to = "stash pop";
+        tp = "stash push --patch";
+        ts = "stash show";
         u = "pull";
         ut = "pull --autostash";
         w = "worktree";

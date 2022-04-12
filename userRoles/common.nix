@@ -311,16 +311,6 @@ with builtins;
         R = "rename";
         M = "push :mkdir<space>";
         x = ''!unzip "$f"'';
-        c = ''
-          ''${{
-              set IFS " "
-              set n 1
-              while test -e "card$n.md"
-                  set n (math $n + 1)
-              end
-              $EDITOR -c "startinsert" "card$n.md" && test -e "card$n.md" && lf -remote "send $id select \"card$n.md\""
-          }}
-        '';
         gc = "cd ~/courses";
         gi = "cd ~/.infra";
         gm = "cd ~/music";

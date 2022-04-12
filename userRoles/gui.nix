@@ -82,6 +82,7 @@ in
     };
   };
 
+  home.file.Downloads.source = config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory;
   programs = {
     brave = {
       enable = true;

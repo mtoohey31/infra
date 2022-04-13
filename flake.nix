@@ -133,11 +133,14 @@
       };
 
     } // (flake-utils.lib.eachDefaultSystem (system:
-      with import nixpkgs
-        {
-          inherit system;
-          overlays = [ (self: super: { nix-index = nix-index.defaultPackage."${self.system}"; }) ];
-        }; {
-        devShell = mkShell { nativeBuildInputs = [ rnix-lsp nixpkgs-fmt nix-index gnumake ]; };
+      with import nixpkgs { inherit system; }; {
+        devShell = mkShell {
+          nativeBuildInputs = [
+            rnix-lsp
+            nixpkgs-fmt
+            nix-index.defaultPackage."${system}"
+            gnumake
+          ];
+        };
       }));
 }

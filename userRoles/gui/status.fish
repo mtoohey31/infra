@@ -13,7 +13,7 @@ while true
         set -a output "睊 |"
     end
 
-    if set graphics (supergfxctl -g)
+    if set graphics (supergfxctl -g | string replace -r '^Current graphics mode: ' '')
         set -a output  $graphics" |"
     else
         set -a output " misbehaving |"
@@ -21,7 +21,6 @@ while true
 
     set -a output  (df -h / | tail -n1 | awk '{ print $4 }')" |"
 
-    # TODO: get udev rules set up for this
     set hs_bat (headsetcontrol -cb 2> /dev/null)
     if test "$status" -eq 0
         set -a output  $hs_bat"% |"

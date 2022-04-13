@@ -1,9 +1,6 @@
 { config, lib, pkgs, ... }:
 
-# TODO:
-#
-# check dotfiles repo for any other configs that need to get picked up
-# make cursor not tiny
+# TODO: make cursor not tiny
 
 with builtins;
 let lib = import ../lib;
@@ -79,17 +76,25 @@ in
 
   home.file.Downloads.source = config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory;
   programs = {
-    brave = {
-      enable = true;
-      # TODO: figure out how to add profile sync and add keybindings
-    };
+    brave.enable = true;
     fish = rec {
+      functions = {
+        ssh = {
+          body = ''
+            if test "$TERM" = "xterm-kitty"
+              TERM=xterm-256color command ssh $argv
+            else
+              command ssh $argv
+            end
+          '';
+          wraps = "ssh";
+        };
+      };
       shellAbbrs = {
         zth = "zathura --fork";
       };
       shellAliases = shellAbbrs // { nsxiv = "nsxiv -a"; };
     };
-    # TODO: wrap ssh in a script to change xterm-kitty to xterm-256color when running inside kitty
     kitty = {
       enable = true;
       environment = { SHLVL = "0"; };

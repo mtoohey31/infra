@@ -2,10 +2,6 @@
 
 {
   home.packages = with pkgs; [
-    (rWrapper.override {
-      packages = with rPackages; [ ggplot2 ];
-    }) # TODO: add configuration
-
     docker
 
     rnix-lsp

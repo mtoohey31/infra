@@ -20,7 +20,6 @@ in
   home.packages = with pkgs; [
     nsxiv
     pywal
-    plover.dev
     socat
     qbpm # TODO: add greasemonkey and figure out how to handle bookmarks
     xdg-utils

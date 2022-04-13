@@ -8,7 +8,7 @@ with builtins;
   home.stateVersion = "21.11";
 
   nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [ "discord" "bitwig-studio" ];
+    builtins.elem (lib.getName pkg) [ "bitwig-studio" ];
 
   nixpkgs.config.permittedInsecurePackages = [ "python2.7-Pillow-6.2.2" ];
 

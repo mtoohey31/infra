@@ -8,6 +8,7 @@
     bitwarden
     bitwarden-cli
     signal-desktop
+    obs-studio
   ];
 
   xdg.mimeApps.associations.added."image/png" = "gimp.desktop";

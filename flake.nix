@@ -60,7 +60,7 @@
     , ...
     }:
     let
-      lib = import ./lib;
+      lib = import ./lib { lib = nixpkgs.lib; };
       overlays = [
         kmonad.overlay
         taskmatter.overlay

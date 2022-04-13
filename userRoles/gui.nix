@@ -52,23 +52,21 @@ in
       })
     { } [ "personal" "gaming" "university" "mod" ]);
 
-  xdg.desktopEntries =
-    (if pkgs.stdenv.hostPlatform.isLinux then {
-      todoist = {
-        name = "Todoist";
-        exec = "brave --profile-directory=\"Default\" --app=https://todoist.com";
-        terminal = false;
-      };
-    } else { }) // {
-      qbpm = {
-        type = "Application";
-        name = "qbpm";
-        icon = "qutebrowser";
-        exec = "qbpm choose %u";
-        categories = [ "Network" ];
-        terminal = false;
-      };
+  xdg.desktopEntries = {
+    qbpm = {
+      type = "Application";
+      name = "qbpm";
+      icon = "qutebrowser";
+      exec = "qbpm choose %u";
+      categories = [ "Network" ];
+      terminal = false;
     };
+    todoist = pkgs.lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+      name = "Todoist";
+      exec = "brave --profile-directory=\"Default\" --app=https://todoist.com";
+      terminal = false;
+    };
+  };
 
   xdg.mimeApps = {
     enable = true;

@@ -46,17 +46,17 @@ with builtins;
           "mpv --shuffle --loop-playlist --no-audio-display --volume=35 --input-ipc-server=$XDG_RUNTIME_DIR/mpv.sock";
       in
       rec {
-        shellAbbrs = ((if pkgs.stdenv.hostPlatform.isDarwin then {
-          copy = "pbcopy";
-          paste = "pbpaste";
-        } else
-          { }) // {
+        shellAbbrs = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin
+          {
+            copy = "pbcopy";
+            paste = "pbpaste";
+          } // {
           c = "command";
           music = musicCmdStr;
           pcp = "rsync -r --info=progress2";
           rm = "trash";
           se = "sudoedit";
-        });
+        };
         shellAliases = shellAbbrs // {
           # source: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
           trash-undo =

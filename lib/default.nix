@@ -1,9 +1,8 @@
+{ lib }:
+
 with builtins;
 
 rec {
-  range = min: max:
-    if min <= max then ([ min ] ++ (range (min + 1) max)) else [ ];
-
   mkPrimaryUser = { username, groups ? [ "wheel" ] }:
     pkgs: {
       groups."${username}".gid = 1000;
@@ -77,16 +76,14 @@ rec {
                 hardwareProfilePath = ../hosts
                 + "/${hostName}/hardware-profile.nix";
               in
-              if (pathExists hardwareProfilePath) then
-                [ nixos-hardware.nixosModules."${import hardwareProfilePath}" ]
-              else
-                [ ]
+              lib.optional (pathExists hardwareProfilePath)
+                nixos-hardware.nixosModules."${import hardwareProfilePath}"
             ) ++ (
               let
                 kbdPath = ../hosts
                 + "/${hostName}/default.kbd";
               in
-              if (pathExists kbdPath) then
+              lib.optionals (pathExists kbdPath)
                 [
                   kmonad.nixosModule
                   {
@@ -97,8 +94,6 @@ rec {
                     systemd.services."kmonad-defaut".enable = true;
                   }
                 ]
-              else
-                [ ]
             );
             system =
               let sysPath = ../hosts + "/${hostName}/system.nix";

@@ -91,7 +91,10 @@ rec {
                       enable = true;
                       configfiles = [ kbdPath ];
                     };
-                    systemd.services."kmonad-defaut".enable = true;
+                    systemd.services."kmonad-default" = {
+                      enable = true;
+                      wantedBy = [ "multi-user.target" ];
+                    };
                   }
                 ]
             );

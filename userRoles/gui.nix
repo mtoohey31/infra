@@ -2,7 +2,6 @@
 
 # TODO:
 #
-# kmonad
 # scripts
 # check dotfiles repo for any other configs that need to get picked up
 # make cursor not tiny

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 # TODO: split music into its own role and wrap the mpv binary in a script that forces certain flags, such as the socket path. also debug why I can't keep typing after killing the inital mpv run in tmux-music, and make that abbreviation shorter
-# TODO: add neovim (with dev-stuff in the appropriate) role cause I'll need a fallback while I play with other editors
+# TODO: set python prompts in system wide configuration (but don't install python globally)
 
 with builtins;
 {
@@ -40,6 +40,8 @@ with builtins;
       enable = true;
       config = { theme = "base16"; };
     };
+    # TODO: add bash and zsh configuration too with the simplest aliases and starship
+    # integration (or define generic aliases and merge them into everything?)
     fish = (
       let
         musicCmdStr =

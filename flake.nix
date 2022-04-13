@@ -1,5 +1,3 @@
-# TODO: simplify some of the messy if statements with helper functions (mkIf?)
-
 {
   description = "Infrastructure configuration";
 

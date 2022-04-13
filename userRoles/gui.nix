@@ -2,7 +2,6 @@
 
 # TODO:
 #
-# scripts
 # check dotfiles repo for any other configs that need to get picked up
 # make cursor not tiny
 
@@ -90,6 +89,7 @@ in
       };
       shellAliases = shellAbbrs // { nsxiv = "nsxiv -a"; };
     };
+    # TODO: wrap ssh in a script to change xterm-kitty to xterm-256color when running inside kitty
     kitty = {
       enable = true;
       environment = { SHLVL = "0"; };

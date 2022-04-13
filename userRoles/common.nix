@@ -132,7 +132,6 @@ with builtins;
             export PAGER="bat --plain"
             export MANPAGER="sh -c 'col -bx | bat -l man -p'"
           '';
-          # TODO: this section's sway branch should be gui only
           loginShellInit = ''
             if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$TMUX"
                 if test -n "$SSH_CONNECTION" -o -f /.dockerenv
@@ -248,7 +247,6 @@ with builtins;
             keys.select = clipboard_remaps;
           };
       };
-      # TODO: add icons
       lf = {
         enable = true;
         commands = {
@@ -283,8 +281,6 @@ with builtins;
           E = "push :edit<space>";
           t = "push :touch<space>";
           "<esc>" = "clear";
-          # source: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
-          # TODO: make this shell string a common variable
           u = "%{{ ${trash-undo} }}";
           D = ''%echo "\"$fx\"" | string join '" "' | xargs trash'';
           r = "reload";
@@ -304,7 +300,6 @@ with builtins;
           scrolloff = 7;
         };
       };
-      # TODO: check if I need bat stuff cause of new default configs
       pistol = {
         enable = true;
         config = {

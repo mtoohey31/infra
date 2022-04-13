@@ -27,7 +27,6 @@ with builtins; {
         end
       '';
     };
-    # TODO: get pywal colours working
     mako = {
       enable = true;
       font = "JetBrainsMono Nerd Font Regular 16px";
@@ -134,6 +133,7 @@ with builtins; {
       extraConfigEarly = ''
         include ${config.xdg.cacheHome}/wal/colors-sway
         exec_always rm -f ${wobsock}; mkfifo ${wobsock} && tail -f ${wobsock} | wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
+        exec_always pkill mako; mako --background-color "$background"CC --text-color "$foreground"
       '';
       extraSessionCommands = ''
         export _JAVA_AWT_WM_NONREPARENTING=1

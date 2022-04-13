@@ -13,8 +13,9 @@
   programs = {
     fish = rec {
       shellAbbrs.tm = "taskmatter";
-      shellAliases = shellAbbrs;
-
+      shellAliases = shellAbbrs // {
+        R = "R --quiet --save";
+      };
     };
     lf.keybindings.c = ''
       ''${{

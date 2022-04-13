@@ -22,10 +22,7 @@
           "docker compose -f docker-compose-dev.yaml down --remove-orphans";
         g = "git";
       };
-      shellAliases = shellAbbrs // {
-        R = "R --quiet --save";
-        python3 = "python3 -q";
-      };
+      shellAliases = shellAbbrs;
     };
     git = {
       enable = true;

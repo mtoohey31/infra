@@ -97,30 +97,6 @@ with builtins;
               '';
               wraps = "mv";
             };
-            # TODO: figure out how to determine this at build time
-            python = {
-              body = ''
-                # Intelligently determines which startup silencing method to use by testing paths of python instances
-                if test (command -v python2) -a (realpath (command -v python)) = (realpath (command -v python2))
-                    python2 $argv
-                else if test (command -v python3) -a (realpath (command -v python)) = (realpath (command -v python3))
-                    python3 $argv
-                else
-                    eval (command -v python) $argv
-                end
-              '';
-              wraps = "python";
-            };
-            python2 = {
-              body = ''
-                if test -z "$argv"
-                    eval (command -v python2) -i -c "''''"
-                else
-                    eval (command -v python2) $argv
-                end
-              '';
-              wraps = "python2";
-            };
             gce = {
               body = ''
                 set tmp (mktemp)

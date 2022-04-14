@@ -28,7 +28,7 @@ rec {
     ];
   };
 
-  mkHomeCfgs = { pkgs, home-manager, usernames, systems }:
+  mkHomeCfgs = { nixpkgs, overlays, home-manager, usernames, systems }:
     foldl'
       (s: user:
         s // (foldl'
@@ -38,13 +38,12 @@ rec {
                 s // {
                   "${username}-${user}-${system}" =
                     home-manager.lib.homeManagerConfiguration rec {
-                      inherit pkgs system username;
+                      inherit system username;
+                      pkgs = import nixpkgs { inherit overlays system; };
                       homeDirectory =
-                        if system == pkgs.stdenv.hostPlatform.isDarwin then
-                          "/Users/${username}"
-                        else
-                          "/home/${username}";
-                      configuration = mkHomeCfg user;
+                        if pkgs.stdenv.hostPlatform.isDarwin
+                        then "/Users/${username}" else "/home/${username}";
+                      configuration = mkHomeCfg user pkgs;
                     };
                 })
               { }

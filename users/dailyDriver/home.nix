@@ -8,12 +8,17 @@
     obs-studio
   ];
 
-  xdg.desktopEntries.discord = pkgs.lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
-    name = "Discord";
-    exec = "brave --profile-directory=\"Profile 2\" --app=https://discord.com/app";
-    terminal = false;
+  xdg = pkgs.lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
+    desktopEntries.discord = {
+      name = "Discord";
+      exec = "brave --profile-directory=\"Profile 2\" --app=https://discord.com/app";
+      terminal = false;
+    };
+    mimeApps = {
+      enable = true;
+      associations.added."image/png" = "gimp.desktop";
+    };
   };
-  xdg.mimeApps.associations.added."image/png" = "gimp.desktop";
 
   programs.fish = rec {
     shellAbbrs.hi = "himalaya";

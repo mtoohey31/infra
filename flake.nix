@@ -122,8 +122,7 @@
     in
     {
       homeManagerConfigurations = lib.mkHomeCfgs {
-        inherit home-manager;
-        pkgs = import nixpkgs { inherit overlays; };
+        inherit nixpkgs overlays home-manager;
         usernames = [ "mtoohey" "tooheys" ];
         systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
       };

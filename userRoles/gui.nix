@@ -6,19 +6,16 @@ with builtins;
 let lib = import ../lib;
 in
 {
-  xdg.configFile."kitty/search".source = fetchTarball {
-    url =
-      "https://github.com/trygveaa/kitty-kitten-search/archive/8cc3237e6a995b6e7e101cba667fcda5439d96e2.tar.gz";
-    sha256 = "0h4zryamysalv80dgdwrlfqanx45xl7llmlmag0limpa3mqs0hs3";
-  };
-
   home.packages = with pkgs; [
-    nsxiv
     pywal
     socat
     qbpm # TODO: add greasemonkey and figure out how to handle bookmarks
+
+    ibm-plex
+    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+  ] ++ pkgs.lib.optionals (!pkgs.stdenv.hostPlatform.isDarwin) [
+    nsxiv
     xdg-utils
-    kmonad
 
     rofi # TODO: replace this with a wrapper script because it's only used for qute-bitwarden and won't be available on macos
     keyutils # needed for qute-bitwarden userscript
@@ -26,57 +23,68 @@ in
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
-    ibm-plex
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ];
 
   # TODO: fix having to force this https://github.com/nix-community/home-manager/issues/1118
   fonts.fontconfig.enable = pkgs.lib.mkForce true;
 
-  xdg.dataFile = (foldl'
-    (s: name:
-      s // {
-        "qutebrowser-profiles/${name}/config/config.py".text = ''
-          config.load_autoconfig(False);
-          config.source('${config.xdg.configHome}/qutebrowser/config.py')
-        '';
-        "qutebrowser-profiles/${name}/config/greasemonkey".source =
-          config.lib.file.mkOutOfStoreSymlink
-            "${config.xdg.configHome}/qutebrowser/greasemonkey";
-      })
-    { } [ "personal" "gaming" "university" "mod" ]);
-
-  xdg.desktopEntries = {
-    qbpm = {
-      type = "Application";
-      name = "qbpm";
-      icon = "qutebrowser";
-      exec = "qbpm choose %u";
-      categories = [ "Network" ];
-      terminal = false;
+  xdg = pkgs.lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
+    configFile = {
+      "qutebrowser/js".source = ./gui/qutebrowser/js;
+      xdg.configFile."qutebrowser/qutewal".source = fetchGit {
+        url = "https://gitlab.com/jjzmajic/qutewal";
+        rev = "ff878423ab251bf764475ab54b28486b957edfd4";
+      };
+      "wal/templates/zathuracolours".source = ./gui/zathuracolours;
+      "kitty/search".source = fetchTarball {
+        url =
+          "https://github.com/trygveaa/kitty-kitten-search/archive/8cc3237e6a995b6e7e101cba667fcda5439d96e2.tar.gz";
+        sha256 = "0h4zryamysalv80dgdwrlfqanx45xl7llmlmag0limpa3mqs0hs3";
+      };
     };
-    todoist = pkgs.lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
-      name = "Todoist";
-      exec = "brave --profile-directory=\"Default\" --app=https://todoist.com";
-      terminal = false;
+    dataFile = (foldl'
+      (s: name:
+        s // {
+          "qutebrowser-profiles/${name}/config/config.py".text = ''
+            config.load_autoconfig(False);
+            config.source('${config.xdg.configHome}/qutebrowser/config.py')
+          '';
+          "qutebrowser-profiles/${name}/config/greasemonkey".source =
+            config.lib.file.mkOutOfStoreSymlink
+              "${config.xdg.configHome}/qutebrowser/greasemonkey";
+        })
+      { } [ "personal" "gaming" "university" "mod" ]);
+    desktopEntries = {
+      qbpm = {
+        type = "Application";
+        name = "qbpm";
+        icon = "qutebrowser";
+        exec = "qbpm choose %u";
+        categories = [ "Network" ];
+        terminal = false;
+      };
+      todoist = {
+        name = "Todoist";
+        exec = "brave --profile-directory=\"Default\" --app=https://todoist.com";
+        terminal = false;
+      };
     };
-  };
-
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "application/pdf" = "org.pwmt.zathura.desktop";
-      "image/png" = "nsxiv.desktop";
-      "image/jpeg" = "nsxiv.desktop";
-      "text/html" = "qbpm.desktop";
-      "x-scheme-handler/http" = "qbpm.desktop";
-      "x-scheme-handler/https" = "qbpm.desktop";
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "application/pdf" = "org.pwmt.zathura.desktop";
+        "image/png" = "nsxiv.desktop";
+        "image/jpeg" = "nsxiv.desktop";
+        "text/html" = "qbpm.desktop";
+        "x-scheme-handler/http" = "qbpm.desktop";
+        "x-scheme-handler/https" = "qbpm.desktop";
+      };
     };
   };
 
   home.file.Downloads.source = config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory;
   programs = {
-    brave.enable = true;
+    brave.enable = (!pkgs.stdenv.hostPlatform.isDarwin); # TODO: get this working on darwin, see nixos/nixpkgs#98853
     fish = rec {
       functions = {
         ssh = {
@@ -96,7 +104,7 @@ in
       shellAliases = shellAbbrs // { nsxiv = "nsxiv -a"; };
     };
     kitty = {
-      enable = true;
+      enable = !pkgs.stdenv.hostPlatform.isDarwin; # TODO: get the test passing here so it will build, or disable tests...
       environment = { SHLVL = "0"; };
       settings = {
         cursor = "none";
@@ -184,7 +192,7 @@ in
       };
     };
     qutebrowser = {
-      enable = true;
+      enable = !pkgs.stdenv.hostPlatform.isDarwin; # TODO: get this working on darwin
       extraConfig = ''
         ${readFile ./gui/qutebrowser/config.py}
         config.bind('B', 'spawn --userscript ${pkgs.qutebrowser}/share/qutebrowser/userscripts/qute-bitwarden')
@@ -204,12 +212,4 @@ in
       };
     };
   };
-
-  xdg.configFile."qutebrowser/js".source = ./gui/qutebrowser/js;
-  xdg.configFile."qutebrowser/qutewal".source = fetchGit {
-    url = "https://gitlab.com/jjzmajic/qutewal";
-    rev = "ff878423ab251bf764475ab54b28486b957edfd4";
-  };
-
-  xdg.configFile."wal/templates/zathuracolours".source = ./gui/zathuracolours;
 }

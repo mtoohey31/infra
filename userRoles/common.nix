@@ -5,7 +5,7 @@
 
 with builtins;
 {
-  home.stateVersion = "21.11";
+  home.stateVersion = "20.09";
 
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [ "bitwig-studio" ];
@@ -20,10 +20,9 @@ with builtins;
     jq
     wget
     unzip
-    gotop
     poppler_utils
     ffmpeg
-  ];
+  ] ++ pkgs.lib.optional (!pkgs.stdenv.hostPlatform.isDarwin) gotop;
 
   xdg.configFile."lf/cleaner" = {
     text = ''
@@ -315,7 +314,7 @@ with builtins;
         };
       };
       starship = {
-        enable = true;
+        enable = !pkgs.stdenv.hostPlatform.isDarwin; # TODO: get this working on darwin
         enableFishIntegration = true;
         settings = {
           format = lib.concatStrings [

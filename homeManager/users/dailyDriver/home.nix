@@ -2,8 +2,10 @@
   home.packages = with pkgs; [
     himalaya # TODO: add configuration
     gimp
-    bitwarden
     bitwarden-cli
+  ] ++ pkgs.lib.optionals (!pkgs.stdenv.hostPlatform.isDarwin) [
+    # TODO: get these working on darwin
+    bitwarden
     signal-desktop
     obs-studio
   ];

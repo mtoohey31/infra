@@ -7,11 +7,6 @@ with builtins;
 {
   home.stateVersion = "20.09";
 
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [ "bitwig-studio" ];
-
-  nixpkgs.config.permittedInsecurePackages = [ "python2.7-Pillow-6.2.2" ];
-
   home.packages = with pkgs; [
     trash-cli
     exa

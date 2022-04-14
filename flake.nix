@@ -5,6 +5,11 @@
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "nixpkgs/nixos-unstable";
 
+    darwin = {
+      url = "github:lnl7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixos-hardware = {
       url = "nixos-hardware";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -46,8 +51,10 @@
   };
 
   outputs =
-    { flake-utils
+    { self
+    , flake-utils
     , nixpkgs
+    , darwin
     , nixos-hardware
     , home-manager
     , nix-index
@@ -55,7 +62,6 @@
     , helix
     , taskmatter
     , qbpm
-    , ...
     }:
     let
       lib = import ./lib { lib = nixpkgs.lib; };
@@ -93,7 +99,7 @@
                 };
               });
           } // super.python3Packages;
-          plover.dev = super.plover.dev.overridePythonAttrs
+          plover.wayland = super.plover.dev.overridePythonAttrs
             (oldAttrs: {
               src = self.fetchFromGitHub {
                 owner = "openstenoproject";
@@ -131,6 +137,9 @@
         inherit nixpkgs overlays nixos-hardware home-manager kmonad;
       };
 
+      darwinConfigurations = lib.mkDarwinCfgs {
+        inherit nixpkgs overlays darwin home-manager kmonad;
+      };
     } // (flake-utils.lib.eachDefaultSystem (system:
       with import nixpkgs { inherit system; }; {
         devShell = mkShell {

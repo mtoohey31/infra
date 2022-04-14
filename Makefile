@@ -1,20 +1,39 @@
-.PHONY: system user install update develop format
+.PHONY: default user nixos darwin install update develop format
 
-system:
-	sudo nixos-rebuild switch --flake .#
-	
+NIX_CMD = nix --extra-experimental-features nix-command --extra-experimental-features flakes
+UNAME := $(shell uname)
+
+ifeq ($(UNAME),Darwin)
+default: darwin
+install: install-darwin
+else
+default: nixos
+install: install-nixos
+endif
+
 user:
-	nix --extra-experimental-features nix-command --extra-experimental-features flakes build .#homeManagerConfigurations."$$(whoami)-$$INFRA_USER-$$(uname -m)-$$(uname | tr '[:upper:]' '[:lower:]')".activationPackage
+	$(NIX_CMD) build .#homeManagerConfigurations."$$(whoami)-$$INFRA_USER-$$(uname -m)-$$(uname | tr '[:upper:]' '[:lower:]')".activationPackage
 	result/activate
-	
-install:
-	nixos-install --flake .#
+
+nixos:
+	sudo nixos-rebuild switch --flake .#
+
+# TODO: test this with an iso
+install-nixos:
+	nixos-install --flake .#nixosConfigurations."$${INFRA_SYSTEM:-$$HOSTNAME}"	
+
+darwin:
+	darwin-rebuild switch --flake .#
+
+install-darwin:
+	$(NIX_CMD) build .#darwinConfigurations."$${INFRA_SYSTEM:-$$HOSTNAME}".system
+	./result/sw/bin/darwin-rebuild switch --flake .#"$${INFRA_SYSTEM:-$$HOSTNAME}"
 	
 update:
-	nix --extra-experimental-features nix-command --extra-experimental-features flakes flake update
+	$(NIX_CMD) flake update
 
 develop:
-	nix --extra-experimental-features nix-command --extra-experimental-features flakes develop
+	$(NIX_CMD) develop
 	
 format:
 	nixpkgs-fmt .

@@ -1,6 +1,6 @@
 { config, pkgs, stdenv, ... }:
 
-let lib = import ../../lib;
+let lib = import ../../../lib { lib = pkgs.lib; };
 in
 {
   users = lib.mkPrimaryUser { username = "mtoohey"; } pkgs;

@@ -1,4 +1,9 @@
 { pkgs, lib, ... }: {
+  home-manager = {
+    useUserPackages = true;
+    useGlobalPkgs = true;
+  };
+
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
@@ -6,15 +11,6 @@
       keep-outputs = true
     '';
   };
-
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-      "nvidia-x11"
-      "nvidia-settings"
-      "steam"
-      "steam-original"
-      "cudatoolkit"
-    ];
 
   # TODO: figure out how to set password securely in configuration, then enable this
   # users.mutableUsers = false;

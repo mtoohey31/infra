@@ -12,6 +12,9 @@ with builtins; {
     light
     pulsemixer
     headsetcontrol
+
+    plover.dev
+    firefox
   ];
 
   programs = {

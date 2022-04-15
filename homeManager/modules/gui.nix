@@ -110,7 +110,10 @@ in
       shellAliases = shellAbbrs // { nsxiv = "nsxiv -a"; };
     };
     kitty = {
-      enable = !pkgs.stdenv.hostPlatform.isDarwin; # TODO: get the test passing here so it will build, or disable tests...
+      enable = true;
+      package = pkgs.lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (pkgs.kitty.overrideAttrs (oldAttrs: {
+        doInstallCheck = false;
+      }));
       environment = { SHLVL = "0"; };
       settings = {
         cursor = "none";
@@ -133,15 +136,24 @@ in
         "ctrl+shift+f" =
           "launch --location=hsplit --allow-remote-control kitty +kitten search/search.py @active-kitty-window-id";
       };
-      extraConfig = ''
-        font_family JetBrains Mono Regular Nerd Font Complete
-        bold_font JetBrains Mono Bold Nerd Font Complete
-        italic_font JetBrains Mono Italic Nerd Font Complete
-        bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
-        font_size 12
+      extraConfig =
+        (if pkgs.stdenv.hostPlatform.isDarwin then ''
+          font_family JetBrainsMono Nerd Font Mono Regular
+          bold_font JetBrainsMono Nerd Font Mono Bold
+          italic_font JetBrainsMono Nerd Font Mono Italic
+          bold_italic_font JetBrainsMono Nerd Font Mono Bold Italic
 
-        include ${config.xdg.cacheHome}/wal/colors-kitty.conf
-      '';
+          font_size 14
+        '' else ''
+          font_family JetBrains Mono Regular Nerd Font Complete
+          bold_font JetBrains Mono Bold Nerd Font Complete
+          italic_font JetBrains Mono Italic Nerd Font Complete
+          bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
+
+          font_size 12
+        '') + ''
+          include ${config.xdg.cacheHome}/wal/colors-kitty.conf
+        '';
     };
     lf.keybindings.gC = "&kitty -e fish -C lf &>/dev/null &";
     mpv = {

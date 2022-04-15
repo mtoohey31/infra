@@ -121,8 +121,7 @@ rec {
   mkDarwinCfgs = { nixpkgs, overlays, darwin, home-manager, kmonad }:
     foldl'
       (s: hostName: s // {
-        "${hostName}" = darwin.lib.darwinSystem {
-          inputs = { inherit kmonad; };
+        "${hostName}" = darwin.lib.darwinSystem rec {
           modules =
             let modulePath = ../darwin/systems + "/${hostName}/modules.nix"; in
             lib.optionals (pathExists modulePath)

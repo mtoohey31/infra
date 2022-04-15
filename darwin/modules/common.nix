@@ -8,6 +8,8 @@
 
   services.nix-daemon.enable = true;
 
+  programs.fish.enable = true;
+
   system.defaults = {
     NSGlobalDomain = {
       AppleInterfaceStyleSwitchesAutomatically = true;

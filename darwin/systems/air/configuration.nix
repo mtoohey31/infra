@@ -2,8 +2,6 @@
 
 let lib = import ../../../lib { lib = pkgs.lib; }; in
 {
-  programs.fish.enable = true;
-
   users.users.mtoohey = {
     description = "Matthew Toohey";
     home = "/Users/mtoohey";

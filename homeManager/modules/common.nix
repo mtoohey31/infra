@@ -309,7 +309,7 @@ with builtins;
         };
       };
       starship = {
-        enable = !pkgs.stdenv.hostPlatform.isDarwin; # TODO: get this working on darwin
+        enable = true;
         enableFishIntegration = true;
         settings = {
           format = lib.concatStrings [

@@ -4,6 +4,7 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs-master.url = "nixpkgs/master";
 
     darwin = {
       url = "github:lnl7/nix-darwin";
@@ -54,6 +55,7 @@
     { self
     , flake-utils
     , nixpkgs
+    , nixpkgs-master
     , darwin
     , nixos-hardware
     , home-manager
@@ -70,6 +72,8 @@
         taskmatter.overlay
 
         (self: super: { helix = helix.defaultPackage."${self.system}"; })
+        # TODO: remove this and the nixpkgs-master input once the commits from nixpkgs#168558
+        (self: super: { starship = (import nixpkgs-master { inherit (self) system; }).starship; })
         (self: super: { qbpm = qbpm.defaultPackage."${self.system}"; })
         (self: super: rec {
           python3Packages = {

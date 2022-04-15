@@ -1,6 +1,14 @@
 { pkgs, ... }:
 
 {
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      keep-outputs = true
+    '';
+  };
+
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;

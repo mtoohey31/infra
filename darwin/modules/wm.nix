@@ -15,25 +15,24 @@
         cmd + shift - k : yabai -m window --swap north
         cmd + shift - l : yabai -m window --swap east
 
+        cmd + shift - tab : yabai -m window --toggle float
         cmd - return : kitty -d ~
-        cmd - 0x2C : kitty -d ~ -e fish -C 'lf'
-        cmd + shift - 0x2C : open ~
 
         cmd + shift - b : yabai -m space --balance
         cmd + shift - y : launchctl kickstart -k gui/501/org.nixos.yabai
-        cmd + shift - 0x2A : yabai -m window --toggle float
-        cmd + shift - p : qbpm launch personal
-        cmd + shift - u : qbpm launch university
-        cmd + shift - g : qbpm launch gaming
-        cmd + shift - n : qbpm launch mod
+
+        cmd - 0x2C : kitty -d ~ -e fish -C 'lf'
+        cmd + shift - 0x2C : open ~
       '';
     };
     yabai = {
       enable = true;
+      enableScriptingAddition = true;
       config = {
         mouse_follows_focus = "on";
         focus_follows_mouse = "autoraise";
         window_topmost = "on";
+        window_shadow = "float";
         mouse_modifier = "cmd";
         mouse_action1 = "move";
         mouse_action2 = "resize";

@@ -42,12 +42,12 @@ config.bind('M', 'hint links spawn --userscript view_in_mpv {hint-url}')
 config.bind('D', 'close')
 config.bind('so', 'config-source')
 config.bind('e', 'edit-url')
-config.bind('(', 'jseval --world=main -f ~/.config/qutebrowser/js/slowDown.js')
-config.bind(')', 'jseval --world=main -f ~/.config/qutebrowser/js/speedUp.js')
+config.bind('(', f'jseval --world=main -f {config_prefix}/js/slowDown.js')
+config.bind(')', f'jseval --world=main -f {config_prefix}/js/speedUp.js')
 config.bind(
-    'c-', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomOut.js')
+    'c-', f'jseval --world=main -f {config_prefix}/js/zoomOut.js')
 config.bind(
-    'c+', 'jseval --world=main -f ~/.config/qutebrowser/js/zoomIn.js')
+    'c+', f'jseval --world=main -f {config_prefix}/js/zoomIn.js')
 config.bind('<ESC>', 'fake-key <ESC>')
 config.bind('<Ctrl-Shift-c>', 'yank selection')
 config.bind('v', 'hint all hover')
@@ -76,7 +76,7 @@ c.fonts.web.family.fixed = 'JetBrainsMono Nerd Font'
 
 # TODO: make this dynamic based on sunset/sunrise with https://pypi.org/project/suntime/
 c.colors.webpage.preferred_color_scheme = 'dark'
-config.source(join(expanduser('~'), '.config/qutebrowser/qutewal/qutewal.py'))
+config.source(join(expanduser(config_prefix), 'qutewal/qutewal.py'))
 
 c.url.searchengines = {'DEFAULT':
                        'https://duckduckgo.com/?q={}&kt=SF+Pro+Text&kj=' +

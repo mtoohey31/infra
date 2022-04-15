@@ -3,7 +3,24 @@
 # TODO: make cursor not tiny
 
 with builtins;
-let lib = import ../lib;
+let
+  lib = import ../lib;
+  kittyPackage =
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      (pkgs.kitty.overrideAttrs (oldAttrs: {
+        doInstallCheck = false;
+      })) else pkgs.kitty;
+  qutebrowserPrefix =
+    if pkgs.stdenv.hostPlatform.isDarwin
+    then "${config.home.homeDirectory}/.qutebrowser"
+    else "${config.xdg.configHome}/qutebrowser";
+  qutebrowserExtraFiles = {
+    "${qutebrowserPrefix}/js".source = ./gui/qutebrowser/js;
+    "${qutebrowserPrefix}/qutewal".source = fetchGit {
+      url = "https://gitlab.com/jjzmajic/qutewal";
+      rev = "ff878423ab251bf764475ab54b28486b957edfd4";
+    };
+  };
 in
 {
   home.packages = with pkgs; [
@@ -34,13 +51,11 @@ in
   # TODO: fix having to force this https://github.com/nix-community/home-manager/issues/1118
   fonts.fontconfig.enable = pkgs.lib.mkForce true;
 
-  xdg = pkgs.lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
-    configFile = {
-      "qutebrowser/js".source = ./gui/qutebrowser/js;
-      xdg.configFile."qutebrowser/qutewal".source = fetchGit {
-        url = "https://gitlab.com/jjzmajic/qutewal";
-        rev = "ff878423ab251bf764475ab54b28486b957edfd4";
-      };
+  home.file = {
+    Downloads.source = config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory;
+  } // (pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin qutebrowserExtraFiles);
+  xdg = {
+    configFile = (pkgs.lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isDarwin) qutebrowserExtraFiles) // {
       "wal/templates/zathuracolours".source = ./gui/zathuracolours;
       "kitty/search".source = fetchTarball {
         url =
@@ -53,14 +68,14 @@ in
         s // {
           "qutebrowser-profiles/${name}/config/config.py".text = ''
             config.load_autoconfig(False);
-            config.source('${config.xdg.configHome}/qutebrowser/config.py')
+            config.source('${qutebrowserPrefix}/config.py')
           '';
           "qutebrowser-profiles/${name}/config/greasemonkey".source =
             config.lib.file.mkOutOfStoreSymlink
-              "${config.xdg.configHome}/qutebrowser/greasemonkey";
+              "${qutebrowserPrefix}/greasemonkey";
         })
       { } [ "personal" "gaming" "university" "mod" ]);
-    desktopEntries = {
+    desktopEntries = pkgs.lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
       qbpm = {
         type = "Application";
         name = "qbpm";
@@ -75,7 +90,7 @@ in
         terminal = false;
       };
     };
-    mimeApps = {
+    mimeApps = pkgs.lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
       enable = true;
       defaultApplications = {
         "application/pdf" = "org.pwmt.zathura.desktop";
@@ -88,7 +103,6 @@ in
     };
   };
 
-  home.file.Downloads.source = config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory;
   programs = {
     brave.enable = (!pkgs.stdenv.hostPlatform.isDarwin); # TODO: get this working on darwin, see nixos/nixpkgs#98853
     fish = rec {
@@ -111,9 +125,7 @@ in
     };
     kitty = {
       enable = true;
-      package = pkgs.lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (pkgs.kitty.overrideAttrs (oldAttrs: {
-        doInstallCheck = false;
-      }));
+      package = kittyPackage;
       environment = { SHLVL = "0"; };
       settings = {
         cursor = "none";
@@ -210,8 +222,13 @@ in
       };
     };
     qutebrowser = {
-      enable = !pkgs.stdenv.hostPlatform.isDarwin; # TODO: get this working on darwin
-      extraConfig = ''
+      enable = true;
+      extraConfig = (if pkgs.stdenv.hostPlatform.isDarwin then ''
+        config_prefix = "${config.home.homeDirectory}/.qutebrowser"
+        c.qt.args = ["single-process"]
+      '' else ''
+        config_prefix = "${config.xdg.configHome}/qutebrowser"
+      '') + ''
         ${readFile ./gui/qutebrowser/config.py}
         config.bind('B', 'spawn --userscript ${pkgs.qutebrowser}/share/qutebrowser/userscripts/qute-bitwarden')
       ''; # NOTE: running the command mentioned here might be neccessary: https://github.com/mattydebie/bitwarden-rofi/issues/34#issuecomment-639257565

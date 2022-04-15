@@ -7,13 +7,19 @@ let lib = import ../lib;
 in
 {
   home.packages = with pkgs; [
-    pywal
     socat
     qbpm # TODO: add greasemonkey and figure out how to handle bookmarks
 
     ibm-plex
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-  ] ++ pkgs.lib.optionals (!pkgs.stdenv.hostPlatform.isDarwin) [
+  ] ++ (if pkgs.stdenv.hostPlatform.isDarwin then [
+    (pywal.overrideAttrs (oldAttrs: {
+      prePatch = ''
+        substituteInPlace pywal/util.py --replace pidof pgrep
+      '';
+    }))
+  ] else [
+    pywal
     nsxiv
     xdg-utils
 
@@ -23,7 +29,7 @@ in
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
-  ];
+  ]);
 
   # TODO: fix having to force this https://github.com/nix-community/home-manager/issues/1118
   fonts.fontconfig.enable = pkgs.lib.mkForce true;

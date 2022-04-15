@@ -11,6 +11,10 @@ default: nixos
 install: install-nixos
 endif
 
+ifeq (${TERM},xterm-kitty)
+KITTY_TERMFIX = TERM=xterm-256color 
+endif
+
 user:
 	$(NIX_CMD) build .#homeManagerConfigurations."$$(whoami)-$$INFRA_USER-$$(uname -m)-$$(uname | tr '[:upper:]' '[:lower:]')".activationPackage
 	result/activate
@@ -23,10 +27,10 @@ install-nixos:
 	nixos-install --flake .#nixosConfigurations."$${INFRA_SYSTEM:-$$HOSTNAME}"	
 
 darwin:
-	darwin-rebuild switch --flake .#
+	$(KITTY_TERMFIX)darwin-rebuild switch --flake .#
 
 install-darwin:
-	$(NIX_CMD) build .#darwinConfigurations."$${INFRA_SYSTEM:-$$HOSTNAME}".system
+	$(KITTY_TERMFIX)$(NIX_CMD) build .#darwinConfigurations."$${INFRA_SYSTEM:-$$HOSTNAME}".system
 	./result/sw/bin/darwin-rebuild switch --flake .#"$${INFRA_SYSTEM:-$$HOSTNAME}"
 	
 update:

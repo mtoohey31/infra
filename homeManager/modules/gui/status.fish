@@ -19,7 +19,10 @@ while true
         set -a output " misbehaving |"
     end
 
-    set -a output  (df -h / | tail -n1 | awk '{ print $4 }')" |"
+    set free_size (df -h / | tail -n1 | awk '{ print $4 }')
+    if test (echo "$free_size" | tr -d '[:alpha:]') -le 100
+        set -a output  "$free_size |"
+    end
 
     set hs_bat (headsetcontrol -cb 2> /dev/null)
     if test "$status" -eq 0

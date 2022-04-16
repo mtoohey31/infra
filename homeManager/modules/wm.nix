@@ -13,7 +13,7 @@ with builtins; {
     pulsemixer
     headsetcontrol
 
-    plover.dev
+    plover.wayland
     firefox
   ];
 

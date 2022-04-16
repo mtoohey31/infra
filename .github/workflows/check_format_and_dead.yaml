@@ -1,9 +1,9 @@
-name: "Check formatting"
+name: "Check formatting and dead code"
 on:
   push:
     branches: ["**"]
 jobs:
-  format:
+  check_format_and_dead:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,6 +12,9 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
       - name: Install nixpkgs-fmt
         run: nix-env -i nixpkgs-fmt -f '<nixpkgs>'
-      #   run: nix-env -f https://github.com/nix-community/nixpkgs-fmt/archive/master.tar.gz -iA nixpkgs-fmt
       - name: Check formatting
         run: nixpkgs-fmt --check .
+      - name: Install deadnix
+        run: nix-env -i deadnix -f '<nixpkgs>'
+      - name: Check dead code
+        run: deadnix --fail $(find -name '*.nix' -not -name 'hardware-configuration.nix')

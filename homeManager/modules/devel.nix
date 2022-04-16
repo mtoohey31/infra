@@ -32,7 +32,7 @@
         branch = { autosetuprebase = "always"; };
         init = { defaultBranch = "main"; };
       };
-      ignores = [ ".direnv/" ".envrc" ];
+      ignores = [ ".direnv/" ];
       # TODO: add prompts for dangerous stuff that doesn't already include it by default
       aliases = {
         a = "add --verbose";

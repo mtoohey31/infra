@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 # TODO: make cursor not tiny
 
@@ -7,7 +7,7 @@ let
   lib = import ../lib;
   kittyPackage =
     if pkgs.stdenv.hostPlatform.isDarwin then
-      (pkgs.kitty.overrideAttrs (oldAttrs: {
+      (pkgs.kitty.overrideAttrs (_: {
         doInstallCheck = false;
       })) else pkgs.kitty;
   qutebrowserPrefix =
@@ -30,7 +30,7 @@ in
     ibm-plex
     (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
   ] ++ (if pkgs.stdenv.hostPlatform.isDarwin then [
-    (pywal.overrideAttrs (oldAttrs: {
+    (pywal.overrideAttrs (_: {
       prePatch = ''
         substituteInPlace pywal/util.py --replace pidof pgrep
       '';

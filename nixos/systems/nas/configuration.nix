@@ -1,4 +1,4 @@
-{ config, pkgs, stdenv, ... }:
+{ pkgs, ... }:
 
 let lib = import ../../../lib { lib = pkgs.lib; };
 in

@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }: {
+{ pkgs, ... }: {
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;

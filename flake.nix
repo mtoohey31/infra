@@ -71,10 +71,10 @@
         kmonad.overlay
         taskmatter.overlay
 
-        (self: super: { helix = helix.defaultPackage."${self.system}"; })
+        (self: _: { helix = helix.defaultPackage."${self.system}"; })
         # TODO: remove this and the nixpkgs-master input once the commits from nixpkgs#168558
-        (self: super: { starship = (import nixpkgs-master { inherit (self) system; }).starship; })
-        (self: super: {
+        (self: _: { starship = (import nixpkgs-master { inherit (self) system; }).starship; })
+        (self: _: {
           qutebrowser = self.stdenv.mkDerivation rec {
             pname = "qutebrowser";
             version = "2.5.0";
@@ -93,7 +93,7 @@
             '';
           };
         })
-        (self: super: { qbpm = qbpm.defaultPackage."${self.system}"; })
+        (self: _: { qbpm = qbpm.defaultPackage."${self.system}"; })
         (self: super: rec {
           python3Packages = {
             plover-stroke = self.python3Packages.buildPythonPackage rec {
@@ -113,7 +113,7 @@
               };
             };
             pywayland_0_4_7 = super.python3Packages.pywayland.overridePythonAttrs
-              (oldAttrs: rec {
+              (_: rec {
                 pname = "pywayland";
                 version = "0.4.7";
                 src = super.python3Packages.fetchPypi {
@@ -171,6 +171,7 @@
             nixpkgs-fmt
             nix-index.defaultPackage."${system}"
             gnumake
+            deadnix
           ];
         };
       }));

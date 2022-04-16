@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: {
+{ lib, pkgs, ... }: {
   home.packages = with pkgs; [
     himalaya # TODO: add configuration
     gimp

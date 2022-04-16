@@ -1,4 +1,4 @@
-{ config, pkgs, stdenv, ... }:
+{ config, pkgs, ... }:
 
 let
   lib = import ../../../lib { lib = pkgs.lib; };
@@ -20,7 +20,7 @@ in
   ];
 
   nixpkgs.overlays = [
-    (self: super: {
+    (_: _: {
       asusctl =
         pkgs.callPackage "${asusctl_pr_tar}/pkgs/tools/misc/asusctl/default.nix"
           { };

@@ -40,7 +40,7 @@
         layout = "bsp";
         window_gap = 16;
       };
-      package = pkgs.yabai.overrideAttrs (oldAttrs: {
+      package = pkgs.yabai.overrideAttrs (_: {
         version = "4.0.0";
         src = pkgs.fetchFromGitHub {
           owner = "koekeishiya";

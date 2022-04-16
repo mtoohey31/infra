@@ -1,3 +1,6 @@
+# TODO: stop autologin from happening on every screen on zephyrus
+# TODO: add swapfile to nixos systems
+
 {
   description = "Infrastructure configuration";
 
@@ -74,24 +77,26 @@
         (self: _: { helix = helix.defaultPackage."${self.system}"; })
         # TODO: remove this and the nixpkgs-master input once the commits from nixpkgs#168558
         (self: _: { starship = (import nixpkgs-master { inherit (self) system; }).starship; })
-        (self: _: {
-          qutebrowser = self.stdenv.mkDerivation rec {
-            pname = "qutebrowser";
-            version = "2.5.0";
-            sourceRoot = "${pname}.app";
-            src = self.fetchurl {
-              url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.dmg";
-              sha256 = "v4SdiXUS+fB4js7yf+YCDD4OGcb/5zeYaXoUwk/WwCs=";
-            };
-            buildInputs = [ self.undmg ];
-            installPhase = ''
-              mkdir -p "$out/Applications/${pname}.app"
-              cp -R . "$out/Applications/${pname}.app"
-              chmod +x "$out/Applications/${pname}.app/Contents/MacOS/${pname}"
-              mkdir "$out/bin"
-              ln -s "$out/Applications/${pname}.app/Contents/MacOS/${pname}" "$out/bin/qutebrowser"
-            '';
-          };
+        (self: super: {
+          qutebrowser = (if self.stdenv.hostPlatform.isDarwin then
+            self.stdenv.mkDerivation
+              rec {
+                pname = "qutebrowser";
+                version = "2.5.0";
+                sourceRoot = "${pname}.app";
+                src = self.fetchurl {
+                  url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.dmg";
+                  sha256 = "v4SdiXUS+fB4js7yf+YCDD4OGcb/5zeYaXoUwk/WwCs=";
+                };
+                buildInputs = [ self.undmg ];
+                installPhase = ''
+                  mkdir -p "$out/Applications/${pname}.app"
+                  cp -R . "$out/Applications/${pname}.app"
+                  chmod +x "$out/Applications/${pname}.app/Contents/MacOS/${pname}"
+                  mkdir "$out/bin"
+                  ln -s "$out/Applications/${pname}.app/Contents/MacOS/${pname}" "$out/bin/qutebrowser"
+                '';
+              } else super.qutebrowser);
         })
         (self: _: { qbpm = qbpm.defaultPackage."${self.system}"; })
         (self: super: rec {

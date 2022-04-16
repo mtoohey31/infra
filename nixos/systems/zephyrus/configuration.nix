@@ -93,7 +93,7 @@ in
   users = lib.mkPrimaryUser
     {
       username = "mtoohey";
-      groups = [ "wheel" "video" "docker" ];
+      groups = [ "wheel" "video" "docker" "libvirtd" ];
     }
     pkgs;
   home-manager.users.mtoohey = lib.mkHomeCfg "dailyDriver" pkgs;

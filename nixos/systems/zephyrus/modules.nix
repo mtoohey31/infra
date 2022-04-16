@@ -1,1 +1,10 @@
-[ "wifi" "bluetooth" "sound" "opengl" "printing" "gaming" "docker" ]
+[
+  "wifi"
+  "bluetooth"
+  "sound"
+  "opengl"
+  "printing"
+  "gaming"
+  "docker"
+  "virtualisation"
+]

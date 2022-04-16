@@ -5,4 +5,5 @@
   "steam-original"
   "cudatoolkit"
   "bitwig-studio"
+  "osu-lazer"
 ]

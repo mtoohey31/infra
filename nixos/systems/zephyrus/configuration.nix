@@ -67,7 +67,6 @@ in
 
     # mediatek mt7921 bt/wifi patches
     "${g14_patches}/sys-kernel_arch-sources-g14_files-8017-mt76-mt7921-enable-VO-tx-aggregation.patch"
-    "${g14_patches}/sys-kernel_arch-sources-g14_files-8018-mt76-mt7921e-fix-possible-probe-failure-after-reboot.patch"
     "${g14_patches}/sys-kernel_arch-sources-g14_files-8026-cfg80211-dont-WARN-if-a-self-managed-device.patch"
     "${g14_patches}/sys-kernel_arch-sources-g14_files-8050-r8152-fix-spurious-wakeups-from-s0i3.patch"
 

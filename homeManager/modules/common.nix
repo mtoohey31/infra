@@ -203,14 +203,20 @@ with builtins;
       helix = {
         enable = true;
         settings =
-          let clipboard_remaps = rec {
-            p = "paste_clipboard_after";
-            P = "paste_clipboard_before";
-            y = "yank_main_selection_to_clipboard";
-            c = "change_selection_noyank";
-            d = [ y "delete_selection" ];
-            R = [ "replace_selections_with_clipboard" ];
-          };
+          let
+            clipboard_remaps = rec {
+              p = "paste_clipboard_after";
+              P = "paste_clipboard_before";
+              y = "yank_main_selection_to_clipboard";
+              c = "change_selection_noyank";
+              d = [ y "delete_selection" ];
+              R = [ "replace_selections_with_clipboard" ];
+            };
+            save_quit_remaps = {
+              Q = ":q!";
+              W = [ ":w" "align_view_center" ];
+              Z = ":wq";
+            };
           in
           {
             theme = "base16_default";
@@ -223,7 +229,7 @@ with builtins;
                 select = "underline";
               };
             };
-            keys.normal = clipboard_remaps // {
+            keys.normal = clipboard_remaps // save_quit_remaps // {
               n = [ "search_next" "align_view_center" ];
               N = [ "search_prev" "align_view_center" ];
               # TODO: debug why mode changes don't take effect until after the whole binding sequence
@@ -234,11 +240,8 @@ with builtins;
               g.a = "code_action";
               g.v = "hover";
               G = "goto_last_line";
-              Q = ":q!";
-              W = [ ":w" "align_view_center" ];
-              Z = ":wq";
             };
-            keys.select = clipboard_remaps;
+            keys.select = clipboard_remaps // save_quit_remaps;
           };
       };
       lf = {

@@ -311,6 +311,10 @@ with builtins;
 
         };
       };
+      readline = {
+        enable = true;
+        variables.editing-mode = "vi";
+      };
       starship = {
         enable = true;
         enableFishIntegration = true;

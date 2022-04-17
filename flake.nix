@@ -1,4 +1,3 @@
-# TODO: stop autologin from happening on every screen on zephyrus
 # TODO: add swapfile to nixos systems
 
 {

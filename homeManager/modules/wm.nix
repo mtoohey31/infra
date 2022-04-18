@@ -2,8 +2,7 @@
 
 with builtins; {
   home.packages = with pkgs; [
-    wofi # TODO: remove after fuzzel is working
-    # fuzzel TODO: depends on https://gitlab.gnome.org/GNOME/librsvg/-/issues/856
+    fuzzel
     flashfocus
     autotiling
     wob
@@ -111,18 +110,43 @@ with builtins; {
       };
   };
 
-  xdg.configFile."sway/status" = {
-    text = ''
-      #!${pkgs.fish}/bin/fish
-      ${readFile ./gui/status.fish}
-    '';
-    executable = true;
-    # TODO: figure out how to source this from xdg.configFile."sway/config".onChange cause it's identical
-    onChange = ''
-      swaySocket=''${XDG_RUNTIME_DIR:-/run/user/$UID}/sway-ipc.$UID.$(${pkgs.procps}/bin/pgrep -x sway || true).sock
-      if [ -S $swaySocket ]; then
-        ${pkgs.sway}/bin/swaymsg -s $swaySocket reload
-      fi
+  xdg.configFile = {
+    "sway/status" = {
+      text = ''
+        #!${pkgs.fish}/bin/fish
+        ${readFile ./gui/status.fish}
+      '';
+      executable = true;
+      # TODO: figure out how to source this from xdg.configFile."sway/config".onChange cause it's identical
+      onChange = ''
+        swaySocket=''${XDG_RUNTIME_DIR:-/run/user/$UID}/sway-ipc.$UID.$(${pkgs.procps}/bin/pgrep -x sway || true).sock
+        if [ -S $swaySocket ]; then
+          ${pkgs.sway}/bin/swaymsg -s $swaySocket reload
+        fi
+      '';
+    };
+    "wal/templates/colors-sway-stripped".text = ''
+      set $wallpapers {wallpaper.strip}
+
+      set $backgrounds {background.strip}
+      set $foregrounds {foreground.strip}
+
+      set $color0s {color0.strip}
+      set $color1s {color1.strip}
+      set $color2s {color2.strip}
+      set $color3s {color3.strip}
+      set $color4s {color4.strip}
+      set $color5s {color5.strip}
+      set $color6s {color6.strip}
+      set $color7s {color7.strip}
+      set $color8s {color8.strip}
+      set $color9s {color9.strip}
+      set $color10s {color10.strip}
+      set $color11s {color11.strip}
+      set $color12s {color12.strip}
+      set $color13s {color13.strip}
+      set $color14s {color14.strip}
+      set $color15s {color15.strip}
     '';
   };
   wayland.windowManager.sway =
@@ -135,6 +159,7 @@ with builtins; {
       extraOptions = [ "--unsupported-gpu" ];
       extraConfigEarly = ''
         include ${config.xdg.cacheHome}/wal/colors-sway
+        include ${config.xdg.cacheHome}/wal/colors-sway-stripped
         exec_always rm -f ${wobsock}; mkfifo ${wobsock} && tail -f ${wobsock} | wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
         exec_always pkill mako; mako --background-color "$background"CC --text-color "$foreground"
       '';
@@ -226,7 +251,7 @@ with builtins; {
 
           "${modifier}+Shift+d" = "exec systemctl restart --user kanshi";
 
-          "${modifier}+space" = "exec wofi --show drun";
+          "${modifier}+space" = ''exec fuzzel -x 14 -y 14 -p 14 --border-radius=0 --background-color=$backgrounds"BF" --text-color=$foregrounds"FF" --match-color=$color3s"FF" --selection-color=$color1s"FF" --selection-text-color=$foregrounds"FF" --border-color=00000000 --show drun'';
           "${modifier}+return" = "exec ${terminal}";
           "${modifier}+slash" = "exec ${terminal} -e fish -C lfcd";
 

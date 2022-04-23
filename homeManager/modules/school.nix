@@ -1,11 +1,14 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
+  home.file.".Renviron".text = "R_HISTFILE=${config.home.homeDirectory}/.Rhistory";
+  home.file.".Rprofile".source = ./school/Rprofile;
+
   home.packages = [
     # this is global because I use it as a calculator
     (pkgs.rWrapper.override {
       packages = with pkgs.rPackages; [ ggplot2 ];
-    }) # TODO: add configuration
+    })
 
     pkgs.taskmatter
     (pkgs.texlive.combine {

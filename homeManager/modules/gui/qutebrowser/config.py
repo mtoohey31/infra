@@ -37,8 +37,6 @@ c.url.start_pages = ['about:blank']
 c.content.javascript.can_access_clipboard = True
 
 # Keybinds
-config.bind('m', 'spawn --userscript view_in_mpv')
-config.bind('M', 'hint links spawn --userscript view_in_mpv {hint-url}')
 config.bind('D', 'close')
 config.bind('so', 'config-source')
 config.bind('e', 'edit-url')

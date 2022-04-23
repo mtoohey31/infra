@@ -118,16 +118,10 @@ with builtins; {
     "sway/status" = {
       text = ''
         #!${pkgs.fish}/bin/fish
-        ${readFile ./gui/status.fish}
+        ${readFile ./wm/status.fish}
       '';
       executable = true;
-      # TODO: figure out how to source this from xdg.configFile."sway/config".onChange cause it's identical
-      onChange = ''
-        swaySocket=''${XDG_RUNTIME_DIR:-/run/user/$UID}/sway-ipc.$UID.$(${pkgs.procps}/bin/pgrep -x sway || true).sock
-        if [ -S $swaySocket ]; then
-          ${pkgs.sway}/bin/swaymsg -s $swaySocket reload
-        fi
-      '';
+      inherit (config.xdg.configFile."sway/config") onChange;
     };
     "wal/templates/colors-sway-stripped".text = ''
       set $wallpapers {wallpaper.strip}

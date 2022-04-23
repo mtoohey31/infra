@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with builtins; {
+  assertions = [
+    (lib.hm.assertions.assertPlatform "modules.wm" pkgs lib.platforms.linux)
+  ];
+
   home.packages = with pkgs; [
     fuzzel
     flashfocus

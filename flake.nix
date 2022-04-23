@@ -82,8 +82,10 @@
         vimv2.overlay
 
         (self: _: { helix = helix.defaultPackage."${self.system}"; })
-        # TODO: remove this and the nixpkgs-master input once the commits from nixpkgs#168558
-        (self: _: { starship = (import nixpkgs-master { inherit (self) system; }).starship; })
+        (self: _: let master = (import nixpkgs-master { inherit (self) system; }); in {
+          # TODO: remove this once 125e35fda755a29ec9c0f8ee9446a047e18efcf7 is in nixos-unstable
+          inherit (master) starship;
+        })
         (self: super: {
           qutebrowser = (if self.stdenv.hostPlatform.isDarwin then
             self.stdenv.mkDerivation

@@ -14,6 +14,7 @@ with builtins;
     fzf
     jq
     wget
+    vimv2
     unzip
     poppler_utils
     ffmpeg

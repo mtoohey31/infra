@@ -422,7 +422,8 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
         "qbpm": "qbpm",
-        "taskmatter": "taskmatter"
+        "taskmatter": "taskmatter",
+        "vimv2": "vimv2"
       }
     },
     "rust-overlay": {
@@ -468,6 +469,29 @@
       "original": {
         "owner": "mtoohey31",
         "repo": "taskmatter",
+        "type": "github"
+      }
+    },
+    "vimv2": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1650756926,
+        "narHash": "sha256-t9kSUmASrtiSl4pWo0Mi9k4LXPkWMCwh2u1j8YeDSdU=",
+        "owner": "mtoohey31",
+        "repo": "vimv2",
+        "rev": "9fefb69330c27520323c6216518058ce25741ebe",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mtoohey31",
+        "repo": "vimv2",
         "type": "github"
       }
     }

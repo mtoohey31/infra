@@ -46,6 +46,12 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
+    vimv2 = {
+      url = "github:mtoohey31/vimv2";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
     qbpm = {
       url = "github:pvsr/qbpm";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -65,6 +71,7 @@
     , kmonad
     , helix
     , taskmatter
+    , vimv2
     , qbpm
     }:
     let
@@ -72,6 +79,7 @@
       overlays = [
         kmonad.overlay
         taskmatter.overlay
+        vimv2.overlay
 
         (self: _: { helix = helix.defaultPackage."${self.system}"; })
         # TODO: remove this and the nixpkgs-master input once the commits from nixpkgs#168558

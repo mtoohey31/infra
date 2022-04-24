@@ -12,6 +12,8 @@ with builtins; {
     wob
     wl-clipboard
     sway-contrib.grimshot
+    swaylock-effects
+    swayidle
     light
     pulsemixer
     headsetcontrol
@@ -165,10 +167,10 @@ with builtins; {
         export _JAVA_AWT_WM_NONREPARENTING=1
         export WLR_RENDERER_ALLOW_SOFTWARE=1
       '';
-      # TODO: extraPackages = with pkgs; [ swaylock-effects swaybg swayidle ];
       extraConfig = ''
         default_border none
         mouse_warping container
+        exec_always pkill swayidle; swayidle before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
         exec_always pkill flashfocus; flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
         exec_always pkill autotiling; autotiling
         exec_always systemctl restart --user kanshi

@@ -99,4 +99,7 @@ in
   home-manager.users.mtoohey = lib.mkHomeCfg "dailyDriver" pkgs;
 
   services.getty.autologinUser = "mtoohey";
+
+  # TODO: figure out how to set this in the homeManager wm role, since swaylock needs this
+  security.pam.services.swaylock = { };
 }

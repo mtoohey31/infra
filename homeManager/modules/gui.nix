@@ -86,7 +86,7 @@ in
       };
       todoist = {
         name = "Todoist";
-        exec = "brave --profile-directory=\"Default\" --app=https://todoist.com";
+        exec = "brave --profile-directory=Default --app=https://todoist.com";
         terminal = false;
       };
     };

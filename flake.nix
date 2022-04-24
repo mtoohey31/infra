@@ -95,6 +95,18 @@
             };
           };
         })
+        # TODO: submit these changes to fuzzel upstream
+        (self: super: {
+          fuzzel = super.fuzzel.overrideAttrs (_: rec {
+            version = "1.7.0-unescaped";
+            src = self.fetchFromGitHub {
+              owner = "mtoohey31";
+              repo = "fuzzel";
+              rev = "refs/tags/${version}";
+              sha256 = "pitsAn0SuteRmTuOv80MR+VngfLCZjb+VKiu9Bc6HTw=";
+            };
+          });
+        })
         (self: _: { helix = helix.defaultPackage."${self.system}"; })
         (self: _:
           let master = (import nixpkgs-master { inherit (self) system; }); in

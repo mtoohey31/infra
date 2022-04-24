@@ -13,7 +13,7 @@
   xdg = pkgs.lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
     desktopEntries.discord = {
       name = "Discord";
-      exec = "brave --profile-directory=\"Profile 2\" --app=https://discord.com/app";
+      exec = "brave --profile-directory=Profile\\s2 --app=https://discord.com/app";
       terminal = false;
     };
     mimeApps = {

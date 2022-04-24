@@ -81,11 +81,27 @@
         taskmatter.overlay
         vimv2.overlay
 
-        (self: _: { helix = helix.defaultPackage."${self.system}"; })
-        (self: _: let master = (import nixpkgs-master { inherit (self) system; }); in {
-          # TODO: remove this once 125e35fda755a29ec9c0f8ee9446a047e18efcf7 is in nixos-unstable
-          inherit (master) starship;
+        # TODO: create nixpkgs PR for this
+        (self: super: {
+          rPackages = super.rPackages // {
+            colorout = super.rPackages.buildRPackage rec {
+              name = "colorout";
+              src = self.fetchFromGitHub {
+                owner = "jalvesaq";
+                repo = name;
+                rev = "79931fd025a21b86e1643dc8c4e4506ea83e2611";
+                sha256 = "5ymRtVdSC+r9A2YBx4W5wOyTpLPWcNDkhX4r6GfzouM=";
+              };
+            };
+          };
         })
+        (self: _: { helix = helix.defaultPackage."${self.system}"; })
+        (self: _:
+          let master = (import nixpkgs-master { inherit (self) system; }); in
+          {
+            # TODO: remove this once 125e35fda755a29ec9c0f8ee9446a047e18efcf7 is in nixos-unstable
+            inherit (master) starship;
+          })
         (self: super: {
           qutebrowser = (if self.stdenv.hostPlatform.isDarwin then
             self.stdenv.mkDerivation

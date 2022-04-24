@@ -7,7 +7,7 @@
   home.packages = [
     # this is global because I use it as a calculator
     (pkgs.rWrapper.override {
-      packages = with pkgs.rPackages; [ ggplot2 ];
+      packages = with pkgs.rPackages; [ colorout ggplot2 ];
     })
 
     pkgs.taskmatter

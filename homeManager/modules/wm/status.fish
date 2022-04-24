@@ -62,10 +62,9 @@ while true
         set -a output "|"
     end
 
+    sleep (math 1 - (date +%N) / 1000000000)
+
     set -a output (date +' %a. %b %-d  %-I:%M:%S %p')" |"
 
     echo $output
-
-    # TODO: make the interval more reliable to account for the time taken by commands
-    sleep 1
 end

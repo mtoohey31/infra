@@ -20,6 +20,9 @@
         dcdu = "docker compose -f docker-compose-dev.yaml up --remove-orphans";
         dcdd =
           "docker compose -f docker-compose-dev.yaml down --remove-orphans";
+        da = "direnv allow";
+        dr = "direnv reload";
+        nfi = "nix flake init --template github:mtoohey31/templates#";
         g = "git";
       };
       shellAliases = shellAbbrs;

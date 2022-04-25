@@ -1,4 +1,4 @@
-.PHONY: default user nixos darwin install update develop format
+.PHONY: default install user nixos install-nixos darwin install-darwin update develop format
 
 NIX_CMD = nix --extra-experimental-features nix-command --extra-experimental-features flakes
 UNAME := $(shell uname)

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -118,7 +118,8 @@
         xrc = "rm -r --cached";
         unbare = ''
           !f() { TARGET="$(echo "$1" | sed -E 's/\.git\/?$//')" && mkdir "$TARGET" && cp -r "$1" "$TARGET/.git" && cd "$TARGET" && git config --local --bool core.bare false && git reset --hard; }; f'';
-      };
+      } // (pkgs.lib.optionalAttrs (builtins.hasAttr "copy" config.programs.fish.shellAliases)
+        { h = "!${config.programs.fish.shellAliases.copy} \"$(git rev-parse HEAD)\""; });
     };
     gh = {
       enable = true;

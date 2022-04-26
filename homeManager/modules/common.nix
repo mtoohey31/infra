@@ -20,12 +20,15 @@ with builtins;
     ffmpeg
   ] ++ pkgs.lib.optional (!pkgs.stdenv.hostPlatform.isDarwin) gotop;
 
-  xdg.configFile."lf/cleaner" = {
-    text = ''
-      #!${pkgs.bash}/bin/sh
-      kitty +kitten icat --transfer-mode file --clear
-    '';
-    executable = true;
+  xdg.configFile = {
+    "lf/cleaner" = {
+      text = ''
+        #!${pkgs.bash}/bin/sh
+        kitty +kitten icat --transfer-mode file --clear
+      '';
+      executable = true;
+    };
+    "helix/themes/base16_terminal_alacritty.toml".source = ./common/base16_terminal_alacritty.toml;
   };
 
   programs =
@@ -220,7 +223,7 @@ with builtins;
             };
           in
           {
-            theme = "base16_default";
+            theme = "base16_terminal_alacritty";
             editor = {
               scrolloff = 7;
               line-number = "relative";
@@ -240,6 +243,8 @@ with builtins;
               g.R = "rename_symbol";
               g.a = "code_action";
               g.v = "hover";
+              g.n = "goto_next_diag";
+              g.N = "goto_prev_diag";
               G = "goto_last_line";
             };
             keys.select = clipboard_remaps // save_quit_remaps;

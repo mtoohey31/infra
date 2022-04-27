@@ -1,9 +1,8 @@
-# TODO: clean up all the foldl''s, there must be a cleaner way, look at the
-# builtins some more
-
 with builtins;
 let self = import ./.; in
 rec {
+  mapToAttrs = f: list: listToAttrs (map (x: { name = x; value = f x; }) list);
+
   allowedInsecure = import ./allowed-insecure.nix;
   allowedUnfree = import ./allowed-unfree.nix;
 
@@ -63,84 +62,76 @@ rec {
 
   # TODO: check if nixosSystem accepts inputs like darwinSystem does
   mkNixOSCfgs = { nixpkgs, overlays, flake-inputs, nixos-hardware, kmonad }:
-    foldl'
-      (s: hostName:
-        s // {
-          "${hostName}" = nixpkgs.lib.nixosSystem
-            rec {
-              modules =
-                let modulePath = ../nixos/systems + "/${hostName}/modules.nix"; in
-                nixpkgs.lib.optionals (pathExists modulePath)
-                  (map (moduleName: ../nixos/modules + "/${moduleName}.nix")
-                    (import modulePath)) ++ [
-                  ../nixos/modules/common.nix
+    mapToAttrs
+      (hostName: nixpkgs.lib.nixosSystem rec {
+        modules =
+          let modulePath = ../nixos/systems + "/${hostName}/modules.nix"; in
+          nixpkgs.lib.optionals (pathExists modulePath)
+            (map (moduleName: ../nixos/modules + "/${moduleName}.nix")
+              (import modulePath)) ++ [
+            ../nixos/modules/common.nix
 
-                  {
-                    nixpkgs.overlays = overlays;
-                    networking.hostName = hostName;
-                  }
+            {
+              nixpkgs.overlays = overlays;
+              networking.hostName = hostName;
+            }
 
-                  (../nixos/systems + "/${hostName}/configuration.nix")
-                  (../nixos/systems + "/${hostName}/hardware-configuration.nix")
-                ] ++ (
-                  let
-                    hardwareProfilePath = ../nixos/systems + "/${hostName}/hardware-profile.nix";
-                  in
-                  nixpkgs.lib.optional (pathExists hardwareProfilePath)
-                    nixos-hardware.nixosModules."${import hardwareProfilePath}"
-                ) ++ (
-                  let
-                    kbdPath = ../nixos/systems
-                    + "/${hostName}/default.kbd";
-                  in
-                  nixpkgs.lib.optionals (pathExists kbdPath)
-                    [
-                      kmonad.nixosModule
-                      {
-                        services.kmonad = {
-                          enable = true;
-                          configfiles = [ kbdPath ];
-                        };
-                        systemd.services."kmonad-default" = {
-                          enable = true;
-                          wantedBy = [ "multi-user.target" ];
-                        };
-                      }
-                    ]
-                );
-              specialArgs = { inherit flake-inputs; lib = nixpkgs.lib // self; };
-              system =
-                let sysPath = ../nixos/systems + "/${hostName}/system.nix";
-                in if (pathExists sysPath) then import sysPath else "x86_64-linux";
-            };
-        })
-      { }
+            (../nixos/systems + "/${hostName}/configuration.nix")
+            (../nixos/systems + "/${hostName}/hardware-configuration.nix")
+          ] ++ (
+            let
+              hardwareProfilePath = ../nixos/systems + "/${hostName}/hardware-profile.nix";
+            in
+            nixpkgs.lib.optional (pathExists hardwareProfilePath)
+              nixos-hardware.nixosModules."${import hardwareProfilePath}"
+          ) ++ (
+            let
+              kbdPath = ../nixos/systems
+              + "/${hostName}/default.kbd";
+            in
+            nixpkgs.lib.optionals (pathExists kbdPath)
+              [
+                kmonad.nixosModule
+                {
+                  services.kmonad = {
+                    enable = true;
+                    configfiles = [ kbdPath ];
+                  };
+                  systemd.services."kmonad-default" = {
+                    enable = true;
+                    wantedBy = [ "multi-user.target" ];
+                  };
+                }
+              ]
+          );
+        specialArgs = { inherit flake-inputs; lib = nixpkgs.lib // self; };
+        system =
+          let sysPath = ../nixos/systems + "/${hostName}/system.nix";
+          in if (pathExists sysPath) then import sysPath else "x86_64-linux";
+      })
       (attrNames (readDir ../nixos/systems));
 
   mkDarwinCfgs = { nixpkgs, overlays, flake-inputs, darwin, kmonad }:
-    foldl'
-      (s: hostName: s // {
-        "${hostName}" = darwin.lib.darwinSystem rec {
-          inputs = { inherit flake-inputs; lib = nixpkgs.lib // self; };
-          modules =
-            let modulePath = ../darwin/systems + "/${hostName}/modules.nix"; in
-            nixpkgs.lib.optionals (pathExists modulePath)
-              (map (moduleName: ../darwin/modules + "/${moduleName}.nix")
-                (import modulePath)) ++ [
-              ../darwin/modules/common.nix
+    mapToAttrs
+      (hostName: darwin.lib.darwinSystem rec {
+        inputs = { inherit flake-inputs; lib = nixpkgs.lib // self; };
+        modules =
+          let modulePath = ../darwin/systems + "/${hostName}/modules.nix"; in
+          nixpkgs.lib.optionals (pathExists modulePath)
+            (map (moduleName: ../darwin/modules + "/${moduleName}.nix")
+              (import modulePath)) ++ [
+            ../darwin/modules/common.nix
 
-              {
-                nixpkgs.overlays = overlays;
-                networking.hostName = hostName;
-              }
+            {
+              nixpkgs.overlays = overlays;
+              networking.hostName = hostName;
+            }
 
-              (../darwin/systems + "/${hostName}/configuration.nix")
-            ];
-          system =
-            let sysPath = ../darwin/systems + "/${hostName}/system.nix";
-            in if (pathExists sysPath) then import sysPath else "x86_64-darwin";
-        };
+            (../darwin/systems + "/${hostName}/configuration.nix")
+          ];
+        system =
+          let sysPath = ../darwin/systems + "/${hostName}/system.nix";
+          in if (pathExists sysPath) then import sysPath else "x86_64-darwin";
       })
-      { }
       (attrNames (readDir ../darwin/systems));
 }

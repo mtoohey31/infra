@@ -36,7 +36,6 @@
         init = { defaultBranch = "main"; };
       };
       ignores = [ ".direnv/" ];
-      # TODO: add prompts for dangerous stuff that doesn't already include it by default
       aliases = {
         a = "add --verbose";
         aa = "add --all --verbose";
@@ -61,6 +60,7 @@
         can = "commit --amend --no-edit";
         canp = "!git commit --amend --no-edit && git push";
         d = "diff";
+        dh = "diff .";
         dl = "diff HEAD^ HEAD";
         ds = "diff --staged";
         e = "rebase";

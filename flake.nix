@@ -189,16 +189,21 @@
               '';
             });
         })
-        (self: super: {
-          xdg-desktop-portal-wlr = super.xdg-desktop-portal-wlr.overrideAttrs (oldAttrs: rec {
-            version = "c34d09877cb55eb353311b5e85bf50443be9439d";
-            src = self.fetchFromGitHub {
-              owner = "emersion";
-              repo = oldAttrs.pname;
-              rev = version;
-              sha256 = "I1/O3CPpbrMWhAN4Gjq7ph7WZ8Tj8xu8hoSbgHqFhXc=";
-            };
-          });
+        (self: _: {
+          arctis-9-udev-rules = self.stdenv.mkDerivation rec {
+            pname = "arctis-9-udev-rules";
+            version = "0.1.0";
+            nativeBuildInputs = [ self.headsetcontrol ];
+            phases = [ "installPhase" ];
+            installPhase = ''
+              mkdir -p "$out/share/headsetcontrol"
+              RULES="$(headsetcontrol -u | grep -A1 "SteelSeries Arctis 9" | tail -n1)"
+              if test -z "$RULES"; then
+                exit 1
+              fi
+              echo "$RULES" > "$out/share/headsetcontrol/99-arctis-9.rules"
+            '';
+          };
         })
         # TODO: remove this when swaylock-effects gets a new release and is updated in nixpkgs
         (self: super: {
@@ -208,6 +213,17 @@
               repo = "swaylock-effects";
               rev = "a8fc557b86e70f2f7a30ca9ff9b3124f89e7f204";
               sha256 = "GN+cxzC11Dk1nN9wVWIyv+rCrg4yaHnCePRYS1c4JTk=";
+            };
+          });
+        })
+        (self: super: {
+          xdg-desktop-portal-wlr = super.xdg-desktop-portal-wlr.overrideAttrs (oldAttrs: rec {
+            version = "c34d09877cb55eb353311b5e85bf50443be9439d";
+            src = self.fetchFromGitHub {
+              owner = "emersion";
+              repo = oldAttrs.pname;
+              rev = version;
+              sha256 = "I1/O3CPpbrMWhAN4Gjq7ph7WZ8Tj8xu8hoSbgHqFhXc=";
             };
           });
         })

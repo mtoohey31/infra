@@ -56,8 +56,7 @@
       "${g14-patches}/sys-kernel_arch-sources-g14_files-9012-Improve-usability-for-amd-pstate.patch"
     ];
 
-  # TODO: convert this into a package that gets built automatically using headsetcontrol as a build dependency
-  services.udev.extraRules = ''KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1038", ATTRS{idProduct}=="12c2", TAG+="uaccess"'';
+  services.udev.extraRules = builtins.readFile "${pkgs.arctis-9-udev-rules}/share/headsetcontrol/99-arctis-9.rules";
 
   # for quiet startup
   boot.consoleLogLevel = 0;

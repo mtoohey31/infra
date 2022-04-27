@@ -18,16 +18,17 @@ rec {
       };
     };
 
-  mkHomeCfg = user: pkgs: {
+  mkHomeCfg = { user, standalone ? false }: { lib, ... }: {
     imports =
       let modulePath = ../homeManager/users + "/${user}/modules.nix"; in
-      pkgs.lib.optionals (pathExists modulePath)
+      lib.optionals (pathExists modulePath)
         (map (moduleName: ../homeManager/modules + "/${moduleName}.nix")
           (import modulePath)) ++ [
         ../homeManager/modules/common.nix
 
         {
           programs.fish.shellInit = ''export INFRA_USER="${user}"'';
+          programs.home-manager.enable = standalone;
         }
 
         (../homeManager/users + "/${user}/home.nix")
@@ -44,7 +45,7 @@ rec {
                 s // {
                   "${username}-${user}-${system}" =
                     home-manager.lib.homeManagerConfiguration rec {
-                      configuration = mkHomeCfg user pkgs;
+                      configuration = mkHomeCfg { inherit user; standalone = true; };
                       extraSpecialArgs = { inherit flake-inputs; lib = nixpkgs.lib // self; };
                       homeDirectory =
                         if pkgs.stdenv.hostPlatform.isDarwin
@@ -60,7 +61,6 @@ rec {
       { }
       (attrNames (readDir ../homeManager/users));
 
-  # TODO: check if nixosSystem accepts inputs like darwinSystem does
   mkNixOSCfgs = { nixpkgs, overlays, flake-inputs, nixos-hardware, kmonad }:
     mapToAttrs
       (hostName: nixpkgs.lib.nixosSystem rec {

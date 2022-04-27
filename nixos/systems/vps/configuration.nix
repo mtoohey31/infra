@@ -1,10 +1,8 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
-let lib = import ../../../lib { lib = pkgs.lib; };
-in
 {
   users = lib.mkPrimaryUser { username = "mtoohey"; } pkgs;
-  home-manager.users.mtoohey = lib.mkHomeCfg "server" pkgs;
+  home-manager.users.mtoohey = lib.mkHomeCfg { user = "server"; };
 
   networking.wg-quick.interfaces = {
     wg0 = {

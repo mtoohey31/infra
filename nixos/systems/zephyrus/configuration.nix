@@ -70,7 +70,7 @@
       groups = [ "wheel" "video" "docker" "libvirtd" ];
     }
     pkgs;
-  home-manager.users.mtoohey = lib.mkHomeCfg "dailyDriver" pkgs;
+  home-manager.users.mtoohey = lib.mkHomeCfg { user = "dailyDriver"; };
   home-manager.extraSpecialArgs = { inherit flake-inputs; };
 
   services.getty.autologinUser = "mtoohey";

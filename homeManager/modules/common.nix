@@ -39,8 +39,6 @@
       trash-undo = "echo '' | trash-restore 2>/dev/null | sed '$d' | sort -k2,3 -k1,1n | awk 'END {print $1}' | trash-restore >/dev/null 2>&1";
     in
     {
-      home-manager.enable = pkgs.stdenv.hostPlatform.isDarwin;
-
       bat = {
         enable = true;
         config = { theme = "base16"; };

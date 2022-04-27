@@ -4,7 +4,7 @@
   description = "Infrastructure configuration";
 
   inputs = {
-    flake-utils.url = "github:numtide/flake-utils";
+    utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "nixpkgs/nixos-unstable";
     nixpkgs-master.url = "nixpkgs/master";
 
@@ -31,37 +31,31 @@
     helix = {
       url = "github:helix-editor/helix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+      inputs.flake-utils.follows = "utils";
     };
 
     kmonad = {
       url = "github:kmonad/kmonad?dir=nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
-
-    taskmatter = {
-      url = "github:mtoohey31/taskmatter";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+      inputs.flake-utils.follows = "utils";
     };
 
     vimv2 = {
       url = "github:mtoohey31/vimv2";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+      inputs.flake-utils.follows = "utils";
     };
 
     qbpm = {
       url = "github:pvsr/qbpm";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
+      inputs.flake-utils.follows = "utils";
     };
   };
 
   outputs =
     { self
-    , flake-utils
+    , utils
     , nixpkgs
     , nixpkgs-master
     , darwin
@@ -70,7 +64,6 @@
     , nix-index
     , kmonad
     , helix
-    , taskmatter
     , vimv2
     , qbpm
     }:
@@ -78,23 +71,8 @@
       lib = import ./lib { lib = nixpkgs.lib; };
       overlays = [
         kmonad.overlay
-        taskmatter.overlay
         vimv2.overlay
 
-        # TODO: create nixpkgs PR for this
-        (self: super: {
-          rPackages = super.rPackages // {
-            colorout = super.rPackages.buildRPackage rec {
-              name = "colorout";
-              src = self.fetchFromGitHub {
-                owner = "jalvesaq";
-                repo = name;
-                rev = "79931fd025a21b86e1643dc8c4e4506ea83e2611";
-                sha256 = "5ymRtVdSC+r9A2YBx4W5wOyTpLPWcNDkhX4r6GfzouM=";
-              };
-            };
-          };
-        })
         # TODO: submit these changes to fuzzel upstream
         (self: super: {
           fuzzel = super.fuzzel.overrideAttrs (_: rec {
@@ -227,7 +205,7 @@
       darwinConfigurations = lib.mkDarwinCfgs {
         inherit nixpkgs overlays darwin home-manager kmonad;
       };
-    } // (flake-utils.lib.eachDefaultSystem (system:
+    } // (utils.lib.eachDefaultSystem (system:
       with import nixpkgs { inherit system; }; {
         devShell = mkShell {
           nativeBuildInputs = [

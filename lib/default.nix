@@ -1,11 +1,12 @@
 # TODO: clean up all the foldl''s, there must be a cleaner way, look at the
 # builtins some more
-# TODO: move configuration that don't need to be here into the corresponding
-# common.nix
 
 with builtins;
 let self = import ./.; in
 rec {
+  allowedInsecure = import ./allowed-insecure.nix;
+  allowedUnfree = import ./allowed-unfree.nix;
+
   mkPrimaryUser = { username, groups ? [ "wheel" ] }:
     pkgs: {
       groups."${username}".gid = 1000;
@@ -23,13 +24,10 @@ rec {
       let modulePath = ../homeManager/users + "/${user}/modules.nix"; in
       pkgs.lib.optionals (pathExists modulePath)
         (map (moduleName: ../homeManager/modules + "/${moduleName}.nix")
-          (import modulePath { inherit pkgs; })) ++ [
+          (import modulePath)) ++ [
         ../homeManager/modules/common.nix
 
         {
-          nixpkgs.config.allowUnfreePredicate = pkg:
-            builtins.elem (pkgs.lib.getName pkg) (import ./unfree.nix);
-          nixpkgs.config.permittedInsecurePackages = import ./insecure.nix;
           programs.fish.shellInit = ''export INFRA_USER="${user}"'';
         }
 
@@ -64,7 +62,7 @@ rec {
       (attrNames (readDir ../homeManager/users));
 
   # TODO: check if nixosSystem accepts inputs like darwinSystem does
-  mkNixOSCfgs = { nixpkgs, overlays, flake-inputs, home-manager, nixos-hardware, kmonad }:
+  mkNixOSCfgs = { nixpkgs, overlays, flake-inputs, nixos-hardware, kmonad }:
     foldl'
       (s: hostName:
         s // {
@@ -78,16 +76,12 @@ rec {
                   ../nixos/modules/common.nix
 
                   {
-                    nixpkgs.config.allowUnfreePredicate = pkg:
-                      builtins.elem (nixpkgs.lib.getName pkg) (import ./unfree.nix);
-                    nixpkgs.config.permittedInsecurePackages = import ./insecure.nix;
                     nixpkgs.overlays = overlays;
                     networking.hostName = hostName;
                   }
 
                   (../nixos/systems + "/${hostName}/configuration.nix")
                   (../nixos/systems + "/${hostName}/hardware-configuration.nix")
-                  home-manager.nixosModule
                 ] ++ (
                   let
                     hardwareProfilePath = ../nixos/systems + "/${hostName}/hardware-profile.nix";
@@ -123,7 +117,7 @@ rec {
       { }
       (attrNames (readDir ../nixos/systems));
 
-  mkDarwinCfgs = { nixpkgs, overlays, flake-inputs, home-manager, darwin, kmonad }:
+  mkDarwinCfgs = { nixpkgs, overlays, flake-inputs, darwin, kmonad }:
     foldl'
       (s: hostName: s // {
         "${hostName}" = darwin.lib.darwinSystem rec {
@@ -136,15 +130,11 @@ rec {
               ../darwin/modules/common.nix
 
               {
-                nixpkgs.config.allowUnfreePredicate = pkg:
-                  builtins.elem (nixpkgs.lib.getName pkg) (import ./unfree.nix);
-                nixpkgs.config.permittedInsecurePackages = import ./insecure.nix;
                 nixpkgs.overlays = overlays;
                 networking.hostName = hostName;
               }
 
               (../darwin/systems + "/${hostName}/configuration.nix")
-              home-manager.darwinModule
             ];
           system =
             let sysPath = ../darwin/systems + "/${hostName}/system.nix";

@@ -1,8 +1,16 @@
-{ pkgs, ... }: {
+{ lib, pkgs, flake-inputs, ... }: {
+  imports = [
+    flake-inputs.home-manager.nixosModule
+  ];
+
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
   };
+
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) lib.allowedUnfree;
+  nixpkgs.config.permittedInsecurePackages = lib.allowedInsecure;
 
   nix = {
     package = pkgs.nixFlakes;

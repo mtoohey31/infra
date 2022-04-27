@@ -3,9 +3,12 @@
 # TODO: split music into its own role and wrap the mpv binary in a script that forces certain flags, such as the socket path. also debug why I can't keep typing after killing the inital mpv run in tmux-music, and make that abbreviation shorter
 # TODO: set python prompts in system wide configuration (but don't install python globally)
 
-with builtins;
 {
   home.stateVersion = "20.09";
+
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) lib.allowedUnfree;
+  nixpkgs.config.permittedInsecurePackages = lib.allowedInsecure;
 
   home.packages = with pkgs; [
     trash-cli
@@ -196,7 +199,7 @@ with builtins;
 
             alias e "$EDITOR"
             abbr e "$EDITOR"
-          '' + (readFile (fetchurl {
+          '' + (builtins.readFile (builtins.fetchurl {
             # TODO: turn this into a flake so I can bind it to the exa version more elegantly
             url = "https://github.com/mtoohey31/lf-exa-icons/releases/download/v${pkgs.exa.version}/icons";
             sha256 = "16h52mm589f9y0y27iwjgrbrk9i34dp4hhi25qz7qpnyx20qrsay";

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   nix = {
@@ -8,6 +8,10 @@
       keep-outputs = true
     '';
   };
+
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) lib.allowedUnfree;
+  nixpkgs.config.permittedInsecurePackages = lib.allowedInsecure;
 
   home-manager = {
     useUserPackages = true;

@@ -237,11 +237,11 @@
       };
 
       nixosConfigurations = lib.mkNixOSCfgs {
-        inherit nixpkgs overlays flake-inputs home-manager nixos-hardware kmonad;
+        inherit nixpkgs overlays flake-inputs nixos-hardware kmonad;
       };
 
       darwinConfigurations = lib.mkDarwinCfgs {
-        inherit nixpkgs overlays flake-inputs home-manager darwin kmonad;
+        inherit nixpkgs overlays flake-inputs darwin kmonad;
       };
     } // (utils.lib.eachDefaultSystem (system:
       with import nixpkgs { inherit system; }; {

@@ -250,6 +250,7 @@ with builtins;
             keys.select = clipboard_remaps // save_quit_remaps;
           };
       };
+      # TODO: get lf working more smoothly with direnv so I don't have to do the q c-f dance
       lf = {
         enable = true;
         commands = {

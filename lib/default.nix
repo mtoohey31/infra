@@ -1,6 +1,10 @@
 { lib }:
 
-# TODO: clean up all the foldl''s, there must be a cleaner way, look at the builtins some more
+# TODO: clean up all the foldl''s, there must be a cleaner way, look at the
+# builtins some more
+# TODO: move configuration that don't need to be here into the corresponding
+# common.nix and use inputs for darwin, specialArgs for nixos, and I'm not sure
+# what for home-manager to pass the required arguments
 
 with builtins;
 rec {

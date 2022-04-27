@@ -1,7 +1,10 @@
 { config, pkgs, ... }:
 
+# TODO: add https://github.com/andreldm/harpoond
+
 let
   lib = import ../../../lib { lib = pkgs.lib; };
+  # TODO: convert this to a flake input
   asusctl_pr_tar = fetchTarball {
     url =
       "https://github.com/NixOS/nixpkgs/archive/a4a81b6f6c27e5a964faea25b7b5cbe611f98691.tar.gz";

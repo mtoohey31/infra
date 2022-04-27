@@ -41,8 +41,10 @@
         a = "add --verbose";
         aa = "add --all --verbose";
         af = "add --force --verbose";
-        afp = "add --force --patch --verbose";
+        afp = "add --force --patch";
+        afhp = "add --force --patch .";
         ah = "add --verbose .";
+        ahp = "add --patch .";
         ap = "add --patch --verbose";
         add = "add --verbose";
         b = "!git --no-pager branch";
@@ -107,8 +109,8 @@
         t = "stash push --include-untracked";
         td = "stash drop";
         tl = "stash list";
-        to = "stash pop";
-        tp = "stash push --patch";
+        tp = "stash pop";
+        tpp = "stash push --patch";
         ts = "stash show";
         u = "pull";
         ut = "pull --autostash";
@@ -118,7 +120,9 @@
         wr = "worktree remove";
         x = "rm";
         xc = "rm --cached";
+        xch = "rm --cached .";
         xrc = "rm -r --cached";
+        xrch = "rm -r --cached .";
         unbare = ''
           !f() { TARGET="$(echo "$1" | sed -E 's/\.git\/?$//')" && mkdir "$TARGET" && cp -r "$1" "$TARGET/.git" && cd "$TARGET" && git config --local --bool core.bare false && git reset --hard; }; f'';
       } // (pkgs.lib.optionalAttrs (builtins.hasAttr "copy" config.programs.fish.shellAliases)

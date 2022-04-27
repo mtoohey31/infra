@@ -7,91 +7,113 @@
     utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "nixpkgs/nixos-unstable";
     nixpkgs-master.url = "nixpkgs/master";
-
+    home-manager = {
+      url = "github:mtoohey31/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-hardware = {
+      url = "nixos-hardware";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixos-hardware = {
-      url = "nixos-hardware";
+    cogitri = {
+      url = "github:Cogitri/cogitri-pkgs";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "utils";
     };
-
-    home-manager = {
-      url = "github:mtoohey31/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+    fuzzel = {
+      url = "git+https://codeberg.org/mtoohey/fuzzel?ref=1.7.0-unescaped";
+      flake = false;
     };
-
-    nix-index = {
-      url = "github:bennofs/nix-index";
-      inputs.nixpkgs.follows = "nixpkgs";
+    g14-patches = {
+      url = "git+https://gitlab.com/dragonn/linux-g14?ref=5.17";
+      flake = false;
     };
-
+    harpoond = {
+      url = "github:andreldm/harpoond";
+      flake = false;
+    };
     helix = {
       url = "github:helix-editor/helix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";
     };
-
     kmonad = {
       url = "github:kmonad/kmonad?dir=nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";
     };
-
-    vimv2 = {
-      url = "github:mtoohey31/vimv2";
+    nix-index = {
+      url = "github:bennofs/nix-index";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    qbpm = {
+      url = "github:pvsr/qbpm";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";
     };
-
-    qbpm = {
-      url = "github:pvsr/qbpm";
+    qutewal = {
+      url = "git+https://gitlab.com/jjzmajic/qutewal";
+      flake = false;
+    };
+    vimv2 = {
+      url = "github:mtoohey31/vimv2";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";
     };
   };
 
   outputs =
-    { self
-    , utils
+    { utils
     , nixpkgs
     , nixpkgs-master
+    , home-manager
     , darwin
     , nixos-hardware
-    , home-manager
     , nix-index
-    , kmonad
+    , cogitri
+    , fuzzel
+    , harpoond
     , helix
-    , vimv2
+    , kmonad
     , qbpm
-    }:
+    , vimv2
+    , ...
+    }@flake-inputs:
     let
-      lib = import ./lib { lib = nixpkgs.lib; };
+      lib = import ./lib;
       overlays = [
+        cogitri.overlays.default
         kmonad.overlay
         vimv2.overlay
 
         # TODO: submit these changes to fuzzel upstream
-        (self: super: {
+        (_: super: {
           fuzzel = super.fuzzel.overrideAttrs (_: rec {
             version = "1.7.0-unescaped";
-            src = self.fetchFromGitHub {
-              owner = "mtoohey31";
-              repo = "fuzzel";
-              rev = "refs/tags/${version}";
-              sha256 = "pitsAn0SuteRmTuOv80MR+VngfLCZjb+VKiu9Bc6HTw=";
-            };
+            src = fuzzel;
           });
         })
+        (self: _: {
+          harpoond = self.stdenv.mkDerivation rec {
+            pname = "harpoond";
+            version = "0.1.0";
+            src = harpoond;
+            nativeBuildInputs = with self; [ pkg-config libusb ];
+            installPhase = ''
+              mkdir -p "$out/bin" "$out/lib/udev/rules.d"
+              cp harpoond "$out/bin"
+              cp 99-harpoond.rules "$out/lib/udev/rules.d"
+            '';
+          };
+        })
         (self: _: { helix = helix.defaultPackage."${self.system}"; })
-        (self: _:
-          let master = (import nixpkgs-master { inherit (self) system; }); in
-          {
-            # TODO: remove this once 125e35fda755a29ec9c0f8ee9446a047e18efcf7 is in nixos-unstable
-            inherit (master) starship;
-          })
+        # TODO: remove this once 125e35fda755a29ec9c0f8ee9446a047e18efcf7 is in nixos-unstable
+        (self: _: { inherit (import nixpkgs-master { inherit (self) system; }) starship; })
         (self: super: {
           qutebrowser = (if self.stdenv.hostPlatform.isDarwin then
             self.stdenv.mkDerivation
@@ -193,17 +215,17 @@
     in
     {
       homeManagerConfigurations = lib.mkHomeCfgs {
-        inherit nixpkgs overlays home-manager;
+        inherit nixpkgs overlays flake-inputs home-manager;
         usernames = [ "mtoohey" "tooheys" ];
         systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
       };
 
-      nixosConfigurations = lib.mkHostCfgs {
-        inherit nixpkgs overlays nixos-hardware home-manager kmonad;
+      nixosConfigurations = lib.mkNixOSCfgs {
+        inherit nixpkgs overlays flake-inputs home-manager nixos-hardware kmonad;
       };
 
       darwinConfigurations = lib.mkDarwinCfgs {
-        inherit nixpkgs overlays darwin home-manager kmonad;
+        inherit nixpkgs overlays flake-inputs home-manager darwin kmonad;
       };
     } // (utils.lib.eachDefaultSystem (system:
       with import nixpkgs { inherit system; }; {

@@ -1,5 +1,28 @@
 {
   "nodes": {
+    "cogitri": {
+      "inputs": {
+        "flake-utils": [
+          "utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1650801319,
+        "narHash": "sha256-53Z7+v0cOtoAipUuomr5ByY1r7/5cifHLFkDXF7CdK0=",
+        "owner": "Cogitri",
+        "repo": "cogitri-pkgs",
+        "rev": "934b5d7d99cc1a774ae5267b96b85b46746882f3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Cogitri",
+        "repo": "cogitri-pkgs",
+        "type": "github"
+      }
+    },
     "crane": {
       "flake": false,
       "locked": {
@@ -161,6 +184,56 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "fuzzel": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650847448,
+        "narHash": "sha256-zmRgR+7rK1cc2TRyK+8QohODh3+maa+hIBeqUgFcc2U=",
+        "ref": "1.7.0-unescaped",
+        "rev": "9ccd1e4b9595611f925ff909dcc3dd6d097bde60",
+        "revCount": 759,
+        "type": "git",
+        "url": "https://codeberg.org/mtoohey/fuzzel"
+      },
+      "original": {
+        "ref": "1.7.0-unescaped",
+        "type": "git",
+        "url": "https://codeberg.org/mtoohey/fuzzel"
+      }
+    },
+    "g14-patches": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1648617747,
+        "narHash": "sha256-oWucG5iiqj0hP+CBadtnxIAWTPRngEgQZ6hKAeBkM+E=",
+        "ref": "5.17",
+        "rev": "ed8cf277690895c5b2aa19a0c89b397b5cd2073d",
+        "revCount": 83,
+        "type": "git",
+        "url": "https://gitlab.com/dragonn/linux-g14"
+      },
+      "original": {
+        "ref": "5.17",
+        "type": "git",
+        "url": "https://gitlab.com/dragonn/linux-g14"
+      }
+    },
+    "harpoond": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1639850419,
+        "narHash": "sha256-7qmrK9Fsg55lpMIhrnMu3uH81D4K6k75lAN0yUGB1WQ=",
+        "owner": "andreldm",
+        "repo": "harpoond",
+        "rev": "972a02a0a770996c9a5e8842b32c1663290b9f06",
+        "type": "github"
+      },
+      "original": {
+        "owner": "andreldm",
+        "repo": "harpoond",
         "type": "github"
       }
     },
@@ -346,9 +419,29 @@
         "type": "github"
       }
     },
+    "qutewal": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1568775160,
+        "narHash": "sha256-2NiRqLtnimcYFNAVk+eBPtfjHNKICflYpFW51JjpcHU=",
+        "ref": "master",
+        "rev": "ff878423ab251bf764475ab54b28486b957edfd4",
+        "revCount": 33,
+        "type": "git",
+        "url": "https://gitlab.com/jjzmajic/qutewal"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://gitlab.com/jjzmajic/qutewal"
+      }
+    },
     "root": {
       "inputs": {
+        "cogitri": "cogitri",
         "darwin": "darwin",
+        "fuzzel": "fuzzel",
+        "g14-patches": "g14-patches",
+        "harpoond": "harpoond",
         "helix": "helix",
         "home-manager": "home-manager",
         "kmonad": "kmonad",
@@ -357,6 +450,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
         "qbpm": "qbpm",
+        "qutewal": "qutewal",
         "utils": "utils",
         "vimv2": "vimv2"
       }

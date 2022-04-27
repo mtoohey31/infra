@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, flake-inputs, ... }:
 
 # TODO: make cursor not tiny
 
@@ -16,10 +16,7 @@ let
     else "${config.xdg.configHome}/qutebrowser";
   qutebrowserExtraFiles = {
     "${qutebrowserPrefix}/js".source = ./gui/qutebrowser/js;
-    "${qutebrowserPrefix}/qutewal".source = fetchGit {
-      url = "https://gitlab.com/jjzmajic/qutewal";
-      rev = "ff878423ab251bf764475ab54b28486b957edfd4";
-    };
+    "${qutebrowserPrefix}/qutewal".source = flake-inputs.qutewal;
   };
 in
 {

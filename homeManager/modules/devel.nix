@@ -27,6 +27,7 @@
       };
       shellAliases = shellAbbrs;
     };
+    # TODO: add cherry-pick git aliases
     git = {
       enable = true;
       userName = "Matthew Toohey";

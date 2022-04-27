@@ -27,7 +27,6 @@
       };
       shellAliases = shellAbbrs;
     };
-    # TODO: add cherry-pick git aliases
     git = {
       enable = true;
       userName = "Matthew Toohey";
@@ -124,6 +123,9 @@
         xch = "rm --cached .";
         xrc = "rm -r --cached";
         xrch = "rm -r --cached .";
+        y = "cherry-pick";
+        ya = "cherry-pick --abort";
+        yc = "cherry-pick --continue";
         unbare = ''
           !f() { TARGET="$(echo "$1" | sed -E 's/\.git\/?$//')" && mkdir "$TARGET" && cp -r "$1" "$TARGET/.git" && cd "$TARGET" && git config --local --bool core.bare false && git reset --hard; }; f'';
       } // (pkgs.lib.optionalAttrs (builtins.hasAttr "copy" config.programs.fish.shellAliases)

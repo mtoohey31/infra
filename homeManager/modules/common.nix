@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-# TODO: split music into its own role and wrap the mpv binary in a script that forces certain flags, such as the socket path. also debug why I can't keep typing after killing the inital mpv run in tmux-music, and make that abbreviation shorter
 # TODO: set python prompts in system wide configuration (but don't install python globally)
 
 {
@@ -49,10 +48,6 @@
       # TODO: add bash and zsh configuration too with the simplest aliases and starship
       # integration (or define generic aliases and merge them into everything?)
       fish = (
-        let
-          musicCmdStr =
-            "mpv --shuffle --loop-playlist --no-audio-display --volume=35 --input-ipc-server=$XDG_RUNTIME_DIR/mpv.sock";
-        in
         rec {
           shellAbbrs = lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin
             {
@@ -60,7 +55,6 @@
               paste = "pbpaste";
             } // {
             c = "command";
-            music = musicCmdStr;
             pcp = "rsync -r --info=progress2";
             rm = "trash";
             se = "sudoedit";
@@ -98,33 +92,18 @@
               '';
               wraps = "mv";
             };
-            gce = {
-              body = ''
-                set tmp (mktemp)
-                gcc -Wall -o "$tmp" "$argv[1]" && "$tmp" $argv[2..]
-              '';
-            };
-            gde = {
-              body = ''
-                set tmp (mktemp)
-                gcc -Wall -g -o "$tmp" $argv && gdb --quiet --args "$tmp" $argv
-              '';
-            };
-            gve = {
-              body = ''
-                set tmp (mktemp)
-                gcc -Wall -g -o "$tmp" $argv && valgrind "$tmp" $argv
-              '';
-            };
-            tmux-music = {
-              body = ''
-                if tmux has-session -t music &>/dev/null
-                    tmux attach -t music
-                else
-                    tmux new-session -d -s music -c ~/music fish -C "${musicCmdStr} ."
-                end
-              '';
-            };
+            gce.body = ''
+              set tmp (mktemp)
+              gcc -Wall -o "$tmp" "$argv[1]" && "$tmp" $argv[2..]
+            '';
+            gde.body = ''
+              set tmp (mktemp)
+              gcc -Wall -g -o "$tmp" $argv && gdb --quiet --args "$tmp" $argv
+            '';
+            gve.body = ''
+              set tmp (mktemp)
+              gcc -Wall -g -o "$tmp" $argv && valgrind "$tmp" $argv
+            '';
           };
           enable = true;
           shellInit = ''
@@ -296,7 +275,6 @@
           x = ''!unzip "$f"'';
           gc = "cd ~/courses";
           gi = "cd ~/.infra";
-          gm = "cd ~/music";
           gr = "cd ~/repos";
         };
         previewer = { source = "${pkgs.pistol}/bin/pistol"; };

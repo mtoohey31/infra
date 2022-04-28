@@ -190,18 +190,17 @@
     "fuzzel": {
       "flake": false,
       "locked": {
-        "lastModified": 1651083768,
-        "narHash": "sha256-oVl0pYzmX5pm7/OAXLTyrZGoPui/IMl/6O4Cw8LDE1Q=",
-        "ref": "unescape-exec-arguments",
-        "rev": "05f0af80642919cb93e35945104efe2b76845f64",
-        "revCount": 830,
+        "lastModified": 1651170570,
+        "narHash": "sha256-GNoJiCFBSDmppKG1N3Cbay68k/0uxHOY/lOQqiv7T5I=",
+        "ref": "master",
+        "rev": "da8de117a2e53632cddb1ead4e05c951e620c2b5",
+        "revCount": 833,
         "type": "git",
-        "url": "https://codeberg.org/mtoohey/fuzzel"
+        "url": "https://codeberg.org/dnkl/fuzzel"
       },
       "original": {
-        "ref": "unescape-exec-arguments",
         "type": "git",
-        "url": "https://codeberg.org/mtoohey/fuzzel"
+        "url": "https://codeberg.org/dnkl/fuzzel"
       }
     },
     "g14-patches": {

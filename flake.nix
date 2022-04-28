@@ -26,9 +26,8 @@
       inputs.flake-utils.follows = "utils";
     };
     fuzzel = {
-      # TODO: update once PR is merged
       # TODO: update once next release hits nixpkgs
-      url = "git+https://codeberg.org/mtoohey/fuzzel?ref=unescape-exec-arguments";
+      url = "git+https://codeberg.org/dnkl/fuzzel";
       flake = false;
     };
     g14-patches = {
@@ -99,7 +98,7 @@
 
         (_: super: {
           fuzzel = super.fuzzel.overrideAttrs (_: rec {
-            version = "unescaped";
+            version = "HEAD";
             src = fuzzel;
           });
         })

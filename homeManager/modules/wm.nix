@@ -1,23 +1,25 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, flake-inputs, ... }:
 
 with builtins;
-let fuzzel-wrapped = (pkgs.symlinkJoin {
-  name = "fuzzel-wrapped";
-  paths = [
-    (pkgs.writeShellScriptBin "fuzzel" ''
-      . ${config.xdg.cacheHome}/wal/colors-stripped.sh
-      exec ${pkgs.fuzzel}/bin/fuzzel -x 14 -y 14 -p 14 --border-radius=0 --background-color="''${backgrounds}BF" --text-color="''${foreground}FF" --match-color="''${color3}FF" --selection-color="''${color1}FF" --selection-text-color="''${foreground}FF" --border-color=00000000 "$@"
-    '')
-    pkgs.fuzzel
-  ];
-}); in
 {
   assertions = [
     (lib.hm.assertions.assertPlatform "modules.wm" pkgs lib.platforms.linux)
   ];
 
   home.packages = with pkgs; [
-    fuzzel-wrapped
+    (pkgs.symlinkJoin {
+      name = "fuzzel-wrapped";
+      paths = [
+        (pkgs.writeShellScriptBin "fuzzel" ''
+          . ${config.xdg.cacheHome}/wal/colors-stripped.sh
+          exec ${pkgs.fuzzel}/bin/fuzzel -x 14 -y 14 -p 14 --border-radius=0 --background-color="''${backgrounds}BF" --text-color="''${foreground}FF" --match-color="''${color3}FF" --selection-color="''${color1}FF" --selection-text-color="''${foreground}FF" --border-color=00000000 "$@"
+        '')
+        fuzzel
+      ];
+    })
+    (pkgs.writeShellScriptBin "emoji" ''
+      jq -r '.[] | ([.description] + .aliases)[] + ": " + .emoji' ${flake-inputs.gemoji}/db/emoji.json | fuzzel -dmenu | grep -o '.$' | tr -d '\n' | wl-copy
+    '')
     flashfocus
     autotiling
     wob

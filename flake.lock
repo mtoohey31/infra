@@ -221,6 +221,22 @@
         "url": "https://gitlab.com/dragonn/linux-g14"
       }
     },
+    "gemoji": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1627297691,
+        "narHash": "sha256-f1MwKDW/NCgsS60HIWyCF0e6XRIwDeNEswN5Zb25MA8=",
+        "ref": "master",
+        "rev": "55bb37afa4a24e92709ff135a9be4a4f1e79aaef",
+        "revCount": 428,
+        "type": "git",
+        "url": "https://github.com/github/gemoji"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://github.com/github/gemoji"
+      }
+    },
     "harpoond": {
       "flake": false,
       "locked": {
@@ -441,6 +457,7 @@
         "darwin": "darwin",
         "fuzzel": "fuzzel",
         "g14-patches": "g14-patches",
+        "gemoji": "gemoji",
         "harpoond": "harpoond",
         "helix": "helix",
         "home-manager": "home-manager",

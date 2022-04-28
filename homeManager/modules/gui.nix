@@ -75,7 +75,7 @@ in
         type = "Application";
         name = "qbpm";
         icon = "qutebrowser";
-        exec = "qbpm choose %u";
+        exec = "qbpm choose -m \"fuzzel -dmenu\"";
         categories = [ "Network" ];
         terminal = false;
       };

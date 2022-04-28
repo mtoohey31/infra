@@ -35,6 +35,10 @@
       url = "git+https://gitlab.com/dragonn/linux-g14?ref=5.17";
       flake = false;
     };
+    gemoji = {
+      url = "git+https://github.com/github/gemoji";
+      flake = false;
+    };
     harpoond = {
       url = "github:andreldm/harpoond";
       flake = false;

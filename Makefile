@@ -20,7 +20,7 @@ user:
 	result/activate
 
 nixos:
-	sudo nixos-rebuild switch --flake .#
+	nixos-rebuild switch --use-remote-sudo --flake .#
 
 # TODO: test this with an iso
 install-nixos:

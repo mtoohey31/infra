@@ -52,7 +52,6 @@
       "${g14-patches}/sys-kernel_arch-sources-g14_files-9006-amd-c3-entry.patch"
 
       "${g14-patches}/sys-kernel_arch-sources-g14_files-9010-ACPI-PM-s2idle-Don-t-report-missing-devices-as-faili.patch"
-      "${g14-patches}/sys-kernel_arch-sources-g14_files-9011-cpufreq-CPPC-Fix-performance-frequency-conversion.patch"
       "${g14-patches}/sys-kernel_arch-sources-g14_files-9012-Improve-usability-for-amd-pstate.patch"
     ];
 

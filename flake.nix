@@ -206,17 +206,6 @@
             '';
           };
         })
-        # TODO: remove this when swaylock-effects gets a new release and is updated in nixpkgs
-        (self: super: {
-          swaylock-effects = super.swaylock-effects.overrideAttrs (_: {
-            src = self.fetchFromGitHub {
-              owner = "mortie";
-              repo = "swaylock-effects";
-              rev = "a8fc557b86e70f2f7a30ca9ff9b3124f89e7f204";
-              sha256 = "GN+cxzC11Dk1nN9wVWIyv+rCrg4yaHnCePRYS1c4JTk=";
-            };
-          });
-        })
         (self: super: {
           xdg-desktop-portal-wlr = super.xdg-desktop-portal-wlr.overrideAttrs (oldAttrs: rec {
             version = "c34d09877cb55eb353311b5e85bf50443be9439d";

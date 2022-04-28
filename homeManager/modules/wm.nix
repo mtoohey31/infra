@@ -6,6 +6,13 @@ with builtins;
     (lib.hm.assertions.assertPlatform "modules.wm" pkgs lib.platforms.linux)
   ];
 
+  xdg.desktopEntries.emoji-picker = {
+    type = "Application";
+    name = "Emoji Picker";
+    exec = "emoji";
+    terminal = false;
+  };
+
   home.packages = with pkgs; [
     (pkgs.symlinkJoin {
       name = "fuzzel-wrapped";

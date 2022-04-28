@@ -166,10 +166,7 @@ let fuzzel-wrapped = (pkgs.symlinkJoin {
     '';
   };
   wayland.windowManager.sway =
-    let
-      wobsock = "$XDG_RUNTIME_DIR/wob.sock";
-      mpvsock = "$XDG_RUNTIME_DIR/mpv.sock";
-    in
+    let wobsock = "$XDG_RUNTIME_DIR/wob.sock"; in
     {
       enable = true;
       extraOptions = [ "--unsupported-gpu" ];
@@ -270,18 +267,6 @@ let fuzzel-wrapped = (pkgs.symlinkJoin {
           "${modifier}+space" = ''exec fuzzel --show drun'';
           "${modifier}+return" = "exec ${terminal}";
           "${modifier}+slash" = "exec ${terminal} -e fish -C lfcd";
-
-          "${modifier}+Shift+space" = ''
-            exec test -S ${mpvsock} && echo '{ "command": ["cycle", "pause"] }' | socat - ${mpvsock} || fish -C "tmux-music"'';
-          "${modifier}+Shift+return" = "exec tmux kill-session -t music";
-          "${modifier}+Shift+right" = ''
-            exec echo '{ "command": ["playlist-next"] }' | socat - ${mpvsock}'';
-          "${modifier}+Shift+left" = ''
-            exec echo '{ "command": ["playlist-prev"] }' | socat - ${mpvsock}'';
-          "${modifier}+Shift+down" = ''
-            exec echo '{ "command": ["add", "volume", "-2"] }' | socat - ${mpvsock}'';
-          "${modifier}+Shift+up" = ''
-            exec echo '{ "command": ["add", "volume", "2"] }' | socat - ${mpvsock}'';
 
           "${modifier}+Shift+S" = "exec grimshot copy area";
 

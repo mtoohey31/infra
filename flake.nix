@@ -11,10 +11,6 @@
       url = "github:mtoohey31/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-hardware = {
-      url = "nixos-hardware";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -52,6 +48,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";
     };
+    nixos-hardware = {
+      url = "nixos-hardware";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-index = {
       url = "github:bennofs/nix-index";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -78,7 +78,6 @@
     , nixpkgs-master
     , home-manager
     , darwin
-    , nixos-hardware
     , nix-index
     , cogitri
     , fuzzel
@@ -230,7 +229,7 @@
       };
 
       nixosConfigurations = lib.mkNixOSCfgs {
-        inherit nixpkgs overlays flake-inputs nixos-hardware kmonad;
+        inherit nixpkgs overlays flake-inputs kmonad;
       };
 
       darwinConfigurations = lib.mkDarwinCfgs {

@@ -1,1 +1,0 @@
-"asus-zephyrus-ga401"

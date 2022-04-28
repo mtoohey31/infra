@@ -1,7 +1,25 @@
 { config, lib, pkgs, flake-inputs, ... }:
 
-{
-  imports = with flake-inputs.cogitri.nixosModules; [ asusd supergfxd ];
+lib.enableLocals [
+  "bluetooth"
+  "gaming"
+  "harpoond"
+  "opengl"
+  "sound"
+  "virtualisation"
+  "wlr-screen-sharing"
+] // {
+  imports = with flake-inputs.cogitri.nixosModules; [
+    asusd
+    supergfxd
+
+    ./hardware-configuration.nix
+    flake-inputs.nixos-hardware.nixosModules.asus-zephyrus-ga401
+  ];
+
+  virtualisation.docker.enable = true;
+  services.printing.enable = true;
+  networking.wireless.iwd.enable = true;
 
   hardware.nvidia = {
     modesetting.enable = true;

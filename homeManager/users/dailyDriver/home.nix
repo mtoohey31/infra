@@ -1,4 +1,14 @@
-{ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+
+{
+  # TODO: figure out how to pass flake lib to this point
+  local = {
+    devel.enable = true;
+    music.enable = true;
+    gui.enable = true;
+    wm.enable = !pkgs.stdenv.hostPlatform.isDarwin;
+  };
+
   home.packages = with pkgs; [
     himalaya # TODO: add configuration
     gimp
@@ -8,6 +18,7 @@
     bitwarden
     signal-desktop
     obs-studio
+    bitwig-studio
   ];
 
   xdg = pkgs.lib.mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {

@@ -1,0 +1,10 @@
+[
+  ./bluetooth.nix
+  ./common.nix
+  ./gaming.nix
+  ./harpoond.nix
+  ./opengl.nix
+  ./sound.nix
+  ./virtualisation.nix
+  ./wlr-screen-sharing.nix
+]

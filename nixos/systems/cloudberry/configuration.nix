@@ -1,8 +1,10 @@
-{ config, pkgs, ... }:
+{ config, pkgs, flake-inputs, ... }:
 
 let lib = import ../../../lib { lib = pkgs.lib; };
 in
 {
+  inputs = [ flake-inputs.nixos-hardware.nixosModules.raspberry-pi-4 ];
+
   users = lib.mkPrimaryUser { username = "tooheys"; } pkgs;
 
   # services.caddy = {

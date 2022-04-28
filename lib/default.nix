@@ -114,7 +114,7 @@ rec {
   mkDarwinCfgs = { nixpkgs, overlays, flake-inputs, darwin, kmonad }:
     mapToAttrs
       (hostName: darwin.lib.darwinSystem rec {
-        inputs = { inherit flake-inputs; lib = nixpkgs.lib // self; };
+        specialArgs = { inherit flake-inputs; lib = nixpkgs.lib // self; };
         modules =
           let modulePath = ../darwin/systems + "/${hostName}/modules.nix"; in
           nixpkgs.lib.optionals (pathExists modulePath)

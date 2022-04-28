@@ -1,6 +1,8 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, flake-inputs, ... }:
 
 {
+  imports = [ flake-inputs.home-manager.darwinModule ];
+
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
@@ -14,6 +16,7 @@
   nixpkgs.config.permittedInsecurePackages = lib.allowedInsecure;
 
   home-manager = {
+    extraSpecialArgs = { inherit flake-inputs; };
     useUserPackages = true;
     useGlobalPkgs = true;
   };

@@ -4,6 +4,7 @@
   ];
 
   home-manager = {
+    extraSpecialArgs = { inherit flake-inputs; };
     useUserPackages = true;
     useGlobalPkgs = true;
   };

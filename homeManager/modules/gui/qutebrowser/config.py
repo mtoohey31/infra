@@ -72,7 +72,6 @@ c.fonts.web.family.sans_serif = 'SF Pro Text'
 c.fonts.web.family.serif = 'New York'
 c.fonts.web.family.fixed = 'JetBrainsMono Nerd Font'
 
-# TODO: make this dynamic based on sunset/sunrise with https://pypi.org/project/suntime/
 c.colors.webpage.preferred_color_scheme = 'dark'
 config.source(join(expanduser(config_prefix), 'qutewal/qutewal.py'))
 

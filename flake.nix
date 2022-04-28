@@ -26,7 +26,9 @@
       inputs.flake-utils.follows = "utils";
     };
     fuzzel = {
-      url = "git+https://codeberg.org/mtoohey/fuzzel?ref=1.7.0-unescaped";
+      # TODO: update once PR is merged
+      # TODO: update once next release hits nixpkgs
+      url = "git+https://codeberg.org/mtoohey/fuzzel?ref=unescape-exec-arguments";
       flake = false;
     };
     g14-patches = {
@@ -91,10 +93,9 @@
         kmonad.overlay
         vimv2.overlay
 
-        # TODO: submit these changes to fuzzel upstream
         (_: super: {
           fuzzel = super.fuzzel.overrideAttrs (_: rec {
-            version = "1.7.0-unescaped";
+            version = "unescaped";
             src = fuzzel;
           });
         })

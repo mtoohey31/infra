@@ -1,10 +1,8 @@
-{ config, pkgs, flake-inputs, ... }:
+{ config, lib, pkgs, flake-inputs, ... }:
 
 # TODO: make cursor not tiny
 
-with builtins;
 let
-  lib = import ../lib;
   kittyPackage =
     if pkgs.stdenv.hostPlatform.isDarwin then
       (pkgs.kitty.overrideAttrs (_: {
@@ -37,7 +35,7 @@ in
     nsxiv
     xdg-utils
 
-    rofi # TODO: replace this with a wrapper script because it's only used for qute-bitwarden and won't be available on macos
+    # TODO: debug keyctl link @u @s requirement on reboots (see: https://github.com/mattydebie/bitwarden-rofi/issues/34#issuecomment-639257565)
     keyutils # needed for qute-bitwarden userscript
 
     noto-fonts
@@ -60,7 +58,7 @@ in
         sha256 = "0h4zryamysalv80dgdwrlfqanx45xl7llmlmag0limpa3mqs0hs3";
       };
     };
-    dataFile = (foldl'
+    dataFile = (builtins.foldl'
       (s: name:
         s // {
           "qutebrowser-profiles/${name}/config/config.py".text = ''
@@ -218,6 +216,7 @@ in
         q = "quit";
       };
     };
+    # TODO: get config hot-reloading set-up
     qutebrowser = {
       enable = true;
       extraConfig = (if pkgs.stdenv.hostPlatform.isDarwin then ''
@@ -226,9 +225,10 @@ in
       '' else ''
         config_prefix = "${config.xdg.configHome}/qutebrowser"
       '') + ''
-        ${readFile ./gui/qutebrowser/config.py}
-        config.bind('B', 'spawn --userscript ${pkgs.qutebrowser}/share/qutebrowser/userscripts/qute-bitwarden')
-      ''; # NOTE: running the command mentioned here might be neccessary: https://github.com/mattydebie/bitwarden-rofi/issues/34#issuecomment-639257565
+        ${builtins.readFile ./gui/qutebrowser/config.py}
+        config.bind('B', 'spawn --userscript ${pkgs.qutebrowser}/share/qutebrowser/userscripts/qute-bitwarden ${
+            lib.strings.optionalString pkgs.stdenv.hostPlatform.isLinux ''-d "fuzzel -dmenu" -p "fuzzel -dmenu --password --lines 0"''}')
+      '';
     };
     zathura = {
       enable = true;

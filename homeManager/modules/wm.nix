@@ -19,7 +19,7 @@ with builtins;
       paths = [
         (pkgs.writeShellScriptBin "fuzzel" ''
           . ${config.xdg.cacheHome}/wal/colors-stripped.sh
-          exec ${pkgs.fuzzel}/bin/fuzzel -x 14 -y 14 -p 14 --border-radius=0 --background-color="''${backgrounds}BF" --text-color="''${foreground}FF" --match-color="''${color3}FF" --selection-color="''${color1}FF" --selection-text-color="''${foreground}FF" --border-color=00000000 "$@"
+          exec ${pkgs.fuzzel}/bin/fuzzel -x 14 -y 14 -p 14 -w 42 --border-radius=0 --background-color="''${backgrounds}BF" --text-color="''${foreground}FF" --match-color="''${color3}FF" --selection-color="''${color1}FF" --selection-text-color="''${foreground}FF" --border-color=00000000 "$@" --font="JetBrainsMono Nerd Font"
         '')
         fuzzel
       ];

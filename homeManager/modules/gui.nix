@@ -51,12 +51,13 @@ in
   } // (pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin qutebrowserExtraFiles);
   xdg = {
     configFile = (pkgs.lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isDarwin) qutebrowserExtraFiles) // {
-      "wal/templates/zathuracolours".source = ./gui/zathuracolours;
+      "fontconfig/fonts.conf".source = ./gui/fonts.conf;
       "kitty/search".source = fetchTarball {
         url =
           "https://github.com/trygveaa/kitty-kitten-search/archive/8cc3237e6a995b6e7e101cba667fcda5439d96e2.tar.gz";
         sha256 = "0h4zryamysalv80dgdwrlfqanx45xl7llmlmag0limpa3mqs0hs3";
       };
+      "wal/templates/zathuracolours".source = ./gui/zathuracolours;
     };
     dataFile = (builtins.foldl'
       (s: name:

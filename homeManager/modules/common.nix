@@ -273,7 +273,6 @@
           R = "rename";
           M = "push :mkdir<space>";
           x = ''!unzip "$f"'';
-          gc = "cd ~/courses";
           gi = "cd ~/.infra";
           gr = "cd ~/repos";
         };

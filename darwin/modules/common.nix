@@ -1,4 +1,4 @@
-{ lib, pkgs, flake-inputs, ... }:
+{ config, lib, pkgs, flake-inputs, ... }:
 
 {
   imports = [ flake-inputs.home-manager.darwinModule ];

@@ -213,7 +213,7 @@
             phases = [ "installPhase" ];
             installPhase = ''
               mkdir -p "$out/share/headsetcontrol"
-              RULES="$(headsetcontrol -u | grep -A1 "SteelSeries Arctis 9" | tail -n1)"
+              RULES="$(headsetcontrol -u | grep -A1 "SteelSeries Arctis 9")"
               if test -z "$RULES"; then
                 exit 1
               fi

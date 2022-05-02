@@ -98,7 +98,7 @@ with lib; {
               {
                 inherit criteria mode;
                 scale = 1.75;
-                position = "2752,960";
+                position = "1450,1152";
               }
             ];
           };

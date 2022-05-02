@@ -244,11 +244,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1651460522,
-        "narHash": "sha256-63LU9tFLmsMtEjeeSnSMyqRtEWn4N/uu4zlWZ7llPt8=",
+        "lastModified": 1651506422,
+        "narHash": "sha256-TMgfcH3FKaUU0mnqPOSlYAzY6rS2j7XzdPtWSqKXycI=",
         "owner": "mtoohey31",
         "repo": "git-crypt-agessh",
-        "rev": "6e868f5cf9a5e9a9cbc3d655ab12f4762b08c49d",
+        "rev": "b6da8013695d8fdcb7ac23b613ba8e3aaaaa1d24",
         "type": "github"
       },
       "original": {

@@ -264,7 +264,7 @@
           sops
           rage
           ssh-to-age
-          git-crypt-agessh.defaultPackage."${system}"
+          git-crypt-agessh.packages."${system}".default
         ];
       };
     }));

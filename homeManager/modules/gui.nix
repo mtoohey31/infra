@@ -24,7 +24,12 @@ with lib; {
       qutebrowserExtraFiles = {
         "${qutebrowserPrefix}/js".source = ./gui/qutebrowser/js;
         "${qutebrowserPrefix}/qutewal".source = flake-inputs.qutewal;
-      };
+      } // (lib.mapAttrs'
+        (name: value: {
+          name = "${qutebrowserPrefix}/greasemonkey/${name}";
+          value = { source = value; };
+        })
+        config.local.secrets.userscripts);
     in
     mkIf cfg.enable {
       home.packages = with pkgs; [

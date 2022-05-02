@@ -1,6 +1,8 @@
 { lib, pkgs, ... }:
 
-lib.enableLocals [ "wm" ] // {
+{
+  local.wm.enable = true;
+
   users.users.mtoohey = {
     description = "Matthew Toohey";
     home = "/Users/mtoohey";

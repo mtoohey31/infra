@@ -1,8 +1,7 @@
-{ lib, pkgs, ... }:
+{ ... }:
 
 {
-  users = lib.mkPrimaryUser { username = "mtoohey"; } pkgs;
-  home-manager.users.mtoohey = lib.mkHomeCfg { user = "server"; };
+  local.primary-user.homeManagerUser = "server";
 
   networking.wg-quick.interfaces = {
     wg0 = {

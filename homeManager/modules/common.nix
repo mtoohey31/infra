@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
 # TODO: set python prompts in system wide configuration (but don't install python globally)
+# TODO: add helix format keybind, and set more languages to auto-format
 
 {
   home.stateVersion = "20.09";
@@ -231,6 +232,7 @@
           };
       };
       # TODO: get lf working more smoothly with direnv so I don't have to do the q c-f dance
+      # TODO: make lfcd remember the position of the file browser on reentry so I don't have to scroll back and forth
       lf = {
         enable = true;
         commands = {

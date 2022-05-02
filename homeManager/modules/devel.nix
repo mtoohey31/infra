@@ -67,9 +67,10 @@ with lib; {
           cm = ''!f() { git commit --message "$*"; }; f'';
           can = "commit --amend --no-edit";
           canp = "!git commit --amend --no-edit && git push";
+          cu = "reset HEAD~";
           d = "diff";
           dh = "diff .";
-          dl = "diff HEAD^ HEAD";
+          dl = "diff HEAD~ HEAD";
           ds = "diff --staged";
           e = "rebase";
           ea = "rebase --abort";
@@ -144,11 +145,8 @@ with lib; {
         enableGitCredentialHelper = true;
         settings = { git_protocol = "ssh"; };
       };
-      go = {
-        enable = true;
-        goPath = ".go";
-        package = pkgs.go_1_18;
-      };
     };
+
+    home.sessionVariables.GOPATH = "${config.home.homeDirectory}/.go";
   };
 }

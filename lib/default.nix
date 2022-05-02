@@ -2,24 +2,9 @@ with builtins;
 let self = import ./.; in
 rec {
   mapToAttrs = f: list: listToAttrs (map (x: { name = x; value = f x; }) list);
-  enableLocals = modules: {
-    local = mapToAttrs (_: { enable = true; }) modules;
-  };
 
   allowedInsecure = import ./allowed-insecure.nix;
   allowedUnfree = import ./allowed-unfree.nix;
-
-  mkPrimaryUser = { username, groups ? [ "wheel" ] }:
-    pkgs: {
-      groups."${username}".gid = 1000;
-      users."${username}" = {
-        isNormalUser = true;
-        uid = 1000;
-        group = username;
-        extraGroups = groups;
-        shell = pkgs.fish;
-      };
-    };
 
   mkHomeCfg = { user, standalone ? false }: { ... }: {
     imports = (import ../homeManager/modules/modules.nix) ++ [
@@ -32,7 +17,7 @@ rec {
     ];
   };
 
-  mkHomeCfgs = { nixpkgs, overlays, flake-inputs, home-manager, usernames, systems }:
+  mkHomeCfgs = { nixpkgs, overlays, flake-inputs, home-manager, systems }:
     foldl'
       (s: user:
         s // (foldl'
@@ -43,7 +28,11 @@ rec {
                   "${username}-${user}-${system}" =
                     home-manager.lib.homeManagerConfiguration rec {
                       configuration = mkHomeCfg { inherit user; standalone = true; };
-                      extraSpecialArgs = { inherit flake-inputs; lib = nixpkgs.lib // self; };
+                      extraSpecialArgs = {
+                        inherit flake-inputs;
+                        hostName = null;
+                        lib = nixpkgs.lib // self;
+                      };
                       homeDirectory =
                         if pkgs.stdenv.hostPlatform.isDarwin
                         then "/Users/${username}" else "/home/${username}";
@@ -54,7 +43,7 @@ rec {
               { }
               systems))
           { }
-          usernames))
+          (import ../secrets.nix).usernames))
       { }
       (attrNames (readDir ../homeManager/users));
 

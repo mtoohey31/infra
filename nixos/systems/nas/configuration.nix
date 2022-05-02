@@ -1,10 +1,6 @@
-{ pkgs, ... }:
+{ ... }:
 
-let lib = import ../../../lib { lib = pkgs.lib; };
-in
 {
-  users = lib.mkPrimaryUser { username = "tooheys"; } pkgs;
-
   services.samba = {
     enable = true;
     shares = {

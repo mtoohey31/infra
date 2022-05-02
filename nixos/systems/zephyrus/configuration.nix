@@ -1,14 +1,23 @@
-{ config, lib, pkgs, flake-inputs, ... }:
+{ config, pkgs, flake-inputs, ... }:
 
-lib.enableLocals [
-  "bluetooth"
-  "gaming"
-  "harpoond"
-  "opengl"
-  "sound"
-  "virtualisation"
-  "wlr-screen-sharing"
-] // {
+{
+  local = {
+    bluetooth.enable = true;
+    gaming.enable = true;
+    harpoond.enable = true;
+    opengl.enable = true;
+    primary-user = {
+      autologin = true;
+      homeManagerUser = "dailyDriver";
+      groups = [ "wheel" "video" "docker" "libvirtd" ];
+    };
+    sops.enable = true;
+    sound.enable = true;
+    virtualisation.enable = true;
+    wireguard-client = { enable = true; keepAlive = true; };
+    wlr-screen-sharing.enable = true;
+  };
+
   imports = with flake-inputs.cogitri.nixosModules; [
     asusd
     supergfxd
@@ -17,9 +26,14 @@ lib.enableLocals [
     flake-inputs.nixos-hardware.nixosModules.asus-zephyrus-ga401
   ];
 
+  # TODO: define windows VM here with PCIE passthrough and such
   virtualisation.docker.enable = true;
+
   services.printing.enable = true;
+
   networking.wireless.iwd.enable = true;
+
+  programs.light.enable = true;
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -79,17 +93,6 @@ lib.enableLocals [
   boot.consoleLogLevel = 0;
   boot.initrd.verbose = false;
   boot.kernelParams = [ "quiet" "udev.log_level=3" ];
-
-  programs.light.enable = true;
-  users = lib.mkPrimaryUser
-    {
-      username = "mtoohey";
-      groups = [ "wheel" "video" "docker" "libvirtd" ];
-    }
-    pkgs;
-  home-manager.users.mtoohey = lib.mkHomeCfg { user = "dailyDriver"; };
-
-  services.getty.autologinUser = "mtoohey";
 
   # TODO: figure out how to set this in the homeManager wm role, since swaylock needs this
   security.pam.services.swaylock = { };

@@ -16,6 +16,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    git-crypt-agessh = {
+      url = "github:mtoohey31/git-crypt-agessh";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "utils";
+    };
+    nix-index = {
+      url = "github:bennofs/nix-index";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     cogitri = {
       url = "github:Cogitri/cogitri-pkgs";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -52,10 +66,6 @@
       url = "nixos-hardware";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-index = {
-      url = "github:bennofs/nix-index";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     qbpm = {
       url = "github:pvsr/qbpm";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -76,9 +86,12 @@
     { utils
     , nixpkgs
     , nixpkgs-master
-    , home-manager
     , darwin
+    , home-manager
+
+    , git-crypt-agessh
     , nix-index
+
     , cogitri
     , fuzzel
     , harpoond
@@ -236,15 +249,23 @@
         inherit nixpkgs overlays flake-inputs darwin kmonad;
       };
     } // (utils.lib.eachDefaultSystem (system:
-      with import nixpkgs { inherit system; }; {
-        devShell = mkShell {
-          nativeBuildInputs = [
-            rnix-lsp
-            nixpkgs-fmt
-            nix-index.defaultPackage."${system}"
-            gnumake
-            deadnix
-          ];
-        };
-      }));
+    let pkgs =
+      import nixpkgs { inherit system; }; in
+    with pkgs; {
+      devShell = mkShell {
+        nativeBuildInputs = [
+          rnix-lsp
+          yaml-language-server
+          nixpkgs-fmt
+          nix-index.defaultPackage."${system}"
+          gnumake
+          deadnix
+
+          sops
+          rage
+          ssh-to-age
+          git-crypt-agessh.defaultPackage."${system}"
+        ];
+      };
+    }));
 }

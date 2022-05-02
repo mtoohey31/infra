@@ -16,7 +16,10 @@
   nixpkgs.config.permittedInsecurePackages = lib.allowedInsecure;
 
   home-manager = {
-    extraSpecialArgs = { inherit flake-inputs; };
+    extraSpecialArgs = {
+      inherit flake-inputs;
+      inherit (config.networking) hostName;
+    };
     useUserPackages = true;
     useGlobalPkgs = true;
   };

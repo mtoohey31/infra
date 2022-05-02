@@ -1,16 +1,6 @@
-{ lib, pkgs, flake-inputs, ... }:
+{ lib, pkgs, ... }:
 
 {
-  imports = [
-    flake-inputs.home-manager.nixosModule
-  ];
-
-  home-manager = {
-    extraSpecialArgs = { inherit flake-inputs; };
-    useUserPackages = true;
-    useGlobalPkgs = true;
-  };
-
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) lib.allowedUnfree;
   nixpkgs.config.permittedInsecurePackages = lib.allowedInsecure;
@@ -31,8 +21,6 @@
   time.timeZone = "America/Toronto";
   i18n.defaultLocale = "en_CA.UTF-8";
 
-  # TODO: tweak ssh settings to make things more secure
-  services.openssh.enable = true;
   system.stateVersion = "21.11";
 
   nix.gc = {

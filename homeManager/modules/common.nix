@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-# TODO: set python prompts in system wide configuration (but don't install python globally)
 # TODO: add helix format keybind, and set more languages to auto-format
 
 {
@@ -23,6 +22,17 @@
     ffmpeg
     comma
   ] ++ pkgs.lib.optional (!pkgs.stdenv.hostPlatform.isDarwin) gotop;
+
+  home.file = {
+    ".local/lib/python2.7/site-packages/usercustomize.py".source = ./common/usercustomize2.py;
+  } // (lib.listToAttrs
+    (map
+      (n:
+        {
+          name = ".local/lib/python3.${builtins.toString n}/site-packages/usercustomize.py";
+          value.source = ./common/usercustomize3.py;
+        })
+      (lib.range 7 10)));
 
   xdg.configFile = {
     "lf/cleaner" = {

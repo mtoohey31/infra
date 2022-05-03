@@ -21,6 +21,7 @@
     unzip
     poppler_utils
     ffmpeg
+    comma
   ] ++ pkgs.lib.optional (!pkgs.stdenv.hostPlatform.isDarwin) gotop;
 
   xdg.configFile = {

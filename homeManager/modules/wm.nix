@@ -295,6 +295,24 @@ with lib; {
             "${modifier}+Shift+g" = "exec brave --profile-directory=\"Profile 2\"";
             "${modifier}+Shift+u" = "exec brave --profile-directory=\"Profile 3\"";
             "${modifier}+Shift+m" = "exec brave --profile-directory=\"Profile 4\"";
+
+            "${modifier}+z" = "exec ${pkgs.writeShellScript "toggle-vm-focus" ''
+                      set -e
+
+                      if swaymsg -t get_outputs | jq -e '.[] | select(.model == "XV340CK P") .active' >/dev/null; then
+                        # attaching
+                        ddcutil setvcp 60 0x0F
+                        virsh attach-device win11-dgpu ${./wm/input-harpoon.xml}
+                        virsh attach-device win11-dgpu ${./wm/input-zen.xml}
+                        swaymsg output "'Acer Technologies XV340CK P THQAA0013P00'" disable
+                      else
+                        # detatching
+                        swaymsg output "'Acer Technologies XV340CK P THQAA0013P00'" enable
+                        ddcutil setvcp 60 0x11
+                        virsh detach-device win11-dgpu ${./wm/input-harpoon.xml}
+                        virsh detach-device win11-dgpu ${./wm/input-zen.xml}
+                      fi
+                    ''}";
           };
           modes = {
             resize = {

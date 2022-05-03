@@ -9,11 +9,23 @@
     primary-user = {
       autologin = true;
       homeManagerUser = "dailyDriver";
-      groups = [ "wheel" "video" "docker" "libvirtd" ];
+      groups = [ "wheel" "video" "docker" ];
     };
     sops.enable = true;
     sound.enable = true;
-    virtualisation.enable = true;
+    virtualisation = {
+      enable = true;
+      # TODO: add hooks to isolate host cpus to 0-3 (see: https://github.com/mtoohey31/dotfiles/blob/main/.scripts/setup/stow/libvirt/etc/libvirt/hooks/qemu)
+      # as well as a hook for running `supergfxctl -m vfio` for the dgpu vm
+      vms = {
+        win11 = ./win11.xml;
+        win11-dgpu = builtins.toPath (builtins.toFile "win11-dgpu.xml" ((builtins.readFile ./win11-dgpu-head.xml) + ''
+              <qemu:arg value="file=${./SSDT1.dat}"/>
+            </qemu:commandline>
+          </domain>
+        ''));
+      };
+    };
     wireguard-client = { enable = true; keepAlive = true; };
     wlr-screen-sharing.enable = true;
   };

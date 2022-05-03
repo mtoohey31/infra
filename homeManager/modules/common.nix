@@ -32,6 +32,7 @@
       executable = true;
     };
     "helix/themes/base16_terminal_alacritty.toml".source = ./common/base16_terminal_alacritty.toml;
+    "libvirt/libvirt.conf".text = ''uri_default = "qemu:///system"'';
   };
 
   programs =

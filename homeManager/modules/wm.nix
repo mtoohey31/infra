@@ -296,6 +296,7 @@ with lib; {
             "${modifier}+Shift+u" = "exec brave --profile-directory=\"Profile 3\"";
             "${modifier}+Shift+m" = "exec brave --profile-directory=\"Profile 4\"";
 
+            # TODO: define this only on hosts with local.virtualisation.enable
             "${modifier}+z" = "exec ${pkgs.writeShellScript "toggle-vm-focus" ''
                       set -e
 

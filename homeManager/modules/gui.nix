@@ -34,7 +34,7 @@ with lib; {
     mkIf cfg.enable {
       home.packages = with pkgs; [
         socat
-        qbpm # TODO: add greasemonkey and figure out how to handle bookmarks
+        qbpm
 
         ibm-plex
         (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
@@ -231,7 +231,11 @@ with lib; {
             q = "quit";
           };
         };
-        # TODO: get config hot-reloading set-up
+        # TODO: get config hot-reloading set-up, would probably require a qbpm
+        # home-manager module though since there is hot-reload support for
+        # normal qutebrowser setups, but it expects the ipc socket to be
+        # located at "$XDG_RUNTIME_DIR/qutebrowser/ipc-$(echo -n "$USER" | md5sum | cut -d' ' -f1)"
+        # while qbpm places it at "$HOME/.local/share/qutebrowser-profiles/$profile/$(echo -n "$USER" | md5sum | cut -d' ' -f1)"
         qutebrowser = {
           enable = true;
           extraConfig = (if pkgs.stdenv.hostPlatform.isDarwin then ''

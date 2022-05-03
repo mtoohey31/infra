@@ -38,7 +38,6 @@
     flake-inputs.nixos-hardware.nixosModules.asus-zephyrus-ga401
   ];
 
-  # TODO: define windows VM here with PCIE passthrough and such
   virtualisation.docker.enable = true;
 
   services.printing.enable = true;

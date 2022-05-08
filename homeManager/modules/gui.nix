@@ -21,15 +21,12 @@ with lib; {
         if pkgs.stdenv.hostPlatform.isDarwin
         then "${config.home.homeDirectory}/.qutebrowser"
         else "${config.xdg.configHome}/qutebrowser";
-      qutebrowserExtraFiles = {
-        "${qutebrowserPrefix}/js".source = ./gui/qutebrowser/js;
-        "${qutebrowserPrefix}/qutewal".source = flake-inputs.qutewal;
-      } // (lib.mapAttrs'
+      qutebrowserUserscripts = lib.mapAttrs'
         (name: value: {
           name = "${qutebrowserPrefix}/greasemonkey/${name}";
           value = { source = value; };
         })
-        config.local.secrets.userscripts);
+        config.local.secrets.userscripts;
     in
     mkIf cfg.enable {
       home.packages = with pkgs; [
@@ -62,15 +59,10 @@ with lib; {
 
       home.file = {
         Downloads.source = config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory;
-      } // (pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin qutebrowserExtraFiles);
+      } // (pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin qutebrowserUserscripts);
       xdg = {
-        configFile = (pkgs.lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isDarwin) qutebrowserExtraFiles) // {
+        configFile = (pkgs.lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isDarwin) qutebrowserUserscripts) // {
           "fontconfig/fonts.conf".source = ./gui/fonts.conf;
-          "kitty/search".source = fetchTarball {
-            url =
-              "https://github.com/trygveaa/kitty-kitten-search/archive/8cc3237e6a995b6e7e101cba667fcda5439d96e2.tar.gz";
-            sha256 = "0h4zryamysalv80dgdwrlfqanx45xl7llmlmag0limpa3mqs0hs3";
-          };
           "wal/templates/zathuracolours".source = ./gui/zathuracolours;
         };
         dataFile = (builtins.foldl'
@@ -155,8 +147,10 @@ with lib; {
             "ctrl+enter" = "send_text all \\x1b[13;5u";
             "ctrl+l" =
               "combine : clear_terminal scrollback active : send_text normal,application \\x0c";
-            "ctrl+shift+f" =
-              "launch --location=hsplit --allow-remote-control kitty +kitten search/search.py @active-kitty-window-id";
+            "ctrl+shift+f" = "launch --location=hsplit --allow-remote-control kitty +kitten ${fetchTarball {
+            url = "https://github.com/trygveaa/kitty-kitten-search/archive/8cc3237e6a995b6e7e101cba667fcda5439d96e2.tar.gz";
+            sha256 = "0h4zryamysalv80dgdwrlfqanx45xl7llmlmag0limpa3mqs0hs3";
+          }}/search.py @active-kitty-window-id";
           };
           extraConfig =
             (if pkgs.stdenv.hostPlatform.isDarwin then ''
@@ -238,19 +232,110 @@ with lib; {
         # while qbpm places it at "$HOME/.local/share/qutebrowser-profiles/$profile/$(echo -n "$USER" | md5sum | cut -d' ' -f1)"
         qutebrowser = {
           enable = true;
-          extraConfig = (if pkgs.stdenv.hostPlatform.isDarwin then ''
-            config_prefix = "${config.home.homeDirectory}/.qutebrowser"
+          keyBindings = {
+            normal = {
+              "D" = "close";
+              "so" = "config-source";
+              "e" = "edit-url";
+              "(" = "jseval --world=main -f ${./gui/qutebrowser/js/slowDown.js}";
+              ")" = "jseval --world=main -f ${./gui/qutebrowser/js/speedUp.js}";
+              "c-" = "jseval --world=main -f ${./gui/qutebrowser/js/zoomOut.js}";
+              "c+" = "jseval --world=main -f ${./gui/qutebrowser/js/zoomIn.js}";
+              "<ESC>" = "fake-key <ESC>";
+              "<Ctrl-Shift-c>" = "yank selection";
+              "v" = "hint all hover";
+              "V" = "mode-enter caret";
+              "<Ctrl-F>" = "hint --rapid all tab-bg";
+              "<Ctrl-e>" = "fake-key <Ctrl-a><Ctrl-c><Ctrl-Shift-e>";
+              "o" = "set statusbar.show always;; set-cmd-text -s :open";
+              "O" = "set statusbar.show always;; set-cmd-text -s :open -t";
+              ":" = "set statusbar.show always;; set-cmd-text :";
+              "/" = "set statusbar.show always;; set-cmd-text /";
+            };
+            command = {
+              "<Escape>" = "mode-enter normal;; set statusbar.show never";
+              "<Return>" = "command-accept;; set statusbar.show never";
+            };
+          };
+          settings = let command_prefix = [
+            "kitty"
+            "--title"
+            "floatme"
+            "-o"
+            "background_opacity=0.8"
+            "-e"
+            "fish"
+            "-c"
+          ]; in
+            {
+              auto_save.session = true;
+              colors.webpage.preferred_color_scheme = "dark";
+              completion.height = "25%";
+              content.fullscreen.window = true;
+              content.headers.do_not_track = null;
+              content.javascript.can_access_clipboard = true;
+              downloads.location = {
+                directory = "${config.home.homeDirectory}";
+                remember = false;
+              };
+              editor.command = command_prefix ++ [
+                "cat '${config.xdg.cacheHome}/wal/sequences' && $EDITOR {file}"
+              ];
+              fileselect = {
+                handler = "external";
+                single_file.command = command_prefix ++ [
+                  "cat '${config.xdg.cacheHome}/wal/sequences' && lf -command 'map <enter> \${{echo \\\"$f\\\" > {}; lf -remote \\\"send $id quit\\\"}}'"
+                ];
+                multiple_files.command = command_prefix ++ [
+                  "cat '${config.xdg.cacheHome}/wal/sequences' && lf -command 'map <enter> \${{echo \\\"$fx\\\" > {}; lf -remote \\\"send $id quit\\\"}}'"
+                ];
+                folder.command = command_prefix ++ [
+                  "cat '${config.xdg.cacheHome}/wal/sequences' && lf -command 'set dironly; map <enter> \${{echo \\\"$f\\\" > {}; lf -remote \\\"send $id quit\\\"}}'"
+                ];
+              };
+              fonts = {
+                default_size = "12pt";
+                default_family = "JetBrainsMono Nerd Font";
+              };
+              fonts.web.family = {
+                standard = "SF Pro Text";
+                sans_serif = "SF Pro Text";
+                serif = "New York";
+                fixed = "JetBrainsMono Nerd Font";
+              };
+              hints.chars = "asdfghjkl;qwertyuiopzxcvbnm";
+              statusbar.show = "never";
+              tabs = {
+                show = "switching";
+                show_switching_delay = 1500;
+                last_close = "close";
+              };
+              tabs.title.format = "{current_title}";
+              url.start_pages = [ "about:blank" ];
+            };
+          extraConfig = ''
+            config.unbind('<Ctrl-v>')
+            config.unbind('<Ctrl-a>')
+            config.source('${flake-inputs.qutewal}/qutewal.py')
+            config.bind('B', 'spawn --userscript ${pkgs.qutebrowser}/share/qutebrowser/userscripts/qute-bitwarden ${lib.strings.optionalString config.local.wm.enable '' -d "fuzzel -dmenu" -p "fuzzel -dmenu --password --lines 0" ''}')
+            import json
+            with open("${config.xdg.cacheHome}/wal/colors.json") as file:
+                pywal = json.load(file)
+                c.url.searchengines = {'DEFAULT':
+                                       'https://duckduckgo.com/?q={}&kt=SF+Pro+Text&kj=' +
+                                       pywal['colors']['color2'] + '&k7=' +
+                                       pywal['special']['background'] + '&kx=' +
+                                       pywal['colors']['color1'] + '&k8' +
+                                       pywal['special']['foreground'] + '&k9' +
+                                       pywal['colors']['color2'] + '&kaa' +
+                                       pywal['colors']['color2'] + '&kae=d'}
+          '' + (if pkgs.stdenv.hostPlatform.isDarwin then ''
             c.qt.args = ["single-process"]
           '' else ''
-            config_prefix = "${config.xdg.configHome}/qutebrowser"
-          '') + ''
-            ${builtins.readFile ./gui/qutebrowser/config.py}
-            config.bind('B', 'spawn --userscript ${pkgs.qutebrowser}/share/qutebrowser/userscripts/qute-bitwarden ${
-                lib.strings.optionalString pkgs.stdenv.hostPlatform.isLinux ''-d "fuzzel -dmenu" -p "fuzzel -dmenu --password --lines 0"''}')
-          '' + (lib.strings.optionalString (builtins.hasAttr "copy" config.programs.fish.shellAliases) ''
+          '') + (lib.strings.optionalString (builtins.hasAttr "copy" config.programs.fish.shellAliases) ''
               config.bind('yg', 'spawn --userscript ${pkgs.writeShellScript "qute-yank-git" ''
-                  set -eo pipefail
-                  echo "$QUTE_URL" | sed -E 's/^https?:\/\/github.com\//git@github.com:/;s/(\/[^/]*)\/.*/\1/' | ${config.programs.fish.shellAliases.copy}
+              set -eo pipefail
+              printf "$QUTE_URL" | sed -E 's/^https?:\/\/github.com\//git@github.com:/;s/ (\/[^/]*)\/.*/\1/' | ${config.programs.fish.shellAliases.copy}
             ''}')
           '');
         };

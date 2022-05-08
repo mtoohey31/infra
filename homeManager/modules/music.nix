@@ -1,7 +1,6 @@
 { config, lib, ... }:
 
 # TODO: wrap the mpv binary in a script that forces certain flags, such as the socket path
-# TODO: make jam alias remember volume
 
 let cfg = config.local.music;
 in
@@ -16,7 +15,7 @@ with lib; {
       fish =
         let
           musicCmdStr =
-            "mpv --shuffle --loop-playlist --no-audio-display --volume=35 --input-ipc-server=$XDG_RUNTIME_DIR/mpv.sock";
+            "mpv --shuffle --loop-playlist --no-audio-display --input-ipc-server=$XDG_RUNTIME_DIR/mpv.sock";
         in
         rec {
           shellAbbrs.jam = musicCmdStr;
@@ -34,6 +33,11 @@ with lib; {
 
     wayland.windowManager.sway = lib.mkIf config.wayland.windowManager.sway.enable
       {
+        extraConfig = let wobsock = "$XDG_RUNTIME_DIR/wob.sock"; in
+          ''
+            bindsym --locked Mod4+Shift+Up exec /bin/sh -c 'pulsemixer --list-sink | grep mpv | grep -Po "sink-input-\d+" | xargs -I {} /bin/sh -c "pulsemixer --change-volume +2 --id {}; pulsemixer --get-volume --id {} | cut -d\\" \\" -f1 > ${wobsock}"'
+            bindsym --locked Mod4+Shift+Down exec /bin/sh -c 'pulsemixer --list-sink | grep mpv | grep -Po "sink-input-\d+" | xargs -I {} /bin/sh -c "pulsemixer --change-volume -2 --id {}; pulsemixer --get-volume --id {} | cut -d\\" \\" -f1 > ${wobsock}"'
+          '';
         config.keybindings =
           let mpvsock = "$XDG_RUNTIME_DIR/mpv.sock";
             inherit (config.wayland.windowManager.sway.config) modifier;
@@ -47,10 +51,6 @@ with lib; {
               exec echo '{ "command": ["playlist-next"] }' | socat - ${mpvsock}'';
             "${modifier}+Shift+left" = ''
               exec echo '{ "command": ["playlist-prev"] }' | socat - ${mpvsock}'';
-            "${modifier}+Shift+down" = ''
-              exec echo '{ "command": ["add", "volume", "-2"] }' | socat - ${mpvsock}'';
-            "${modifier}+Shift+up" = ''
-              exec echo '{ "command": ["add", "volume", "2"] }' | socat - ${mpvsock}'';
           };
       };
   };

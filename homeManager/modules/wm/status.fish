@@ -7,7 +7,7 @@ while true
         set -a output "嬨 |"
     end
 
-    set default_route "$(ip route show default | awk '{ print $5 }')"
+    set default_route "$(ip route show default | cut -d' ' -f5)"
     set default_station_state "$(iwctl station "$default_route" show)"
     if test "$(string match -r "(?<=State).*" "$default_station_state" | string trim)" = connected
         set -a output "直 $(string match -r "(?<=Connected network).*" "$default_station_state" | string trim) |"
@@ -23,7 +23,7 @@ while true
         set -a output " misbehaving |"
     end
 
-    set free_size "$(df -h / | tail -n1 | awk '{ print $4 }')"
+    set free_size "$(df -h / | tail -n1 | cut -d' ' -f4)"
     if test "$(echo "$free_size" | tr -d '[:alpha:]')" -le 100
         set -a output " $free_size |"
     end
@@ -45,7 +45,7 @@ while true
     if test "$(pulsemixer --get-mute)" -eq 1
         set -a output "婢 |"
     else
-        set -a output "墳 $(pulsemixer --get-volume | awk '{ print $1 }')% |"
+        set -a output "墳 $(pulsemixer --get-volume | cut -d' ' -f1)% |"
     end
 
     if test -S "$XDG_RUNTIME_DIR/mpv.sock" && set state "$(echo '{ "command": ["get_property", "pause"] }' | socat - $XDG_RUNTIME_DIR/mpv.sock 2> /dev/null)"

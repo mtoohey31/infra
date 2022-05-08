@@ -75,6 +75,11 @@
       url = "git+https://gitlab.com/jjzmajic/qutewal";
       flake = false;
     };
+    uncommitted-go = {
+      url = "github:mtoohey31/uncommitted-go";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "utils";
+    };
     vimv2 = {
       url = "github:mtoohey31/vimv2";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -98,6 +103,7 @@
     , helix
     , kmonad
     , qbpm
+    , uncommitted-go
     , vimv2
     , ...
     }@flake-inputs:
@@ -106,6 +112,7 @@
       overlays = [
         cogitri.overlays.default
         kmonad.overlay
+        uncommitted-go.overlays.default
         vimv2.overlay
 
         (_: super: {

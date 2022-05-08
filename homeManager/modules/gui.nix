@@ -247,7 +247,12 @@ with lib; {
             ${builtins.readFile ./gui/qutebrowser/config.py}
             config.bind('B', 'spawn --userscript ${pkgs.qutebrowser}/share/qutebrowser/userscripts/qute-bitwarden ${
                 lib.strings.optionalString pkgs.stdenv.hostPlatform.isLinux ''-d "fuzzel -dmenu" -p "fuzzel -dmenu --password --lines 0"''}')
-          '';
+          '' + (lib.strings.optionalString (builtins.hasAttr "copy" config.programs.fish.shellAliases) ''
+              config.bind('yg', 'spawn --userscript ${pkgs.writeShellScript "qute-yank-git" ''
+                  set -eo pipefail
+                  echo "$QUTE_URL" | sed -E 's/^https?:\/\/github.com\//git@github.com:/;s/(\/[^/]*)\/.*/\1/' | ${config.programs.fish.shellAliases.copy}
+            ''}')
+          '');
         };
         zathura = {
           enable = true;

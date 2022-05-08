@@ -114,6 +114,7 @@ with lib; {
           rsh = "restore --staged .";
           rsp = "restore --staged --patch .";
           s = "status --short";
+          sh = "status --short .";
           ssh =
             "!git remote set-url origin $(git remote get-url origin | sed -E 's/^https?:\\/\\/github.com\\//git@github.com:/g')";
           t = "stash push --include-untracked";

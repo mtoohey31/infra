@@ -285,11 +285,13 @@
           R = "rename";
           M = "push :mkdir<space>";
           x = ''!unzip "$f"'';
+          ge = "bottom";
           gi = "cd ~/.infra";
           gr = "cd ~/repos";
         };
         previewer = { source = "${pkgs.pistol}/bin/pistol"; };
         settings = {
+          dirfirst = false;
           icons = true;
           smartcase = true;
           shell = "fish";

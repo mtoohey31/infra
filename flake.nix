@@ -109,7 +109,10 @@
     , ...
     }@flake-inputs:
     let
-      lib = import ./lib;
+      lib = import ./lib {
+        allowedInsecure = import ./lib/allowed-insecure.nix;
+        allowedUnfree = import ./lib/allowed-unfree.nix;
+      };
       overlays = [
         cogitri.overlays.default
         kmonad.overlay
@@ -243,6 +246,8 @@
       ];
     in
     {
+      lib = import ./lib;
+
       homeManagerConfigurations = lib.mkHomeCfgs {
         inherit nixpkgs overlays flake-inputs home-manager;
         usernames = [ "mtoohey" "tooheys" ];

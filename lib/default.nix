@@ -1,13 +1,14 @@
+{ allowedInsecure ? [ ], allowedUnfree ? [ ] }:
+
 with builtins;
-let self = import ./.; in
 rec {
+  inherit allowedInsecure allowedUnfree;
+  self = import ./. { inherit allowedInsecure allowedUnfree; };
+
   mapToAttrs = f: list: listToAttrs (map (x: { name = x; value = f x; }) list);
 
-  allowedInsecure = import ./allowed-insecure.nix;
-  allowedUnfree = import ./allowed-unfree.nix;
-
-  mkHomeCfg = { user, standalone ? false }: { ... }: {
-    imports = (import ../homeManager/modules/modules.nix) ++ [
+  mkHomeCfg = { user, standalone ? false, cfgDir ? ../homeManager }: { ... }: {
+    imports = (import (cfgDir + "/modules/modules.nix")) ++ [
       {
         programs.fish.shellInit = ''export INFRA_USER="${user}"'';
         programs.home-manager.enable = standalone;
@@ -17,7 +18,7 @@ rec {
     ];
   };
 
-  mkHomeCfgs = { nixpkgs, overlays, flake-inputs, home-manager, systems }:
+  mkHomeCfgs = { nixpkgs, overlays, flake-inputs, home-manager, systems, cfgDir ? ../homeManager/users }:
     foldl'
       (s: user:
         s // (foldl'
@@ -45,9 +46,9 @@ rec {
           { }
           (import ../secrets.nix).usernames))
       { }
-      (attrNames (readDir ../homeManager/users));
+      (attrNames (readDir (cfgDir + "/users")));
 
-  mkNixOSCfgs = { nixpkgs, overlays, flake-inputs, kmonad }:
+  mkNixOSCfgs = { nixpkgs, overlays, flake-inputs, kmonad, cfgDir ? ../nixos }:
     mapToAttrs
       (hostName: nixpkgs.lib.nixosSystem rec {
         modules = (import ../nixos/modules/modules.nix) ++ [
@@ -56,11 +57,10 @@ rec {
             networking.hostName = hostName;
           }
 
-          (../nixos/systems + "/${hostName}/configuration.nix")
+          (cfgDir + "/systems/${hostName}/configuration.nix")
         ] ++ (
           let
-            kbdPath = ../nixos/systems
-              + "/${hostName}/default.kbd";
+            kbdPath = cfgDir + "/systems/${hostName}/default.kbd";
           in
           nixpkgs.lib.optionals (pathExists kbdPath)
             [
@@ -79,12 +79,12 @@ rec {
         );
         specialArgs = { inherit flake-inputs; lib = nixpkgs.lib // self; };
         system =
-          let sysPath = ../nixos/systems + "/${hostName}/system.nix";
+          let sysPath = cfgDir + "/systems/${hostName}/system.nix";
           in if (pathExists sysPath) then import sysPath else "x86_64-linux";
       })
-      (attrNames (readDir ../nixos/systems));
+      (attrNames (readDir (cfgDir + "/systems")));
 
-  mkDarwinCfgs = { nixpkgs, overlays, flake-inputs, darwin, kmonad }:
+  mkDarwinCfgs = { nixpkgs, overlays, flake-inputs, darwin, kmonad, cfgDir ? ../darwin }:
     mapToAttrs
       (hostName: darwin.lib.darwinSystem rec {
         specialArgs = { inherit flake-inputs; lib = nixpkgs.lib // self; };
@@ -94,11 +94,11 @@ rec {
             networking.hostName = hostName;
           }
 
-          (../darwin/systems + "/${hostName}/configuration.nix")
+          (cfgDir + "/systems/${hostName}/configuration.nix")
         ];
         system =
-          let sysPath = ../darwin/systems + "/${hostName}/system.nix";
+          let sysPath = cfgDir + "/systems/${hostName}/system.nix";
           in if (pathExists sysPath) then import sysPath else "x86_64-darwin";
       })
-      (attrNames (readDir ../darwin/systems));
+      (attrNames (readDir (cfgDir + "/systems")));
 }

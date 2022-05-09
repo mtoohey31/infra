@@ -3,6 +3,7 @@
 {
   local.wm.enable = true;
 
+  # TODO: create a primary-user module for darwin and move this stuff there
   users.users.mtoohey = {
     description = "Matthew Toohey";
     home = "/Users/mtoohey";

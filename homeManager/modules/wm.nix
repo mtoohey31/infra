@@ -44,6 +44,7 @@ with lib; {
       light
       pulsemixer
       headsetcontrol
+      uncommitted-go
 
       plover.wayland
       firefox
@@ -61,6 +62,111 @@ with lib; {
             exec sway
           end
         '';
+      };
+      i3status-rust = {
+        enable = true;
+        bars = {
+          default = {
+            icons = "material-nf";
+            theme = "native";
+            blocks = [
+              {
+                block = "custom";
+                command = "if ip link show wg0 &>/dev/null; echo 嬨; end";
+                hide_when_empty = true;
+              }
+              {
+                block = "net";
+                format = "{ssid}";
+              }
+              {
+                block = "custom";
+                command = ''
+                  if set graphics "$(supergfxctl -g | string replace -r '^Current graphics mode: ' "")"
+                      echo " $graphics"
+                  else
+                      echo  misbehaving
+                  end
+                '';
+                interval = 5;
+              }
+              {
+                block = "custom";
+                command = ''
+                  set free_size "$(df -h / | tail -n1 | cut -d' ' -f4)"
+                  if test "$(echo "$free_size" | tr -d '[:alpha:]')" -le 100
+                      echo " $free_size"
+                  end
+                '';
+                hide_when_empty = true;
+                interval = 300;
+              }
+              {
+                block = "custom";
+                command = ''
+                  if set hs_bat "$(headsetcontrol -cb 2> /dev/null)"
+                      echo " $hs_bat%"
+                  end
+                '';
+                hide_when_empty = true;
+              }
+              { block = "sound"; }
+              # TODO: { block = "github"; }
+              {
+                block = "custom";
+                command = ''
+                  if test -S "$XDG_RUNTIME_DIR/mpv.sock" && set state "$(echo '{ "command": ["get_property", "pause"] }' | socat - $XDG_RUNTIME_DIR/mpv.sock 2> /dev/null)"
+                      if test "$(echo "$state" | jq -r '.data')" = true
+                          echo 契
+                      else
+                          echo 
+                      end
+
+                      echo "$(echo '{ "command": ["get_property", "media-title"] }' | socat - "$XDG_RUNTIME_DIR/mpv.sock" | jq -r '.data')"
+
+                      set artist "$(echo '{ "command": ["get_property", "metadata/artist"] }' | socat - "$XDG_RUNTIME_DIR/mpv.sock" | jq -r '.data')"
+
+                      if test "$artist" != null
+                          echo "- $artist"
+                      end
+                  end
+                '';
+                hide_when_empty = true;
+                interval = 0.5;
+              }
+              {
+                block = "custom";
+                command = ''
+                  if test -d ~/repos && set num_uncommitted (uncommitted -n ~/repos)
+                      echo '{ "state": "Warning", "text": "'" $num_uncommitted"'" }'
+                  end
+                '';
+                hide_when_empty = true;
+                json = true;
+                interval = 300;
+              }
+              { block = "battery"; }
+              # TODO: upstream an option for hiding the builtin disk_space
+              # block below a certain threshold
+              {
+                block = "custom";
+                command = ''
+                  set free_size "$(df -h / | tail -n1 | awk '{ print $4 }')"
+                  if test "$(echo "$free_size" | tr -d '[:alpha:]')" -le 100
+                      echo " $free_size"
+                  end
+                '';
+                hide_when_empty = true;
+                interval = 300;
+              }
+              {
+                block = "time";
+                format = "%a. %b %-d  %-I:%M:%S %p";
+                interval = 1;
+              }
+            ];
+          };
+        };
       };
       mako = {
         enable = true;
@@ -337,11 +443,11 @@ with lib; {
             inherit fonts;
             mode = "hide";
             position = "top";
-            statusCommand = "fish " + builtins.toString ./wm/status.fish;
+            statusCommand = "i3status-rs '${config.xdg.configHome}/i3status-rust/config-default.toml'";
             colors = {
               background = "$background";
               statusline = "$foreground";
-              separator = "#000000";
+              separator = "$foreground";
               focusedWorkspace = {
                 border = "$foreground";
                 background = "$foreground";

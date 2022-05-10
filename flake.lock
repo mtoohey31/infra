@@ -416,21 +416,6 @@
         "type": "indirect"
       }
     },
-    "nixpkgs-master": {
-      "locked": {
-        "lastModified": 1651103823,
-        "narHash": "sha256-92NEu6STfaTp2RfYPJdHQmry5kU0H0SxWABjnRT+ZiU=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "df13cab16c5ead65d69e00ae6187b5f3c8a840cb",
-        "type": "github"
-      },
-      "original": {
-        "id": "nixpkgs",
-        "ref": "master",
-        "type": "indirect"
-      }
-    },
     "qbpm": {
       "inputs": {
         "flake-utils": [
@@ -485,7 +470,6 @@
         "nix-index": "nix-index",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-master": "nixpkgs-master",
         "qbpm": "qbpm",
         "qutewal": "qutewal",
         "sops-nix": "sops-nix",

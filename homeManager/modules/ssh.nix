@@ -1,16 +1,23 @@
-{ config, lib, hostName, ... }:
+_:
+{ config, lib, ... }:
 
 let cfg = config.local.ssh;
   inherit (config.local.secrets) systems;
 in
 with lib; {
-  options.local.ssh.enable = mkOption {
-    type = types.bool;
-    default = hostName != null;
+  options.local.ssh = {
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    hostName = mkOption {
+      type = types.str;
+    };
   };
 
   config = mkIf cfg.enable {
-    home.file.".ssh/id_ed25519.pub".text = systems."${hostName}".user_ssh_public_key + "\n";
+    home.file.".ssh/id_ed25519.pub".text = systems."${cfg.hostName}".user_ssh_public_key + "\n";
 
     programs.ssh = {
       enable = true;

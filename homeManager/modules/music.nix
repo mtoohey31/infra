@@ -1,3 +1,4 @@
+_:
 { config, lib, ... }:
 
 # TODO: wrap the mpv binary in a script that forces certain flags, such as the socket path

@@ -1,7 +1,9 @@
-{ config, flake-inputs, ... }:
+{ config, inputs, ... }:
+
+# system is aarch64-linux
 
 {
-  inputs = [ flake-inputs.nixos-hardware.nixosModules.raspberry-pi-4 ];
+  imports = [ inputs.nixos-hardware.nixosModules.raspberry-pi-4 ];
 
   # services.caddy = {
   #     enable = true;

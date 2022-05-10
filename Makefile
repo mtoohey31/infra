@@ -39,5 +39,8 @@ update:
 develop:
 	$(NIX_CMD) develop
 	
+check:
+	$(NIX_CMD) flake check
+
 format:
 	nixpkgs-fmt .

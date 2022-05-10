@@ -7,7 +7,6 @@
   inputs = {
     utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    nixpkgs-master.url = "nixpkgs/master";
     home-manager = {
       url = "github:mtoohey31/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -89,31 +88,95 @@
   };
 
   outputs =
-    { utils
-    , nixpkgs
-    , nixpkgs-master
+    { cogitri
     , darwin
-    , home-manager
-
-    , git-crypt-agessh
-    , nix-index
-
-    , cogitri
     , fuzzel
+    , git-crypt-agessh
     , harpoond
     , helix
+    , home-manager
     , kmonad
+    , nix-index
+    , nixpkgs
     , qbpm
+    , self
+    , sops-nix
     , uncommitted-go
+    , utils
     , vimv2
     , ...
-    }@flake-inputs:
-    let
-      lib = import ./lib {
-        allowedInsecure = import ./lib/allowed-insecure.nix;
-        allowedUnfree = import ./lib/allowed-unfree.nix;
+    }@inputs:
+    {
+      darwinConfigurations.air = darwin.lib.darwinSystem {
+        modules = (builtins.attrValues self.darwinModules) ++ [
+          {
+            nixpkgs.overlays = builtins.attrValues self.overlays;
+            networking.hostName = "air";
+          }
+          (import ./darwin/systems/air/configuration.nix (inputs // self))
+        ];
+        system = "x86_64-darwin";
       };
-      overlays = [
+      darwinModules = self.modules //
+      home-manager.darwinModules //
+      (builtins.listToAttrs (map
+        (path: {
+          name = builtins.baseNameOf path;
+          value = import path (inputs // self);
+        })
+        (import ./darwin/modules/modules.nix)));
+
+      homeManagerModules = (builtins.listToAttrs (map
+        (path: {
+          name = builtins.baseNameOf path;
+          value = import path (inputs // self);
+        })
+        (import ./homeManager/modules/modules.nix)));
+
+      modules = (builtins.listToAttrs (map
+        (path: {
+          name = builtins.baseNameOf path;
+          value = import path (inputs // self);
+        })
+        (import ./modules/modules.nix)));
+
+      nixosConfigurations.zephyrus =
+        nixpkgs.lib.nixosSystem
+          {
+            modules = (builtins.attrValues self.nixosModules) ++
+            [
+              ({ lib, ... }: {
+                nixpkgs = {
+                  config.allowUnfreePredicate = pkg:
+                    builtins.elem (lib.getName pkg) [
+                      "bitwig-studio"
+                      "cudatoolkit"
+                      "nvidia-settings"
+                      "nvidia-x11"
+                      "osu-lazer"
+                      "steam"
+                      "steam-original"
+                    ];
+                  overlays = builtins.attrValues self.overlays;
+                };
+                networking.hostName = "zephyrus";
+              })
+              (import ./nixos/systems/zephyrus/configuration.nix (inputs // self))
+            ];
+            system = "x86_64-linux";
+          };
+      nixosModules = self.modules //
+      home-manager.nixosModules //
+      { kmonad = kmonad.nixosModule; } //
+      sops-nix.nixosModules //
+      (builtins.listToAttrs (map
+        (path: {
+          name = builtins.baseNameOf path;
+          value = import path (inputs // self);
+        })
+        (import ./nixos/modules/modules.nix)));
+
+      overlays.default = nixpkgs.lib.composeManyExtensions [
         cogitri.overlays.default
         kmonad.overlay
         uncommitted-go.overlays.default
@@ -139,8 +202,6 @@
           };
         })
         (self: _: { helix = helix.defaultPackage."${self.system}"; })
-        # TODO: remove this once 125e35fda755a29ec9c0f8ee9446a047e18efcf7 is in nixos-unstable
-        (self: _: { inherit (import nixpkgs-master { inherit (self) system; }) starship; })
         (self: super: {
           qutebrowser = (if self.stdenv.hostPlatform.isDarwin then
             self.stdenv.mkDerivation
@@ -200,7 +261,7 @@
                 sha256 = "2xvcNcJ07q4BIloGHgmxivqGq1BuXwZY2XWPLbFrdXg=";
               };
               propagatedBuildInputs = oldAttrs.propagatedBuildInputs
-                ++ [
+              ++ [
                 python3Packages.plover-stroke
                 python3Packages.rtf-tokenize
                 python3Packages.pywayland_0_4_7
@@ -244,33 +305,15 @@
           });
         })
       ];
-    in
-    {
-      lib = import ./lib;
-
-      homeManagerConfigurations = lib.mkHomeCfgs {
-        inherit nixpkgs overlays flake-inputs home-manager;
-        usernames = [ "mtoohey" "tooheys" ];
-        systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
-      };
-
-      nixosConfigurations = lib.mkNixOSCfgs {
-        inherit nixpkgs overlays flake-inputs kmonad;
-      };
-
-      darwinConfigurations = lib.mkDarwinCfgs {
-        inherit nixpkgs overlays flake-inputs darwin kmonad;
-      };
     } // (utils.lib.eachDefaultSystem (system:
     let pkgs =
       import nixpkgs { inherit system; }; in
     with pkgs; {
-      devShell = mkShell {
+      devShells.default = mkShell {
         nativeBuildInputs = [
           rnix-lsp
           yaml-language-server
           nixpkgs-fmt
-          nix-index.defaultPackage."${system}"
           gnumake
           deadnix
 
@@ -278,7 +321,10 @@
           rage
           ssh-to-age
           git-crypt-agessh.packages."${system}".default
-        ];
+        ] ++ (lib.optional
+          # TODO: get nix-index working on aarch64-linux
+          (lib.hasAttr system nix-index.defaultPackage)
+          nix-index.defaultPackage."${system}");
       };
     }));
 }

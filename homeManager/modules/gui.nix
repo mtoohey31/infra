@@ -1,4 +1,5 @@
-{ config, lib, pkgs, flake-inputs, ... }:
+inputs:
+{ config, lib, pkgs, ... }:
 
 # TODO: make cursor not tiny
 
@@ -316,7 +317,7 @@ with lib; {
           extraConfig = ''
             config.unbind('<Ctrl-v>')
             config.unbind('<Ctrl-a>')
-            config.source('${flake-inputs.qutewal}/qutewal.py')
+            config.source('${inputs.qutewal}/qutewal.py')
             config.bind('B', 'spawn --userscript ${pkgs.qutebrowser}/share/qutebrowser/userscripts/qute-bitwarden ${lib.strings.optionalString config.local.wm.enable '' -d "fuzzel -dmenu" -p "fuzzel -dmenu --password --lines 0" ''}')
             import json
             with open("${config.xdg.cacheHome}/wal/colors.json") as file:

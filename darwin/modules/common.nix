@@ -1,8 +1,7 @@
-{ config, lib, pkgs, flake-inputs, ... }:
+_:
+{ pkgs, ... }:
 
 {
-  imports = [ flake-inputs.home-manager.darwinModule ];
-
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
@@ -11,15 +10,7 @@
     '';
   };
 
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) lib.allowedUnfree;
-  nixpkgs.config.permittedInsecurePackages = lib.allowedInsecure;
-
   home-manager = {
-    extraSpecialArgs = {
-      inherit flake-inputs;
-      inherit (config.networking) hostName;
-    };
     useUserPackages = true;
     useGlobalPkgs = true;
   };

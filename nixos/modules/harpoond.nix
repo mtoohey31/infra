@@ -1,3 +1,4 @@
+_:
 { config, lib, pkgs, ... }:
 
 let cfg = config.local.harpoond;

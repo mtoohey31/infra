@@ -1,1 +1,5 @@
-[ ./common.nix ./wm.nix ]
+[
+  ./common.nix
+  ./primary-user.nix
+  ./wm.nix
+]

@@ -1,4 +1,5 @@
-{ config, lib, pkgs, flake-inputs, ... }:
+inputs:
+{ config, lib, pkgs, ... }:
 
 let cfg = config.local.wm;
 in
@@ -32,7 +33,7 @@ with lib; {
         ];
       })
       (pkgs.writeShellScriptBin "emoji" ''
-        jq -r '.[] | ([.description] + .aliases)[] + ": " + .emoji' ${flake-inputs.gemoji}/db/emoji.json | fuzzel -dmenu | grep -o '.$' | tr -d '\n' | wl-copy
+        jq -r '.[] | ([.description] + .aliases)[] + ": " + .emoji' ${inputs.gemoji}/db/emoji.json | fuzzel -dmenu | grep -o '.$' | tr -d '\n' | wl-copy
       '')
       flashfocus
       autotiling

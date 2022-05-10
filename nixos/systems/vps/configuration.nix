@@ -1,16 +1,8 @@
 { ... }:
 
 {
-  local.primary-user.homeManagerUser = "server";
-
-  networking.wg-quick.interfaces = {
-    wg0 = {
-      address = [
-        # TODO
-      ];
-      peers = [
-        # TODO
-      ];
-    };
+  local = {
+    primary-user.enable = false;
+    wireguard-client.enable = false;
   };
 }

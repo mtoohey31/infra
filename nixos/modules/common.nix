@@ -1,16 +1,18 @@
-{ lib, pkgs, ... }:
+_:
+{ pkgs, ... }:
 
 {
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) lib.allowedUnfree;
-  nixpkgs.config.permittedInsecurePackages = lib.allowedInsecure;
-
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
     '';
+  };
+
+  home-manager = {
+    useUserPackages = true;
+    useGlobalPkgs = true;
   };
 
   # TODO: figure out how to set password securely in configuration, then enable this

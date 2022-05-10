@@ -1,3 +1,4 @@
+_:
 { config, lib, ... }:
 
 let cfg = config.local.opengl;

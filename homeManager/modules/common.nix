@@ -1,13 +1,10 @@
+_:
 { config, lib, pkgs, ... }:
 
 # TODO: add helix format keybind, and set more languages to auto-format
 
 {
   home.stateVersion = "20.09";
-
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) lib.allowedUnfree;
-  nixpkgs.config.permittedInsecurePackages = lib.allowedInsecure;
 
   home.packages = with pkgs; [
     trash-cli

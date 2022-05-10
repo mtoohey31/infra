@@ -1,4 +1,5 @@
-{ config, pkgs, flake-inputs, ... }:
+inputs:
+{ config, pkgs, ... }:
 
 {
   local = {
@@ -8,7 +9,42 @@
     opengl.enable = true;
     primary-user = {
       autologin = true;
-      homeManagerUser = "dailyDriver";
+      homeManagerCfg = { ... }: {
+        local = {
+          devel.enable = true;
+          gui.enable = true;
+          music.enable = true;
+          ssh.hostName = "zephyrus";
+          wm.enable = true;
+        };
+
+        home.packages = with pkgs; [
+          himalaya # TODO: add configuration
+          gimp
+          bitwarden-cli
+          bitwarden
+          signal-desktop
+          obs-studio
+          bitwig-studio
+        ];
+
+        xdg = {
+          desktopEntries.discord = {
+            name = "Discord";
+            exec = "brave --profile-directory=Profile\\s2 --app=https://discord.com/app";
+            terminal = false;
+          };
+          mimeApps = {
+            enable = true;
+            associations.added."image/png" = "gimp.desktop";
+          };
+        };
+
+        programs.fish = rec {
+          shellAbbrs.hi = "himalaya";
+          shellAliases = shellAbbrs;
+        };
+      };
       groups = [ "wheel" "video" "docker" ];
     };
     sops.enable = true;
@@ -30,12 +66,21 @@
     wlr-screen-sharing.enable = true;
   };
 
-  imports = with flake-inputs.cogitri.nixosModules; [
+  services.kmonad = {
+    enable = true;
+    configfiles = [ ./default.kbd ];
+  };
+  systemd.services.kmonad-default = {
+    enable = true;
+    wantedBy = [ "multi-user.target" ];
+  };
+
+  imports = with inputs.cogitri.nixosModules; [
     asusd
     supergfxd
 
     ./hardware-configuration.nix
-    flake-inputs.nixos-hardware.nixosModules.asus-zephyrus-ga401
+    inputs.nixos-hardware.nixosModules.asus-zephyrus-ga401
   ];
 
   virtualisation.docker.enable = true;
@@ -71,7 +116,7 @@
 
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_5_17;
-  boot.kernelPatches = let inherit (flake-inputs) g14-patches; in
+  boot.kernelPatches = let inherit (inputs) g14-patches; in
     map (patch: { inherit patch; }) [
       "${g14-patches}/sys-kernel_arch-sources-g14_files-0004-5.15+--more-uarches-for-kernel.patch"
       "${g14-patches}/sys-kernel_arch-sources-g14_files-0005-lru-multi-generational.patch"

@@ -1,12 +1,11 @@
-{ config, lib, flake-inputs, ... }:
+_:
+{ config, lib, ... }:
 
 let
   cfg = config.local.sops;
   inherit (config.local.primary-user) username;
 in
 with lib; {
-  imports = [ flake-inputs.sops-nix.nixosModules.sops ];
-
   options.local.sops.enable = mkOption {
     type = types.bool;
     default = false;

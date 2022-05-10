@@ -12,16 +12,6 @@ with lib; {
       default = true;
     };
 
-    autologin = mkOption {
-      type = types.bool;
-      default = false;
-    };
-
-    groups = mkOption {
-      type = types.listOf types.str;
-      default = [ "wheel" ];
-    };
-
     username = mkOption {
       type = types.str;
       default = config.local.secrets.systems."${hostName}".username;
@@ -36,22 +26,23 @@ with lib; {
   config = mkIf cfg.enable
     {
       users = {
-        groups."${cfg.username}".gid = 1000;
         users."${cfg.username}" = {
-          isNormalUser = true;
-          uid = 1000;
-          group = cfg.username;
-          extraGroups = cfg.groups;
+          home = "/Users/${cfg.username}";
+          createHome = true;
           shell = pkgs.fish;
         };
       };
-
-      services.getty.autologinUser = mkIf cfg.autologin cfg.username;
 
       home-manager = mkIf (cfg.homeManagerCfg != null) {
         users."${cfg.username}" = { ... }@args: {
           imports = builtins.attrValues inputs.homeManagerModules;
         } // (cfg.homeManagerCfg args);
       };
+
+      system.activationScripts.users.text = ''
+        if [ "$(dscl . -read /Users/${cfg.username} UserShell)" != 'UserShell: ${pkgs.fish}/bin/fish' ]; then
+            dscl . -create '/Users/${cfg.username}' UserShell '${pkgs.fish}/bin/fish'
+        fi
+      '';
     };
 }

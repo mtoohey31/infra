@@ -22,12 +22,13 @@ with lib; {
         if pkgs.stdenv.hostPlatform.isDarwin
         then "${config.home.homeDirectory}/.qutebrowser"
         else "${config.xdg.configHome}/qutebrowser";
-      qutebrowserUserscripts = lib.mapAttrs'
-        (name: value: {
-          name = "${qutebrowserPrefix}/greasemonkey/${name}";
-          value = { source = value; };
-        })
-        config.local.secrets.userscripts;
+      qutebrowserUserscripts = lib.optionalAttrs config.local.secrets.enable
+        (lib.mapAttrs'
+          (name: value: {
+            name = "${qutebrowserPrefix}/greasemonkey/${name}";
+            value = { source = value; };
+          })
+          config.local.secrets.userscripts);
     in
     mkIf cfg.enable {
       home.packages = with pkgs; [

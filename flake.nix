@@ -309,22 +309,27 @@
     let pkgs =
       import nixpkgs { inherit system; }; in
     with pkgs; {
-      devShells.default = mkShell {
-        nativeBuildInputs = [
-          rnix-lsp
-          yaml-language-server
-          nixpkgs-fmt
-          gnumake
-          deadnix
+      devShells = {
+        default = mkShell {
+          nativeBuildInputs = [
+            rnix-lsp
+            yaml-language-server
+            nixpkgs-fmt
+            gnumake
+            deadnix
 
-          sops
-          rage
-          ssh-to-age
-          git-crypt-agessh.packages."${system}".default
-        ] ++ (lib.optional
-          # TODO: get nix-index working on aarch64-linux
-          (lib.hasAttr system nix-index.defaultPackage)
-          nix-index.defaultPackage."${system}");
+            sops
+            rage
+            ssh-to-age
+            git-crypt-agessh.packages."${system}".default
+          ] ++ (lib.optional
+            # TODO: get nix-index working on aarch64-linux
+            (lib.hasAttr system nix-index.defaultPackage)
+            nix-index.defaultPackage."${system}");
+        };
+
+        go = mkShell { nativeBuildInputs = [ go gopls ]; };
+        go118 = mkShell { nativeBuildInputs = [ go_1_18 gopls ]; };
       };
     }));
 }

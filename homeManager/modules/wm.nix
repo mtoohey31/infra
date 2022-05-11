@@ -394,22 +394,6 @@ with lib; {
             "${modifier}+Shift+g" = "exec brave --profile-directory=\"Profile 2\"";
             "${modifier}+Shift+u" = "exec brave --profile-directory=\"Profile 3\"";
             "${modifier}+Shift+m" = "exec brave --profile-directory=\"Profile 4\"";
-
-            # TODO: define this only on hosts with local.virtualisation.enable
-            "${modifier}+z" = "exec ${pkgs.writeShellScript "vm-focus" ''
-                      set -e
-                      ddcutil setvcp 60 0x0F
-                      virsh attach-device win11-dgpu ${./wm/input-harpoon.xml}
-                      virsh attach-device win11-dgpu ${./wm/input-zen.xml}
-                      swaymsg output "'Acer Technologies XV340CK P THQAA0013P00'" disable
-                    ''}";
-            "${modifier}+x" = "exec ${pkgs.writeShellScript "vm-unfocus" ''
-                      set -e
-                      swaymsg output "'Acer Technologies XV340CK P THQAA0013P00'" enable
-                      ddcutil setvcp 60 0x11
-                      virsh detach-device win11-dgpu ${./wm/input-harpoon.xml}
-                      virsh detach-device win11-dgpu ${./wm/input-zen.xml}
-                    ''}";
           };
           modes = {
             resize = {

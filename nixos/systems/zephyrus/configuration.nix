@@ -9,7 +9,7 @@ inputs:
     opengl.enable = true;
     primary-user = {
       autologin = true;
-      homeManagerCfg = { ... }: {
+      homeManagerCfg = { config, ... }: {
         local = {
           devel.enable = true;
           gui.enable = true;
@@ -44,6 +44,25 @@ inputs:
           shellAbbrs.hi = "himalaya";
           shellAliases = shellAbbrs;
         };
+
+        wayland.windowManager.sway.config.keybindings =
+          let modifier = config.wayland.windowManager.sway.config.modifier; in
+          {
+            "${modifier}+z" = "exec ${pkgs.writeShellScript "vm-focus" ''
+                      set -e
+                      ddcutil setvcp 60 0x0F
+                      virsh attach-device win11-dgpu ${./input-harpoon.xml}
+                      virsh attach-device win11-dgpu ${./input-zen.xml}
+                      swaymsg output "'Acer Technologies XV340CK P THQAA0013P00'" disable
+                    ''}";
+            "${modifier}+x" = "exec ${pkgs.writeShellScript "vm-unfocus" ''
+                      set -e
+                      swaymsg output "'Acer Technologies XV340CK P THQAA0013P00'" enable
+                      ddcutil setvcp 60 0x11
+                      virsh detach-device win11-dgpu ${./input-harpoon.xml}
+                      virsh detach-device win11-dgpu ${./input-zen.xml}
+                    ''}";
+          };
       };
       groups = [ "wheel" "video" "docker" ];
     };

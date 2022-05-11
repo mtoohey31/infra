@@ -448,7 +448,7 @@ _:
           memory_usage.symbol = " ";
           nim.symbol = " ";
           nix_shell = {
-            format = "via $state ";
+            format = "in $state ";
             impure_msg = "[ $name](bold purple)";
             pure_msg = "[ﰕ $name](bold blue)";
           };

@@ -4,6 +4,6 @@ _:
 with lib; {
   options.local.secrets = mkOption {
     type = types.attrs;
-    default = import ../secrets.nix;
+    default = import ../secrets.nix // { enable = true; };
   };
 }

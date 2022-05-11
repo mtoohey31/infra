@@ -311,7 +311,7 @@
     with pkgs; {
       devShells = {
         default = mkShell {
-          nativeBuildInputs = [
+          packages = [
             rnix-lsp
             yaml-language-server
             nixpkgs-fmt
@@ -328,8 +328,8 @@
             nix-index.defaultPackage."${system}");
         };
 
-        go = mkShell { nativeBuildInputs = [ go gopls ]; };
-        go118 = mkShell { nativeBuildInputs = [ go_1_18 gopls ]; };
+        go = mkShell { name = "go"; packages = [ go gopls ]; };
+        go118 = mkShell { name = "go-1.18"; packages = [ go_1_18 gopls ]; };
       };
     }));
 }

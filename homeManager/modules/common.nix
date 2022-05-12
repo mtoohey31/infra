@@ -391,35 +391,8 @@ _:
           cmd_duration.format = "for [$duration]($style) ";
           conda.symbol = " ";
           custom.docker = {
-            format = "inside [ ]($style) ";
+            format = "in [ ]($style) ";
             when = "test -f /.dockerenv";
-          };
-          custom.updates = {
-            format = "with [$output]($style) updates ";
-            shell = "${pkgs.bash}/bin/sh";
-            command = "cat /tmp/num_updates";
-            when = ''
-              if test $(uname) = "Darwin"; then
-                update_indicator_path="$HOME/Library/Logs/Homebrew"
-                update_command="nohup /bin/sh -c \"brew update > /dev/null 2>&1 && brew outdated | wc -l | awk '{ \\\$1 = \\\$1; print }' > /tmp/num_updates\" &"
-              else
-                . /etc/os-release && case "$ID" in
-                  arch)
-                    command -v checkupdates > /dev/null 2>&1 || exit 1
-                    update_indicator_path="/var/log/pacman.log"
-                    update_command="nohup checkupdates | wc -l > /tmp/num_updates &";;
-                  alpine)
-                    update_indicator_path="/var/cache/apk"
-                    update_command="nohup /bin/sh -c \"echo \\\$((\\\$(apk upgrade --simulate | wc -l) - 1)) > /tmp/num_updates\" &";;
-                  *)
-                    exit 1;;
-                esac
-              fi
-              if ! test -e /tmp/num_updates || test -z "$(cat /tmp/num_updates)" || test "$(date -r /tmp/num_updates '+%s')" -lt $(($(date '+%s') - 14400)) || test "$(date -r /tmp/num_updates '+%s')" -lt "$(date -r "$update_indicator_path" '+%s')"; then
-                eval "$update_command" > /dev/null 2>&1
-              fi
-              test "$(cat /tmp/num_updates)" -ge 25
-            '';
           };
           dart.symbol = " ";
           directory.format = "in [$path]($style) ";

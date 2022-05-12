@@ -182,7 +182,7 @@ _:
             set fish_greeting
 
             if test -z "$SSH_CONNECTION" -a -z "$TMUX"
-                cat ${config.xdg.cacheHome}/wal/sequences
+                cat ${config.xdg.cacheHome}/wal/sequences &
             end
 
             alias e "$EDITOR"

@@ -26,12 +26,12 @@ with lib; {
           cmd + shift - l : yabai -m window --swap east
 
           cmd + shift - tab : yabai -m window --toggle float
-          cmd - return : kitty -d ~
+          cmd - return : osascript -e 'if application "iTerm2" is running then' -e 'tell application "iTerm2" to create window with default profile' -e 'else' -e 'tell application "iTerm2" to activate' -e 'end if'
 
           cmd + shift - b : yabai -m space --balance
           cmd + shift - y : launchctl kickstart -k gui/501/org.nixos.yabai
 
-          cmd - 0x2C : kitty -d ~ -e fish -C 'lf'
+          cmd - 0x2C : osascript -e 'tell application "iTerm2" to create window with default profile command "fish -C lf"'
           cmd + shift - 0x2C : open ~
         '';
       };

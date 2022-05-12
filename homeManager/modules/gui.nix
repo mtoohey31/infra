@@ -43,6 +43,7 @@ with lib; {
             substituteInPlace pywal/util.py --replace pidof pgrep
           '';
         }))
+        iterm2
       ] else [
         pywal
         nsxiv
@@ -61,7 +62,10 @@ with lib; {
 
       home.file = {
         Downloads.source = config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory;
-      } // (pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin qutebrowserUserscripts);
+      } // (pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin (qutebrowserUserscripts // {
+        "Library/Preferences/com.googlecode.iterm2.plist".source =
+          ./gui/com.googlecode.iterm2.plist;
+      }));
       xdg = {
         configFile = (pkgs.lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isDarwin) qutebrowserUserscripts) // {
           "fontconfig/fonts.conf".source = ./gui/fonts.conf;
@@ -111,7 +115,7 @@ with lib; {
         brave.enable = (!pkgs.stdenv.hostPlatform.isDarwin); # TODO: get this working on darwin, see nixos/nixpkgs#98853
         fish = rec {
           functions = {
-            ssh = {
+            ssh = mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
               body = ''
                 if test "$TERM" = "xterm-kitty"
                   TERM=xterm-256color command ssh $argv
@@ -128,7 +132,7 @@ with lib; {
           shellAliases = shellAbbrs // { nsxiv = "nsxiv -a"; };
         };
         kitty = {
-          enable = true;
+          enable = !pkgs.stdenv.hostPlatform.isDarwin;
           package = kittyPackage;
           environment = { SHLVL = "0"; };
           settings = {
@@ -173,7 +177,10 @@ with lib; {
               include ${config.xdg.cacheHome}/wal/colors-kitty.conf
             '';
         };
-        lf.keybindings.gC = "&kitty -e fish -C lf &>/dev/null &";
+        lf.keybindings.gC =
+          if pkgs.stdenv.hostPlatform.isDarwin
+          then ''&osascript -e 'tell application "iTerm2" to create window with default profile command "fish -C \'cd \"'"$PWD"'\" && lf\'"' &>/dev/null''
+          else "&kitty -e fish -C lf &>/dev/null &";
         mpv = {
           enable = true;
           config = {

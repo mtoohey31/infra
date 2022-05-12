@@ -21,6 +21,7 @@ _:
   ] ++ pkgs.lib.optional (!pkgs.stdenv.hostPlatform.isDarwin) gotop;
 
   home.file = {
+    ".hushlogin" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin { text = ""; };
     ".local/lib/python2.7/site-packages/usercustomize.py".source = ./common/usercustomize2.py;
   } // (lib.listToAttrs
     (map

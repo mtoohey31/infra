@@ -1,6 +1,8 @@
 inputs:
 { config, lib, pkgs, ... }:
 
+# TODO: fix needing to reload on startup
+
 let cfg = config.local.wm;
 in
 with lib; {

@@ -10,6 +10,7 @@ with lib; {
   };
 
   config = mkIf cfg.enable {
+    launchd.user.agents.skhd.serviceConfig.EnvironmentVariables.SHELL = "${pkgs.bash}/bin/bash";
     services = {
       skhd = {
         enable = true;

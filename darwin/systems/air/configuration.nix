@@ -1,5 +1,5 @@
 _:
-{ ... }:
+{ pkgs, ... }:
 
 {
   local = {
@@ -13,4 +13,8 @@ _:
     };
     wm.enable = true;
   };
+
+  services.skhd.skhdConfig = ''
+    cmd - b : echo '{"args":[""],"target_arg":"","protocol_version":1}' | ${pkgs.socat}/bin/socat - /private/var/folders/xv/*/T/qutebrowser/* || ${pkgs.qutebrowser}/Applications/qutebrowser.app/Contents/MacOS/qutebrowser
+  '';
 }

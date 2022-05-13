@@ -387,10 +387,10 @@ with lib; {
 
             "${modifier}+Shift+S" = "exec grimshot copy area";
 
-            "${modifier}+p" = "exec qbpm launch personal";
-            "${modifier}+g" = "exec qbpm launch gaming";
-            "${modifier}+u" = "exec qbpm launch university";
-            "${modifier}+m" = "exec qbpm launch mod";
+            "${modifier}+p" = ''exec echo '{"args":[""], "target_arg":"", "protocol_version":1}' | ${pkgs.bash}/bin/bash -c "if test -e ${config.home.homeDirectory}/.local/share/qutebrowser-profiles/personal/runtime/*; then socat - ${config.home.homeDirectory}/.local/share/qutebrowser-profiles/personal/runtime/*; else qbpm launch personal; fi"'';
+            "${modifier}+g" = ''exec echo '{"args":[""], "target_arg":"", "protocol_version":1}' | ${pkgs.bash}/bin/bash -c "if test -e ${config.home.homeDirectory}/.local/share/qutebrowser-profiles/gaming/runtime/*; then socat - ${config.home.homeDirectory}/.local/share/qutebrowser-profiles/gaming/runtime/*; else qbpm launch gaming; fi"'';
+            "${modifier}+u" = ''exec echo '{"args":[""], "target_arg":"", "protocol_version":1}' | ${pkgs.bash}/bin/bash -c "if test -e ${config.home.homeDirectory}/.local/share/qutebrowser-profiles/university/runtime/*; then socat - ${config.home.homeDirectory}/.local/share/qutebrowser-profiles/university/runtime/*; else qbpm launch university; fi"'';
+            "${modifier}+m" = ''exec echo '{"args":[""], "target_arg":"", "protocol_version":1}' | ${pkgs.bash}/bin/bash -c "if test -e ${config.home.homeDirectory}/.local/share/qutebrowser-profiles/mod/runtime/*; then socat - ${config.home.homeDirectory}/.local/share/qutebrowser-profiles/mod/runtime/*; else qbpm launch mod; fi"'';
 
             "${modifier}+Shift+p" = "exec brave --profile-directory=\"Default\"";
             "${modifier}+Shift+g" = "exec brave --profile-directory=\"Profile 2\"";

@@ -260,6 +260,7 @@ with lib; {
               "O" = "set statusbar.show always;; set-cmd-text -s :open -t";
               ":" = "set statusbar.show always;; set-cmd-text :";
               "/" = "set statusbar.show always;; set-cmd-text /";
+              "ge" = "scroll-to-perc";
             };
             command = {
               "<Escape>" = "mode-enter normal;; set statusbar.show never";

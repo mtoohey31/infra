@@ -475,7 +475,8 @@
         "sops-nix": "sops-nix",
         "uncommitted-go": "uncommitted-go",
         "utils": "utils_3",
-        "vimv2": "vimv2"
+        "vimv2": "vimv2",
+        "yabai": "yabai"
       }
     },
     "rust-overlay": {
@@ -606,6 +607,22 @@
       "original": {
         "owner": "mtoohey31",
         "repo": "vimv2",
+        "type": "github"
+      }
+    },
+    "yabai": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1651428242,
+        "narHash": "sha256-xpp1WKUCF/+MWBRdV/QLL7GpdE0lsN4rAPjqLhDL41U=",
+        "owner": "koekeishiya",
+        "repo": "yabai",
+        "rev": "41414989666232f4344329e250f38db2f0a1cc48",
+        "type": "github"
+      },
+      "original": {
+        "owner": "koekeishiya",
+        "repo": "yabai",
         "type": "github"
       }
     }

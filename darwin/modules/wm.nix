@@ -50,20 +50,7 @@ with lib; {
           layout = "bsp";
           window_gap = 16;
         };
-        package = pkgs.yabai.overrideAttrs (_: {
-          version = "4.0.0";
-          src = pkgs.fetchFromGitHub {
-            owner = "koekeishiya";
-            repo = "yabai";
-            rev = "910fb43b57866dc6eaa000331bb1b77d91bf245b";
-            sha256 = "9YYYUzNCXEOLOlBmVtPOMW0ikFCvGCl9YnK6NPue3kA=";
-          };
-          # TODO: please don't look too close at this :see_no_evil:
-          prePatch = ''
-            substituteInPlace makefile \
-                --replace xcrun 'SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk /usr/bin/xcrun'
-          '';
-        });
+        package = pkgs.yabai;
       };
     };
   };

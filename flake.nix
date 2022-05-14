@@ -85,6 +85,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";
     };
+    yabai = {
+      url = "github:koekeishiya/yabai";
+      flake = false;
+    };
   };
 
   outputs =
@@ -104,6 +108,7 @@
     , uncommitted-go
     , utils
     , vimv2
+    , yabai
     , ...
     }@inputs:
     {
@@ -223,6 +228,14 @@
                 '';
               } else super.qutebrowser);
         })
+        (self: super: { yabai = super.yabai.overrideAttrs (_: {
+          src = yabai;
+          # TODO: please don't look too close at this :see_no_evil:
+          prePatch = ''
+            substituteInPlace makefile \
+                --replace xcrun 'SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk /usr/bin/xcrun'
+          '';
+        }); })
         (self: _: { qbpm = qbpm.defaultPackage."${self.system}"; })
         (self: super: rec {
           python3Packages = {

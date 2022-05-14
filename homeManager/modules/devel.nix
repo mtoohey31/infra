@@ -123,7 +123,7 @@ with lib; {
           tl = "stash list";
           tp = "stash pop";
           tpp = "stash push --patch";
-          ts = "stash show";
+          ts = "stash show -p";
           u = "pull";
           ut = "pull --autostash";
           w = "worktree";

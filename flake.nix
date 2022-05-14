@@ -199,12 +199,12 @@
           };
           fuzzel = super.fuzzel.overrideAttrs (_: rec {
             version = "HEAD";
-            src = fuzzel;
+            src = inputs.fuzzel;
           });
           harpoond = self.stdenv.mkDerivation rec {
             pname = "harpoond";
             version = "0.1.0";
-            src = harpoond;
+            src = inputs.harpoond;
             nativeBuildInputs = with self; [ pkg-config libusb ];
             installPhase = ''
               mkdir -p "$out/bin" "$out/lib/udev/rules.d"

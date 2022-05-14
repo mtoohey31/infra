@@ -267,16 +267,28 @@ with lib; {
               "<Return>" = "command-accept;; set statusbar.show never";
             };
           };
-          settings = let command_prefix = [
-            "kitty"
-            "--title"
-            "floatme"
-            "-o"
-            "background_opacity=0.8"
-            "-e"
-            "fish"
-            "-c"
-          ]; in
+          settings = let command_prefix =
+            if pkgs.stdenv.hostPlatform.isDarwin
+            then [
+              (builtins.toString (pkgs.writeShellScript "iterm2-exec" ''
+                tmp="$(mktemp)"
+                echo "$1" > "$tmp"
+                echo "rm '$tmp'" >> "$tmp"
+                echo "kill -CONT '$$'" >> "$tmp"
+                osascript -e 'tell application "iTerm2" to create window with default profile command "fish '"$tmp"'"'
+                kill -STOP "$$"
+              ''))
+            ]
+            else [
+              "kitty"
+              "--title"
+              "floatme"
+              "-o"
+              "background_opacity=0.8"
+              "-e"
+              "fish"
+              "-c"
+            ]; in
             {
               auto_save.session = true;
               colors.webpage.preferred_color_scheme = "dark";

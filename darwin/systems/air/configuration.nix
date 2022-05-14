@@ -14,6 +14,6 @@
   };
 
   services.skhd.skhdConfig = ''
-    cmd - b : echo '{"args":[""],"target_arg":"","protocol_version":1}' | ${pkgs.socat}/bin/socat - /private/var/folders/xv/*/T/qutebrowser/* || ${pkgs.qutebrowser}/Applications/qutebrowser.app/Contents/MacOS/qutebrowser
+    cmd - b : echo '{"args":[""],"target_arg":"","protocol_version":1}' | ${pkgs.socat}/bin/socat - /private/var/folders/*/*/T/qutebrowser/* || ${pkgs.qutebrowser}/Applications/qutebrowser.app/Contents/MacOS/qutebrowser
   '';
 }

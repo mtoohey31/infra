@@ -274,7 +274,7 @@
                 version = "2.5.0";
                 sourceRoot = "${pname}.app";
                 src = self.fetchurl {
-                  url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.dmg";
+                  url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.dmg";
                   sha256 = "v4SdiXUS+fB4js7yf+YCDD4OGcb/5zeYaXoUwk/WwCs=";
                 };
                 buildInputs = [ self.undmg ];
@@ -283,7 +283,7 @@
                   cp -R . "$out/Applications/${pname}.app"
                   chmod +x "$out/Applications/${pname}.app/Contents/MacOS/${pname}"
                   mkdir "$out/bin"
-                  ln -s "$out/Applications/${pname}.app/Contents/MacOS/${pname}" "$out/bin/qutebrowser"
+                  ln -s "$out/Applications/${pname}.app/Contents/MacOS/${pname}" "$out/bin/${pname}"
                 '';
               } else super.qutebrowser);
           xdg-desktop-portal-wlr = super.xdg-desktop-portal-wlr.overrideAttrs (oldAttrs: rec {

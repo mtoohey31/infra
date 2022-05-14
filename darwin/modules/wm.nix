@@ -15,10 +15,10 @@ with lib; {
       skhd = {
         enable = true;
         skhdConfig = ''
-          cmd - h : yabai -m window --focus west
-          cmd - j : yabai -m window --focus south
-          cmd - k : yabai -m window --focus north
-          cmd - l : yabai -m window --focus east
+          cmd - h : yabai -m window --focus west || yabai -m display --focus west
+          cmd - j : yabai -m window --focus south || yabai -m display --focus south
+          cmd - k : yabai -m window --focus north || yabai -m display --focus north
+          cmd - l : yabai -m window --focus east || yabai -m display --focus east
 
           cmd + shift - h : yabai -m window --swap west
           cmd + shift - j : yabai -m window --swap south

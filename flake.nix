@@ -113,7 +113,7 @@
             nixpkgs.overlays = builtins.attrValues self.overlays;
             networking.hostName = "air";
           }
-          (import ./darwin/systems/air/configuration.nix (inputs // self))
+          (import ./darwin/systems/air/configuration.nix)
         ];
         system = "x86_64-darwin";
       };

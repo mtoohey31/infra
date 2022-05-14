@@ -316,7 +316,7 @@ with lib; {
                 ];
               };
               fonts = {
-                default_size = "12pt";
+                default_size = if pkgs.stdenv.hostPlatform.isDarwin then "16pt" else "12pt";
                 default_family = "JetBrainsMono Nerd Font";
               };
               fonts.web.family = {

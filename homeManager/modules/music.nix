@@ -24,6 +24,8 @@ with lib; {
           functions.bgjam.body = ''
             if tmux has-session -t music &>/dev/null
                 tmux attach -t music
+            else if status --is-interactive
+                tmux new-session -s music -c ~/music fish -C "${musicCmdStr} ."
             else
                 tmux new-session -d -s music -c ~/music fish -C "${musicCmdStr} ."
             end

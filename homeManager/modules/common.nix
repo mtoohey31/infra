@@ -202,6 +202,8 @@ _:
             clipboard_remaps = rec {
               p = "paste_clipboard_after";
               P = "paste_clipboard_before";
+              "A-p" = "paste_after";
+              "A-P" = "paste_before";
               y = "yank_main_selection_to_clipboard";
               c = "change_selection_noyank";
               d = [ y "delete_selection" ];
@@ -236,6 +238,7 @@ _:
               g.v = "hover";
               g.n = "goto_next_diag";
               g.N = "goto_prev_diag";
+              g.F = ":format";
               G = "goto_last_line";
             };
             keys.select = clipboard_remaps // save_quit_remaps;

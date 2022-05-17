@@ -328,11 +328,12 @@ with lib; {
               hints.chars = "asdfghjkl;qwertyuiopzxcvbnm";
               statusbar.show = "never";
               tabs = {
+                background = false;
+                last_close = "close";
                 show = "switching";
                 show_switching_delay = 1500;
-                last_close = "close";
+                title.format = "{current_title}";
               };
-              tabs.title.format = "{current_title}";
               url.start_pages = [ "about:blank" ];
             };
           extraConfig = ''

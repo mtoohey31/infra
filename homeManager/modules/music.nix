@@ -16,7 +16,7 @@ with lib; {
       fish =
         let
           musicCmdStr =
-            "mpv --shuffle --loop-playlist --no-audio-display --input-ipc-server=$XDG_RUNTIME_DIR/mpv.sock";
+            ''mpv --shuffle --loop-playlist --no-audio-display --input-ipc-server="$XDG_RUNTIME_DIR/mpv.sock"'';
         in
         rec {
           shellAbbrs.jam = musicCmdStr;

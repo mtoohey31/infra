@@ -1,3 +1,5 @@
+# TODO: figure out how to pin system nix channels that are used by nix-shell
+# and comma to the same revision as the nixpkgs flake input
 # TODO: add swapfile to nixos systems
 # TODO: display active vms in status command if there are any
 
@@ -146,6 +148,7 @@
             modules = (builtins.attrValues self.nixosModules) ++
             [
               ({ lib, ... }: {
+                networking.hostName = "zephyrus";
                 nixpkgs = {
                   config.allowUnfreePredicate = pkg:
                     builtins.elem (lib.getName pkg) [
@@ -159,12 +162,25 @@
                     ];
                   overlays = builtins.attrValues self.overlays;
                 };
-                networking.hostName = "zephyrus";
               })
               (import ./nixos/systems/zephyrus/configuration.nix (inputs // self))
             ];
             system = "x86_64-linux";
           };
+      nixosImages.cloudberry = (nixpkgs.lib.nixosSystem {
+        modules = (builtins.attrValues self.nixosModules) ++ [
+          {
+            networking.hostName = "cloudberry";
+            nixpkgs.overlays = builtins.attrValues self.overlays;
+            # TODO: figure out a nicer tag than a hash of a hash... the latest
+            # commit +DIRTY if it is so would be ideal
+            sdImage.imageName = "cloudberry-${builtins.hashString "sha256" self.sourceInfo.narHash}.img";
+          }
+          (import ./nixos/systems/cloudberry/configuration.nix (inputs // self))
+          (nixpkgs + "/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
+        ];
+        system = "aarch64-linux";
+      }).config.system.build.sdImage;
       nixosModules = self.modules //
       home-manager.nixosModules //
       { kmonad = kmonad.nixosModule; } //

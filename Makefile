@@ -1,4 +1,4 @@
-.PHONY: default install user nixos install-nixos darwin install-darwin update develop format
+.PHONY: default install user nixos install-nixos darwin install-darwin cloudberry-image update develop format
 
 NIX_CMD = nix --extra-experimental-features nix-command --extra-experimental-features flakes
 UNAME := $(shell uname)
@@ -32,13 +32,16 @@ darwin:
 install-darwin:
 	$(KITTY_TERMFIX)$(NIX_CMD) build .#darwinConfigurations."$${INFRA_SYSTEM:-$$HOSTNAME}".system
 	./result/sw/bin/darwin-rebuild switch --flake .#"$${INFRA_SYSTEM:-$$HOSTNAME}"
-	
+
+cloudberry-image:
+	$(NIX_CMD) build .#nixosImages.cloudberry
+
 update:
 	$(NIX_CMD) flake update
 
 develop:
 	$(NIX_CMD) develop
-	
+
 check:
 	$(NIX_CMD) flake check
 

@@ -18,8 +18,6 @@ _:
   # TODO: figure out how to set password securely in configuration, then enable this
   # users.mutableUsers = false;
 
-  boot.loader.systemd-boot.enable = true;
-
   time.timeZone = "America/Toronto";
   i18n.defaultLocale = "en_CA.UTF-8";
 

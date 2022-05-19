@@ -1,9 +1,30 @@
-{ config, inputs, ... }:
+inputs:
+{ config, lib, pkgs, ... }:
 
-# system is aarch64-linux
-
-{
+(import (inputs.nixpkgs + "/nixos/modules/profiles/all-hardware.nix")
+  { inherit lib pkgs; }) // {
   imports = [ inputs.nixos-hardware.nixosModules.raspberry-pi-4 ];
+  disabledModules = [ "profiles/all-hardware.nix" ];
+
+  local.sops.enable = true;
+
+  boot = {
+    loader.systemd-boot.enable = false;
+    initrd.availableKernelModules = (builtins.filter
+      (module: ! builtins.elem module [
+        "sun4i-drm"
+        "sun8i-mixer"
+        "pwm-sun4i"
+        "dw-mipi-dsi"
+        "rockchipdrm"
+        "rockchip-rga"
+        "phy-rockchip-pcie"
+        "pcie-rockchip-host"
+      ])
+      (import
+        (inputs.nixpkgs + "/nixos/modules/profiles/all-hardware.nix")
+        { inherit lib pkgs; }).boot.initrd.availableKernelModules);
+  };
 
   # services.caddy = {
   #     enable = true;

@@ -135,6 +135,7 @@ inputs:
   services.asusd.enable = true;
 
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.enable = true;
   boot.kernelPackages = pkgs.linuxPackages_5_17;
   boot.kernelPatches = let inherit (inputs) g14-patches; in
     map (patch: { inherit patch; }) [

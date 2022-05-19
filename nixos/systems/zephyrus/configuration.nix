@@ -3,6 +3,7 @@ inputs:
 
 {
   local = {
+    arch-emu.aarch64.enable = true;
     bluetooth.enable = true;
     gaming.enable = true;
     harpoond.enable = true;

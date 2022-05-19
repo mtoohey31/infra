@@ -326,6 +326,9 @@
       import nixpkgs { inherit system; }; in
     with pkgs; {
       devShells = {
+        # TODO: create a ci devshell and use that with cache-flake-attrs
+        # instead of installing things from whatever nixpkgs channel happens
+        # to get selected
         default = mkShell {
           packages = [
             rnix-lsp

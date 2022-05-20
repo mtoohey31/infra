@@ -20,6 +20,7 @@ with lib; {
     programs = {
       direnv = {
         enable = true;
+        config.warn_timeout = "11037h";
         nix-direnv.enable = true;
       };
       fish = rec {

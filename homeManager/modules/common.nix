@@ -1,8 +1,6 @@
 _:
 { config, lib, pkgs, ... }:
 
-# TODO: add helix format keybind, and set more languages to auto-format
-
 {
   home.stateVersion = "20.09";
 
@@ -197,6 +195,7 @@ _:
       );
       helix = {
         enable = true;
+        languages = [{ name = "nix"; auto-format = true; }];
         settings =
           let
             clipboard_remaps = rec {
@@ -218,6 +217,7 @@ _:
           {
             theme = "base16_terminal_alacritty";
             editor = {
+              idle-timeout = 0;
               scrolloff = 7;
               line-number = "relative";
               cursor-shape = {

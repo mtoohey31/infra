@@ -36,6 +36,12 @@ install-darwin:
 cloudberry-image:
 	$(NIX_CMD) build .#nixosImages.cloudberry
 
+install-cloudberry-image:
+	test -n "$$INFRA_OF" || exit 1
+	$(NIX_CMD) build .#nixosImages.cloudberry
+	export TMP="$$(mktemp)" && unzstd --force result/sd-image/*.img.zst -o "$$TMP" && \
+		sudo dd if="$$TMP" of="$$INFRA_OF" && rm -f "$$TMP"
+
 update:
 	$(NIX_CMD) flake update
 

@@ -213,6 +213,7 @@
               echo "$RULES" > "$out/share/headsetcontrol/99-arctis-9.rules"
             '';
           };
+          caddy-cloudflare = self.callPackage ./pkgs/servers/caddy { };
           fuzzel = super.fuzzel.overrideAttrs (_: rec {
             version = "HEAD";
             src = inputs.fuzzel;
@@ -311,6 +312,25 @@
               sha256 = "I1/O3CPpbrMWhAN4Gjq7ph7WZ8Tj8xu8hoSbgHqFhXc=";
             };
           });
+          xcaddy = (self.buildGoModule rec {
+            pname = "xcaddy";
+            version = "0.3.0";
+            src = self.fetchFromGitHub {
+              owner = "caddyserver";
+              repo = "xcaddy";
+              rev = "v${version}";
+              sha256 = "kB2WyHaln/arvISzVjcgPLHIUC/dCzL9Ub8aEl2xL2c=";
+            };
+            vendorSha256 = "5n0OWG/grOY3tpr0P0RXxlMOg/ne3fSz30rN0zRi1Tc=";
+            nativeBuildInputs = [ self.makeWrapper ];
+            postInstall = ''
+              wrapProgram "$out/bin/xcaddy" \
+                --prefix PATH : ${self.go}/bin
+            '';
+          }).overrideAttrs (oldAttrs: {
+            disallowedReferences = builtins.filter (pkg: pkg.pname != "go")
+              oldAttrs.disallowedReferences;
+          });
           yabai = super.yabai.overrideAttrs (_: {
             src = inputs.yabai;
             # TODO: please don't look too close at this :see_no_evil:
@@ -322,8 +342,13 @@
         })
       ];
     } // (utils.lib.eachDefaultSystem (system:
-    let pkgs =
-      import nixpkgs { inherit system; }; in
+    let
+      pkgs =
+        import nixpkgs {
+          inherit system;
+          overlays = builtins.attrValues self.overlays;
+        };
+    in
     with pkgs; {
       devShells = {
         # TODO: create a ci devshell and use that with cache-flake-attrs
@@ -350,5 +375,7 @@
         go = mkShell { name = "go"; packages = [ go gopls ]; };
         go118 = mkShell { name = "go-1.18"; packages = [ go_1_18 gopls ]; };
       };
+
+      packages.xcaddy = xcaddy;
     }));
 }

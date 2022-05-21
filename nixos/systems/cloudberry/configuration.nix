@@ -26,20 +26,12 @@ inputs:
         { inherit lib pkgs; }).boot.initrd.availableKernelModules);
   };
 
-  # services.caddy = {
-  #     enable = true;
-  #     # TODO: package = cloudflare thingie
-  #     # TODO: figure out how to pass cloudflare api key
-  #     config = ''
-  #     {
-  #         acme_dns cloudflare {env.API_KEY}
-  #     }
-
-  #     https://fileshelter.mtoohey.com {
-  #         reverse_proxy 127.0.0.1:5091
-  #     }
-  #     '';
-  # };
+  sops.secrets.cloudflare_config.sopsFile = ./secrets.yaml;
+  services.caddy = {
+    enable = true;
+    package = pkgs.caddy-cloudflare;
+    extraConfig = config.sops.secrets.cloudflare_config.path;
+  };
 
   services.home-assistant = {
     enable = true;

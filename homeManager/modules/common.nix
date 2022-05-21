@@ -204,8 +204,10 @@ _:
               "A-p" = "paste_after";
               "A-P" = "paste_before";
               y = "yank_main_selection_to_clipboard";
+              "A-y" = "yank";
               c = "change_selection_noyank";
               d = [ y "delete_selection" ];
+              "A-d" = "delete_selection";
               R = [ "replace_selections_with_clipboard" ];
             };
             save_quit_remaps = {

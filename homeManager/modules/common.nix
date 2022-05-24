@@ -208,7 +208,8 @@ _:
               c = "change_selection_noyank";
               d = [ y "delete_selection" ];
               "A-d" = "delete_selection";
-              R = [ "replace_selections_with_clipboard" ];
+              R = "replace_selections_with_clipboard";
+              "A-R" = "replace_with_yanked";
             };
             save_quit_remaps = {
               Q = ":q!";

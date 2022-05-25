@@ -220,6 +220,12 @@
             '';
           };
           caddy-cloudflare = self.callPackage ./pkgs/servers/caddy { };
+          fileshelter = super.fileshelter.overrideAttrs
+            (oldAttrs: rec {
+              meta = oldAttrs.meta // {
+                platforms = [ oldAttrs.meta.platforms ] ++ [ "aarch64-linux" ];
+              };
+            });
           fuzzel = super.fuzzel.overrideAttrs (_: rec {
             version = "HEAD";
             src = inputs.fuzzel;

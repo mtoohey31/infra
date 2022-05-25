@@ -2,6 +2,7 @@
   ./arch-emu.nix
   ./bluetooth.nix
   ./common.nix
+  ./fileshelter.nix
   ./gaming.nix
   ./harpoond.nix
   ./opengl.nix

@@ -39,8 +39,12 @@ cloudberry-image:
 install-cloudberry-image:
 	test -n "$$INFRA_OF" || exit 1
 	$(NIX_CMD) build .#nixosImages.cloudberry
-	export TMP="$$(mktemp)" && unzstd --force result/sd-image/*.img.zst -o "$$TMP" && \
-		sudo dd if="$$TMP" of="$$INFRA_OF" && rm -f "$$TMP"
+	export TMP="$$(mktemp)" && export MOUNT="$$(mktemp -d)" && cp result/sd-image/cloudberry-*.img "$$TMP" && \
+		export OFFSET="$$(partx "$$TMP" | tail -n1 | cut -d' ' -f3)" && \
+		export USERNAME="$$(nix eval --raw --file secrets.nix systems.cloudberry.username)" && \
+		sudo mount -o loop,offset="$$(("$$OFFSET"*512))" "$$TMP" "$$MOUNT" && sudo mkdir -p "$$MOUNT/home/$$USERNAME/.ssh" && \
+		sops -d --extract '["user_ssh_private_key"]' nixos/systems/cloudberry/secrets.yaml | sudo tee "$$MOUNT/home/$$USERNAME/.ssh/id_ed25519" >/dev/null && \
+		sudo umount "$$MOUNT" && sudo dd if="$$TMP" of="$$INFRA_OF" status=progress && sudo rm -rf "$$TMP" "$$MOUNT"
 
 update:
 	$(NIX_CMD) flake update

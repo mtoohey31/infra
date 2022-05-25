@@ -246,6 +246,7 @@ _:
           eir = "rebase --interactive --root";
           eirt = "rebase --interactive --root --autostash";
           eit = "rebase --interactive --autostash";
+          es = "rebase --skip";
           et = "rebase --autostash";
           f = "fetch";
           fu = "fetch --unshallow";

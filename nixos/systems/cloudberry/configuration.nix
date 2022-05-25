@@ -6,7 +6,11 @@ inputs:
   imports = [ inputs.nixos-hardware.nixosModules.raspberry-pi-4 ];
   disabledModules = [ "profiles/all-hardware.nix" ];
 
-  local.sops.enable = true;
+  local = {
+    primary-user.homeManagerCfg = { ... }: { };
+    ssh.authorizedHosts = [ "air" "pixel" "zephyrus" ];
+    sops.enable = true;
+  };
 
   boot = {
     loader.systemd-boot.enable = false;

@@ -23,9 +23,6 @@ with lib; {
   config = mkIf cfg.enable {
     services.openssh.enable = true;
 
-    # TODO: uncomment this once everything is set up with the key sharing system
-    # services.openssh.passwordAuthentication = false;
-
     services.openssh.ports = [ systems."${hostName}".ssh_port ];
     services.openssh.hostKeys = [ ];
     # TODO: once mobile devices are hooked into the key sharing system, add

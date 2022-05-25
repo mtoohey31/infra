@@ -9,12 +9,12 @@ with lib; {
   options.local.wireguard-client = {
     enable = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
     };
 
     keepAlive = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
     };
 
     address = mkOption {

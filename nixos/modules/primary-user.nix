@@ -57,6 +57,8 @@ with lib; {
       home-manager = mkIf (cfg.homeManagerCfg != null) {
         users."${cfg.username}" = { ... }@args: {
           imports = builtins.attrValues inputs.homeManagerModules;
+
+          local.ssh = { inherit hostName; };
         } // (cfg.homeManagerCfg args);
       };
     };

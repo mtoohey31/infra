@@ -15,7 +15,6 @@ inputs:
           devel.enable = true;
           gui.enable = true;
           music.enable = true;
-          ssh.hostName = "zephyrus";
           wm.enable = true;
         };
 
@@ -82,7 +81,6 @@ inputs:
         ''));
       };
     };
-    wireguard-client = { enable = true; keepAlive = true; };
     wlr-screen-sharing.enable = true;
   };
 

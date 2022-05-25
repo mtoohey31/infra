@@ -35,6 +35,11 @@ with lib; {
 
   config = mkIf cfg.enable
     {
+      sops.secrets.user_password = {
+        neededForUsers = true;
+        sopsFile = ../systems + "/${hostName}/secrets.yaml";
+      };
+
       users = {
         groups."${cfg.username}".gid = 1000;
         users."${cfg.username}" = {
@@ -43,6 +48,7 @@ with lib; {
           group = cfg.username;
           extraGroups = cfg.groups;
           shell = pkgs.fish;
+          passwordFile = config.sops.secrets.user_password.path;
         };
       };
 

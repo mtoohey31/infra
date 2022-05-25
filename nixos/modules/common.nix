@@ -1,6 +1,9 @@
 _:
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
+let
+  inherit (config.networking) hostName;
+in
 {
   nix = {
     package = pkgs.nixFlakes;
@@ -15,13 +18,18 @@ _:
     useGlobalPkgs = true;
   };
 
-  # TODO: figure out how to set password securely in configuration, then enable this
-  # users.mutableUsers = false;
+  users.mutableUsers = false;
 
   time.timeZone = "America/Toronto";
   i18n.defaultLocale = "en_CA.UTF-8";
 
   system.stateVersion = "21.11";
+
+  sops.secrets.root_password = {
+    neededForUsers = true;
+    sopsFile = ../systems + "/${hostName}/secrets.yaml";
+  };
+  users.users.root.passwordFile = config.sops.secrets.root_password.path;
 
   nix.gc = {
     automatic = true;

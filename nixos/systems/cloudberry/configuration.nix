@@ -84,6 +84,7 @@ inputs:
       wake_on_lan = { };
       switch = [
         {
+          # TODO: get this working
           platform = "wake_on_lan";
           name = "NAS";
           mac = "!secret server_mac";

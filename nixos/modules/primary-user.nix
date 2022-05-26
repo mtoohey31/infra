@@ -55,11 +55,15 @@ with lib; {
       services.getty.autologinUser = mkIf cfg.autologin cfg.username;
 
       home-manager = mkIf (cfg.homeManagerCfg != null) {
-        users."${cfg.username}" = { ... }@args: {
-          imports = builtins.attrValues inputs.homeManagerModules;
-
-          local.ssh = { inherit hostName; };
-        } // (cfg.homeManagerCfg args);
+        users."${cfg.username}" = { ... }@args:
+          let mergedCfg = (lib.mkMerge [
+            { local.ssh = { inherit hostName; }; }
+            (cfg.homeManagerCfg args)
+          ]); in
+          mergedCfg // {
+            imports = (builtins.attrValues inputs.homeManagerModules)
+            ++ (mergedCfg.imports or [ ]);
+          };
       };
     };
 }

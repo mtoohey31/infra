@@ -23,10 +23,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";
     };
-    nix-index = {
-      url = "github:bennofs/nix-index";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -99,7 +95,6 @@
     , git-crypt-agessh
     , home-manager
     , kmonad
-    , nix-index
     , nixpkgs
     , self
     , sops-nix
@@ -367,21 +362,24 @@
         # instead of installing things from whatever nixpkgs channel happens
         # to get selected
         default = mkShell {
+
+          # NOTE: some of these packages are included in the common home
+          # manager module, but they are also included here in case this is
+          # being worked on from another environment
           packages = [
             rnix-lsp
             yaml-language-server
             nixpkgs-fmt
             gnumake
             deadnix
+            # TODO: integrate https://github.com/Mic92/nix-index-database
+            nix-index
 
             sops
             rage
             ssh-to-age
             git-crypt-agessh.packages."${system}".default
-          ] ++ (lib.optional
-            # TODO: get nix-index working on aarch64-linux
-            (lib.hasAttr system nix-index.defaultPackage)
-            nix-index.defaultPackage."${system}");
+          ];
         };
 
         go = mkShell { name = "go"; packages = [ go gopls ]; };

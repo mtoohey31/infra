@@ -414,6 +414,10 @@ _:
           scrolloff = 7;
         };
       };
+      nix-index = {
+        enable = true;
+        enableFishIntegration = true;
+      };
       pistol = {
         enable = true;
         config = {

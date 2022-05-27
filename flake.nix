@@ -356,11 +356,7 @@
     in
     with pkgs; {
       devShells = {
-        # TODO: create a ci devshell and use that with cache-flake-attrs
-        # instead of installing things from whatever nixpkgs channel happens
-        # to get selected
         default = mkShell {
-
           # NOTE: some of these packages are included in the common home
           # manager module, but they are also included here in case this is
           # being worked on from another environment
@@ -377,6 +373,13 @@
             rage
             ssh-to-age
             git-crypt-agessh.packages."${system}".default
+          ];
+        };
+
+        ci = mkShell {
+          packages = [
+            nixpkgs-fmt
+            deadnix
           ];
         };
 

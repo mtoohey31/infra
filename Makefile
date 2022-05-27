@@ -1,4 +1,4 @@
-.PHONY: default install user nixos install-nixos darwin install-darwin cloudberry-image update develop format
+.PHONY: default install user nixos install-nixos darwin install-darwin cloudberry-image format format-check deadnix-check
 
 NIX_CMD = nix --extra-experimental-features nix-command --extra-experimental-features flakes
 UNAME := $(shell uname)
@@ -14,6 +14,8 @@ endif
 ifeq (${TERM},xterm-kitty)
 KITTY_TERMFIX = TERM=xterm-256color 
 endif
+
+ci: format-check deadnix-check
 
 user:
 	$(NIX_CMD) build .#homeManagerConfigurations."$$(whoami)-$$INFRA_USER-$$(uname -m)-$$(uname | tr '[:upper:]' '[:lower:]')".activationPackage
@@ -46,14 +48,11 @@ install-cloudberry-image:
 		sops -d --extract '["user_ssh_private_key"]' nixos/systems/cloudberry/secrets.yaml | sudo tee "$$MOUNT/home/$$USERNAME/.ssh/id_ed25519" >/dev/null && \
 		sudo umount "$$MOUNT" && sudo dd if="$$TMP" of="$$INFRA_OF" status=progress && sudo rm -rf "$$TMP" "$$MOUNT"
 
-update:
-	$(NIX_CMD) flake update
-
-develop:
-	$(NIX_CMD) develop
-
-check:
-	$(NIX_CMD) flake check
-
 format:
 	nixpkgs-fmt .
+
+format-check:
+	nixpkgs-fmt --check .
+
+deadnix-check:
+	deadnix --fail $$(find -name '*.nix' -not -name 'hardware-configuration.nix')

@@ -123,7 +123,6 @@ with lib; {
                 hide_when_empty = true;
               }
               { block = "sound"; }
-              # TODO: { block = "github"; }
               {
                 block = "custom";
                 command = ''

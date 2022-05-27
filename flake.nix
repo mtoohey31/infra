@@ -1,5 +1,3 @@
-# TODO: figure out how to pin system nix channels that are used by nix-shell
-# and comma to the same revision as the nixpkgs flake input
 # TODO: add swapfile to nixos systems
 # TODO: display active vms in status command if there are any
 

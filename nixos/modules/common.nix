@@ -1,4 +1,4 @@
-_:
+inputs:
 { config, pkgs, ... }:
 
 let
@@ -6,6 +6,7 @@ let
 in
 {
   nix = {
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
     package = pkgs.nixFlakes;
     extraOptions = ''
       experimental-features = nix-command flakes

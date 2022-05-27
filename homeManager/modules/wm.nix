@@ -23,35 +23,44 @@ with lib; {
       terminal = false;
     };
 
-    home.packages = with pkgs; [
-      (pkgs.symlinkJoin {
-        name = "fuzzel-wrapped";
-        paths = [
-          (pkgs.writeShellScriptBin "fuzzel" ''
-            . ${config.xdg.cacheHome}/wal/colors-stripped.sh
-            exec ${pkgs.fuzzel}/bin/fuzzel -x 14 -y 14 -p 14 -w 42 --border-radius=0 --background-color="''${backgrounds}BF" --text-color="''${foreground}FF" --match-color="''${color3}FF" --selection-color="''${color1}FF" --selection-text-color="''${foreground}FF" --border-color=00000000 "$@" --font="JetBrainsMono Nerd Font"
-          '')
-          fuzzel
-        ];
-      })
-      (pkgs.writeShellScriptBin "emoji" ''
-        jq -r '.[] | ([.description] + .aliases)[] + ": " + .emoji' ${inputs.gemoji}/db/emoji.json | fuzzel -dmenu | grep -o '.$' | tr -d '\n' | wl-copy
-      '')
-      flashfocus
-      autotiling
-      wob
-      wl-clipboard
-      sway-contrib.grimshot
-      swaylock-effects
-      swayidle
-      light
-      pulsemixer
-      headsetcontrol
-      uncommitted-go
+    home = {
+      packages = with pkgs; [
+        (pkgs.symlinkJoin {
+          name = "fuzzel-wrapped";
+          paths = [
+            (pkgs.writeShellScriptBin "fuzzel" ''
+              . ${config.xdg.cacheHome}/wal/colors-stripped.sh
+              exec ${pkgs.fuzzel}/bin/fuzzel -x 14 -y 14 -p 14 -w 42 --border-radius=0 --background-color="''${backgrounds}BF" --text-color="''${foreground}FF" --match-color="''${color3}FF" --selection-color="''${color1}FF" --selection-text-color="''${foreground}FF" --border-color=00000000 "$@" --font="JetBrainsMono Nerd Font"
+            '')
+            fuzzel
+          ];
+        })
+        (pkgs.writeShellScriptBin "emoji" ''
+          jq -r '.[] | ([.description] + .aliases)[] + ": " + .emoji' ${inputs.gemoji}/db/emoji.json | fuzzel -dmenu | grep -o '.$' | tr -d '\n' | wl-copy
+        '')
+        flashfocus
+        autotiling
+        wob
+        wl-clipboard
+        sway-contrib.grimshot
+        swaylock-effects
+        swayidle
+        light
+        pulsemixer
+        headsetcontrol
+        uncommitted-go
 
-      plover.wayland
-      firefox
-    ];
+        plover.wayland
+        firefox
+      ];
+      pointerCursor = {
+        name = "Vanilla-DMZ";
+        package = pkgs.vanilla-dmz;
+        size = 24;
+        gtk.enable = true;
+        x11.enable = true;
+      };
+    };
 
     programs = {
       fish = rec {
@@ -332,7 +341,12 @@ with lib; {
             outer = -16;
           };
           focus = { followMouse = true; };
-          seat = { "*" = { hide_cursor = "1000"; }; };
+          seat = {
+            "*" = {
+              hide_cursor = "1000";
+              xcursor_theme = "Vanilla-DMZ 24";
+            };
+          };
           output."*".bg = "${config.xdg.cacheHome}/wallpaper fill";
           keybindings = {
             "${modifier}+h" = "focus left";

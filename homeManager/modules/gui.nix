@@ -1,8 +1,6 @@
 inputs:
 { config, lib, pkgs, ... }:
 
-# TODO: make cursor not tiny
-
 let cfg = config.local.gui;
 in
 with lib; {

@@ -239,6 +239,8 @@ _:
           dh = "diff .";
           dl = "diff HEAD~ HEAD";
           ds = "diff --staged";
+          dst = "diff --staged --stat";
+          dt = "diff --stat";
           e = "rebase";
           ea = "rebase --abort";
           ec = "rebase --continue";

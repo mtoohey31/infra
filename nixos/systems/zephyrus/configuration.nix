@@ -86,7 +86,11 @@ inputs:
 
   services.kmonad = {
     enable = true;
-    configfiles = [ ./default.kbd ];
+    keyboards.default = {
+      device = "/dev/input/by-id/usb-ASUSTeK_Computer_Inc._N-KEY_Device-if02-event-kbd";
+      fallthrough = true;
+      config = builtins.readFile ./default.kbd;
+    };
   };
   systemd.services.kmonad-default = {
     enable = true;

@@ -5,13 +5,6 @@
   x c v n m ,
 )
 
-(defcfg
-  input (device-file "/dev/input/by-id/usb-ASUSTeK_Computer_Inc._N-KEY_Device-if02-event-kbd")
-  output (uinput-sink "KMonad")
-  fallthrough true
-  allow-cmd true
-)
-
 (defalias
   ealt (tap-hold-next-release 200 esc alt)
   bmet (tap-hold-next-release 200 bspc met)

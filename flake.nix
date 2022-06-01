@@ -182,7 +182,7 @@
       nixosImages.cloudberry = self.nixosConfigurations.cloudberry.config.system.build.sdImage;
       nixosModules = self.modules //
       home-manager.nixosModules //
-      { kmonad = kmonad.nixosModule; } //
+      kmonad.nixosModules //
       sops-nix.nixosModules //
       (builtins.listToAttrs (map
         (path: {
@@ -193,7 +193,7 @@
 
       overlays.default = nixpkgs.lib.composeManyExtensions [
         cogitri.overlays.default
-        kmonad.overlay
+        kmonad.overlays.default
         uncommitted-go.overlays.default
         vimv2.overlay
 

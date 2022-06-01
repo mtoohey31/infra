@@ -18,7 +18,7 @@ with lib; {
     };
     nix = {
       extraOptions = ''
-        extra-platforms = aarch64-linux
+        extra-platforms = aarch64-linux i686-linux
       '';
       sandboxPaths = [ "/run/binfmt" "${pkgs.qemu}" ];
     };

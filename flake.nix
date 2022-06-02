@@ -139,9 +139,7 @@
               nixpkgs.overlays = builtins.attrValues self.overlays;
               sdImage = {
                 compressImage = false;
-                # TODO: figure out a nicer tag than a hash of a hash... the latest
-                # commit +DIRTY if it is so would be ideal
-                imageName = "cloudberry-${builtins.hashString "sha256" self.sourceInfo.narHash}.img";
+                imageName = "cloudberry-${self.shortRev or "dirty"}.img";
               };
             }
             (import ./nixos/systems/cloudberry/configuration.nix (inputs // self))

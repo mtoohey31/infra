@@ -49,7 +49,7 @@
       flake = false;
     };
     helix = {
-      url = "github:helix-editor/helix";
+      url = "github:mtoohey31/helix/feat/widechar-aware-vertical-move";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";
     };

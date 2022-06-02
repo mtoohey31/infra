@@ -177,7 +177,7 @@ with lib; {
         };
         lf.keybindings.gC =
           if pkgs.stdenv.hostPlatform.isDarwin
-          then ''&osascript -e 'tell application "iTerm2" to create window with default profile command "fish -C \'cd \"'"$PWD"'\" && lf\'"' &>/dev/null''
+          then ''&osascript -e 'tell application "iTerm2" to create window with default profile command "${pkgs.fish}/bin/fish -C \'cd \"'"$PWD"'\" && lf\'"' &>/dev/null''
           else "&kitty -e fish -C lf &>/dev/null &";
         mpv = {
           enable = true;
@@ -273,7 +273,7 @@ with lib; {
                 echo "$1" > "$tmp"
                 echo "rm '$tmp'" >> "$tmp"
                 echo "kill -CONT '$$'" >> "$tmp"
-                osascript -e 'tell application "iTerm2" to create window with default profile command "fish '"$tmp"'"'
+                osascript -e 'tell application "iTerm2" to create window with default profile command "${pkgs.fish}/bin/fish '"$tmp"'"'
                 kill -STOP "$$"
               ''))
             ]

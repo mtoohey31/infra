@@ -32,7 +32,7 @@ with lib; {
             ${mod} + shift - b : yabai -m space --balance
             ${mod} + shift - y : launchctl kickstart -k gui/501/org.nixos.yabai
 
-            ${mod} - 0x2C : osascript -e 'tell application "iTerm2" to create window with default profile command "fish -C lf"'
+            ${mod} - 0x2C : osascript -e 'tell application "iTerm2" to create window with default profile command "${pkgs.fish}/bin/fish -C lf"'
             ${mod} + shift - 0x2C : open ~
           '';
         };

@@ -81,10 +81,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";
     };
-    yabai = {
-      url = "github:koekeishiya/yabai";
-      flake = false;
-    };
   };
 
   outputs =
@@ -336,14 +332,23 @@
             disallowedReferences = builtins.filter (pkg: pkg.pname != "go")
               oldAttrs.disallowedReferences;
           });
-          yabai = super.yabai.overrideAttrs (_: {
-            src = inputs.yabai;
-            # TODO: please don't look too close at this :see_no_evil:
-            prePatch = ''
-              substituteInPlace makefile \
-                  --replace xcrun 'SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk /usr/bin/xcrun'
-            '';
-          });
+          # TODO: remove this once nixpkgs#174842 or a replacement is merged
+          yabai = self.stdenv.mkDerivation
+            rec {
+              pname = "yabai";
+              version = "4.0.1";
+              src = builtins.fetchurl {
+                url = "https://github.com/koekeishiya/${pname}/releases/download/v${version}/${pname}-v${version}.tar.gz";
+                sha256 = "1iahdi7a5b5blqdhws42f1rqmw5w70qkl2xiprrjn1swzc2lynsh";
+              };
+              dontBuild = true;
+              installPhase = ''
+                ls
+                mkdir -p "$out/bin" "$out/share/man/man1"
+                cp bin/yabai "$out/bin"
+                cp doc/yabai.1 "$out/share/man/man1"
+              '';
+            };
         })
       ];
     } // (utils.lib.eachDefaultSystem (system:

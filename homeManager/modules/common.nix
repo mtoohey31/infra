@@ -42,6 +42,7 @@ _:
     "libvirt/libvirt.conf".text = ''uri_default = "qemu:///system"'';
   };
 
+  home.sessionVariables.DIRENV_LOG_FORMAT = "";
   programs =
     let
       # source: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828
@@ -54,7 +55,10 @@ _:
       };
       direnv = {
         enable = true;
-        config.warn_timeout = "11037h";
+        config = {
+          disable_stdin = true;
+          warn_timeout = "11037h";
+        };
         nix-direnv.enable = true;
       };
       # TODO: add bash and zsh configuration too with the simplest aliases and starship

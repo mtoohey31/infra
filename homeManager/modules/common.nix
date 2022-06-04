@@ -231,7 +231,7 @@ _:
           br = "!git branch -m $(git rev-parse --abbrev-ref HEAD)";
           bs = "branch --set-upstream-to";
           bt = "branch --track";
-          bv = "!git --no-pager branch --verbose";
+          bv = "!git --no-pager branch -vv";
           c = "commit";
           ca = "commit --amend";
           cap = "!git commit --amend && git push";

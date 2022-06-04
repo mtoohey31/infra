@@ -81,6 +81,11 @@ inputs:
         platform = "flic";
         host = "!secret flic_ip";
       }];
+      camera = [{
+        platform = "generic";
+        name = "!secret traffic_cam_name";
+        still_image_url = "!secret traffic_cam_url";
+      }];
       wake_on_lan = { };
       switch = [
         {

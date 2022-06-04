@@ -242,6 +242,7 @@ _:
           d = "diff";
           dh = "diff .";
           dl = "diff HEAD~ HEAD";
+          dlt = "diff --stat HEAD~ HEAD";
           ds = "diff --staged";
           dst = "diff --staged --stat";
           dt = "diff --stat";
@@ -309,7 +310,7 @@ _:
           yc = "cherry-pick --continue";
           unbare = ''!f() { TARGET="$(echo "$1" | sed -E 's/\.git\/?$//')" && mkdir "$TARGET" && cp -r "$1" "$TARGET/.git" && cd "$TARGET" && git config --local --bool core.bare false && git reset --hard; }; f'';
         } // (pkgs.lib.optionalAttrs (builtins.hasAttr "copy" config.programs.fish.shellAliases)
-          { h = "!${config.programs.fish.shellAliases.copy} \"$(git rev-parse HEAD)\""; });
+          { h = "!git rev-parse HEAD | sed -z 's/\\n$//' | ${config.programs.fish.shellAliases.copy}"; });
       };
       helix = {
         enable = true;

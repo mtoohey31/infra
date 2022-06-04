@@ -17,10 +17,6 @@ endif
 
 ci: format-check deadnix-check
 
-user:
-	$(NIX_CMD) build .#homeManagerConfigurations."$$(whoami)-$$INFRA_USER-$$(uname -m)-$$(uname | tr '[:upper:]' '[:lower:]')".activationPackage
-	result/activate
-
 nixos:
 	nixos-rebuild switch --use-remote-sudo --flake .#
 

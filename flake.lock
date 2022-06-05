@@ -321,6 +321,33 @@
         "type": "github"
       }
     },
+    "nix-on-droid": {
+      "inputs": {
+        "flake-utils": [
+          "utils"
+        ],
+        "home-manager": [
+          "home-manager"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1654451928,
+        "narHash": "sha256-fd7EIih4EJ7+0FCM3mDFAbxtyL/mVqvVxeDX9uDD1IE=",
+        "owner": "mtoohey31",
+        "repo": "nix-on-droid",
+        "rev": "fe87f9fc360329d7e5e13d566cc536ad37ab9cd4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mtoohey31",
+        "ref": "remove-nix_2_4",
+        "repo": "nix-on-droid",
+        "type": "github"
+      }
+    },
     "nixCargoIntegration": {
       "inputs": {
         "devshell": "devshell",
@@ -460,6 +487,7 @@
         "helix": "helix",
         "home-manager": "home-manager",
         "kmonad": "kmonad",
+        "nix-on-droid": "nix-on-droid",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "qbpm": "qbpm",

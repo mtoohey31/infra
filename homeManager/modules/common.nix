@@ -16,6 +16,7 @@ _:
     poppler_utils
     ffmpeg
     comma
+    pywal
   ] ++ pkgs.lib.optional (!pkgs.stdenv.hostPlatform.isDarwin) gotop;
 
   home.file = {
@@ -136,7 +137,7 @@ _:
             if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$TMUX"
                 if test -n "$SSH_CONNECTION" -o -f /.dockerenv
                     exec tmux
-                else if test -n "$TERMUX_VERSION"
+                else if test -n "$ANDROID_DATA"
                     cat ${config.xdg.cacheHome}/wal/sequences
                     exec tmux
                 end

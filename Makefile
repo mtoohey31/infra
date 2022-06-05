@@ -1,11 +1,12 @@
-.PHONY: default install user nixos install-nixos darwin install-darwin cloudberry-image format format-check deadnix-check
+.PHONY: default install user nixos install-nixos darwin install-darwin droid cloudberry-image format format-check deadnix-check
 
 NIX_CMD = nix --extra-experimental-features nix-command --extra-experimental-features flakes
-UNAME := $(shell uname)
 
-ifeq ($(UNAME),Darwin)
+ifeq ($(shell uname),Darwin)
 default: darwin
 install: install-darwin
+else ifeq ($(shell whoami),nix-on-droid)
+default: droid
 else
 default: nixos
 install: install-nixos
@@ -30,6 +31,10 @@ darwin:
 install-darwin:
 	$(KITTY_TERMFIX)$(NIX_CMD) build .#darwinConfigurations."$${INFRA_SYSTEM:-$$HOSTNAME}".system
 	./result/sw/bin/darwin-rebuild switch --flake .#"$${INFRA_SYSTEM:-$$HOSTNAME}"
+
+droid:
+	test -n "$$INFRA_DEVICE" || exit 1
+	nix-on-droid switch --flake ".#$$INFRA_DEVICE"
 
 cloudberry-image:
 	$(NIX_CMD) build .#nixosImages.cloudberry

@@ -36,14 +36,8 @@ with lib; {
         ibm-plex
         (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
       ] ++ (if pkgs.stdenv.hostPlatform.isDarwin then [
-        (pywal.overrideAttrs (_: {
-          prePatch = ''
-            substituteInPlace pywal/util.py --replace pidof pgrep
-          '';
-        }))
         iterm2
       ] else [
-        pywal
         nsxiv
         xdg-utils
 

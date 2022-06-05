@@ -19,6 +19,12 @@
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-on-droid = {
+      url = "github:mtoohey31/nix-on-droid/remove-nix_2_4";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "utils";
+      inputs.home-manager.follows = "home-manager";
+    };
 
     git-crypt-agessh = {
       url = "github:mtoohey31/git-crypt-agessh";
@@ -94,6 +100,7 @@
     , home-manager
     , kmonad
     , nixpkgs
+    , nix-on-droid
     , self
     , sops-nix
     , uncommitted-go
@@ -188,6 +195,27 @@
           value = import path (inputs // self);
         })
         (import ./nixos/modules/modules.nix)));
+
+      nixOnDroidConfigurations = {
+        pixel = nix-on-droid.lib.nixOnDroidConfiguration rec {
+          config = import ./nixOnDroid/devices/pixel/configuration.nix (inputs // self);
+          extraModules = (builtins.attrValues self.nixOnDroidModules) ++ [{
+            environment.sessionVariables.INFRA_DEVICE = "pixel";
+          }];
+          pkgs = import nixpkgs {
+            overlays = builtins.attrValues self.overlays;
+            inherit system;
+          };
+          system = "aarch64-linux";
+        };
+      };
+      nixOnDroidModules = self.modules //
+      (builtins.listToAttrs (map
+        (path: {
+          name = builtins.baseNameOf path;
+          value = import path (inputs // self);
+        })
+        (import ./nixOnDroid/modules/modules.nix)));
 
       overlays.default = nixpkgs.lib.composeManyExtensions [
         cogitri.overlays.default
@@ -286,6 +314,15 @@
               };
             };
           } // super.python3Packages;
+          pywal =
+            if self.stdenv.hostPlatform.isDarwin then
+              super.pywal.overrideAttrs
+                (_: {
+                  prePatch = ''
+                    substituteInPlace pywal/util.py --replace pidof pgrep
+                  '';
+                })
+            else super.pywal;
           qbpm = inputs.qbpm.defaultPackage."${self.system}";
           qutebrowser = (if self.stdenv.hostPlatform.isDarwin then
             self.stdenv.mkDerivation

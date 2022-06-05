@@ -20,6 +20,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-on-droid = {
+      # TODO: change once t184256/nix-on-droid#183 is resolved
       url = "github:mtoohey31/nix-on-droid/remove-nix_2_4";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";

@@ -296,6 +296,8 @@ _:
           tpp = "stash push --patch";
           ts = "stash show -p";
           u = "pull";
+          ur = "pull --rebase";
+          urt = "pull --rebase --autostash";
           ut = "pull --autostash";
           w = "worktree";
           wa = "worktree add";

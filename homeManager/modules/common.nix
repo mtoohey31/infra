@@ -39,7 +39,7 @@ _:
       '';
       executable = true;
     };
-    "helix/themes/base16_terminal_alacritty.toml".source = ./common/base16_terminal_alacritty.toml;
+    "helix/themes/base16_terminal_kitty.toml".source = ./common/base16_terminal_kitty.toml;
     "libvirt/libvirt.conf".text = ''uri_default = "qemu:///system"'';
   };
 
@@ -340,7 +340,7 @@ _:
             };
           in
           {
-            theme = "base16_terminal_alacritty";
+            theme = "base16_terminal_kitty";
             editor = {
               idle-timeout = 0;
               scrolloff = 7;

@@ -334,9 +334,9 @@ _:
               "A-R" = "replace_with_yanked";
             };
             save_quit_remaps = {
-              Q = ":q!";
-              W = [ ":w" "align_view_center" ];
-              Z = ":wq";
+              Q = ":quit!";
+              W = [ ":write" "align_view_center" ];
+              Z = ":write-quit";
             };
           in
           {
@@ -364,6 +364,7 @@ _:
               g.n = "goto_next_diag";
               g.N = "goto_prev_diag";
               g.F = ":format";
+              g."A-F" = ":set-option auto-format false";
               G = "goto_last_line";
             };
             keys.select = clipboard_remaps // save_quit_remaps;

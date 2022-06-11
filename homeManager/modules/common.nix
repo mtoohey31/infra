@@ -333,6 +333,9 @@ _:
               R = "replace_selections_with_clipboard";
               "A-R" = "replace_with_yanked";
             };
+            match_remaps = {
+              M = "match_brackets";
+            };
             save_quit_remaps = {
               Q = ":quit!";
               W = [ ":write" "align_view_center" ];
@@ -351,7 +354,7 @@ _:
                 select = "underline";
               };
             };
-            keys.normal = clipboard_remaps // save_quit_remaps // {
+            keys.normal = clipboard_remaps // match_remaps // save_quit_remaps // {
               n = [ "search_next" "align_view_center" ];
               N = [ "search_prev" "align_view_center" ];
               # TODO: debug why mode changes don't take effect until after the whole binding sequence
@@ -367,7 +370,7 @@ _:
               g."A-F" = ":set-option auto-format false";
               G = "goto_last_line";
             };
-            keys.select = clipboard_remaps // save_quit_remaps;
+            keys.select = clipboard_remaps // match_remaps // save_quit_remaps;
           };
       };
       # TODO: get lf working more smoothly with direnv so I don't have to do the q c-f dance

@@ -430,6 +430,12 @@
 
         go = mkShell { name = "go"; packages = [ go gopls ]; };
         go118 = mkShell { name = "go-1.18"; packages = [ go_1_18 gopls ]; };
+        rust = mkShell {
+          packages = [ cargo rustc rustfmt rust-analyzer ];
+          shellHook = ''
+            export RUST_SRC_PATH="${rust.packages.stable.rustPlatform.rustLibSrc}"
+          '';
+        };
       };
 
       packages.xcaddy = xcaddy;

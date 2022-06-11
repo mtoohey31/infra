@@ -1,39 +1,48 @@
 inputs:
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
+  cfg = config.local.common;
   inherit (config.networking) hostName;
 in
-{
-  nix = {
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-    package = pkgs.nixFlakes;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-outputs = true
-    '';
+with lib; {
+  options.local.common.enable = mkOption {
+    type = types.bool;
+    default = true;
   };
 
-  home-manager = {
-    useUserPackages = true;
-    useGlobalPkgs = true;
-  };
+  config = mkIf cfg.enable {
+    nix = {
+      nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+      package = pkgs.nixFlakes;
+      extraOptions = ''
+        experimental-features = nix-command flakes
+        keep-outputs = true
+      '';
+    };
 
-  users.mutableUsers = false;
+    home-manager = {
+      useUserPackages = true;
+      useGlobalPkgs = true;
+    };
 
-  time.timeZone = "America/Toronto";
-  i18n.defaultLocale = "en_CA.UTF-8";
+    users.mutableUsers = false;
 
-  system.stateVersion = "21.11";
+    time.timeZone = "America/Toronto";
+    i18n.defaultLocale = "en_CA.UTF-8";
 
-  sops.secrets.root_password = {
-    neededForUsers = true;
-    sopsFile = ../systems + "/${hostName}/secrets.yaml";
-  };
-  users.users.root.passwordFile = config.sops.secrets.root_password.path;
+    system.stateVersion = "21.11";
 
-  nix.gc = {
-    automatic = true;
-    options = "--delete-older-than 14d";
-  };
+    sops.secrets.root_password = {
+      neededForUsers = true;
+      sopsFile = ../systems + "/${hostName}/secrets.yaml";
+    };
+    users.users.root.passwordFile = config.sops.secrets.root_password.path;
+
+    nix.gc = {
+      automatic = true;
+      options = "--delete-older-than 14d";
+    };
+  }
+  ;
 }

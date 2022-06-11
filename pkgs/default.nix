@@ -9,6 +9,9 @@ with pkgs;
     fuzzel-src = inputs.fuzzel;
     inherit (pkgs) fuzzel;
   };
+  gow = callPackage ./development/tools/gow {
+    gow-src = inputs.gow;
+  };
   harpoond = callPackage ./os-specific/linux/harpoond {
     harpoond-src = inputs.harpoond;
   };

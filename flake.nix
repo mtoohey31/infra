@@ -51,7 +51,11 @@
       flake = false;
     };
     gemoji = {
-      url = "git+https://github.com/github/gemoji";
+      url = "github:github/gemoji";
+      flake = false;
+    };
+    gow = {
+      url = "github:mitranim/gow";
       flake = false;
     };
     harpoond = {
@@ -262,10 +266,10 @@
           ];
         };
 
-        go = mkShell { name = "go"; packages = [ go gopls ]; };
-        go118 = mkShell { name = "go-1.18"; packages = [ go_1_18 gopls ]; };
+        go = mkShell { name = "go"; packages = [ go gopls gow ]; };
+        go118 = mkShell { name = "go-1.18"; packages = [ go_1_18 gopls gow ]; };
         rust = mkShell {
-          packages = [ cargo rustc rustfmt rust-analyzer ];
+          packages = [ cargo cargo-watch rustc rustfmt rust-analyzer ];
           shellHook = ''
             export RUST_SRC_PATH="${rust.packages.stable.rustPlatform.rustLibSrc}"
           '';

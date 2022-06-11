@@ -208,15 +208,15 @@
       "locked": {
         "lastModified": 1627297691,
         "narHash": "sha256-f1MwKDW/NCgsS60HIWyCF0e6XRIwDeNEswN5Zb25MA8=",
-        "ref": "master",
+        "owner": "github",
+        "repo": "gemoji",
         "rev": "55bb37afa4a24e92709ff135a9be4a4f1e79aaef",
-        "revCount": 428,
-        "type": "git",
-        "url": "https://github.com/github/gemoji"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "https://github.com/github/gemoji"
+        "owner": "github",
+        "repo": "gemoji",
+        "type": "github"
       }
     },
     "git-crypt-agessh": {
@@ -237,6 +237,22 @@
       "original": {
         "owner": "mtoohey31",
         "repo": "git-crypt-agessh",
+        "type": "github"
+      }
+    },
+    "gow": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1653989095,
+        "narHash": "sha256-rwFV33e3CL7lkljfISB9QZPchEXOYI5n3IcRorFsGWs=",
+        "owner": "mitranim",
+        "repo": "gow",
+        "rev": "17fe765b1be5a400c6c6098895e0c8b965d3fe2c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mitranim",
+        "repo": "gow",
         "type": "github"
       }
     },
@@ -318,6 +334,27 @@
         "dir": "nix",
         "owner": "kmonad",
         "repo": "kmonad",
+        "type": "github"
+      }
+    },
+    "naersk": {
+      "inputs": {
+        "nixpkgs": [
+          "rnix-lsp",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1639947939,
+        "narHash": "sha256-pGsM8haJadVP80GFq4xhnSpNitYNQpaXk4cnA796Cso=",
+        "owner": "nix-community",
+        "repo": "naersk",
+        "rev": "2fc8ce9d3c025d59fee349c1f80be9785049d653",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "naersk",
         "type": "github"
       }
     },
@@ -474,6 +511,31 @@
         "url": "https://gitlab.com/jjzmajic/qutewal"
       }
     },
+    "rnix-lsp": {
+      "inputs": {
+        "naersk": "naersk",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "utils": [
+          "utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1654968526,
+        "narHash": "sha256-o1MlifAdUn0Rxry8gBqJDD3/vnTpMJU0kEOlySJyXNo=",
+        "owner": "mtoohey31",
+        "repo": "rnix-lsp",
+        "rev": "13c4329d4a3a5c4da06e7f7997fbd68585f95629",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mtoohey31",
+        "ref": "feat/improved-format-edits",
+        "repo": "rnix-lsp",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "cogitri": "cogitri",
@@ -482,6 +544,7 @@
         "g14-patches": "g14-patches",
         "gemoji": "gemoji",
         "git-crypt-agessh": "git-crypt-agessh",
+        "gow": "gow",
         "harpoond": "harpoond",
         "helix": "helix",
         "home-manager": "home-manager",
@@ -491,6 +554,7 @@
         "nixpkgs": "nixpkgs",
         "qbpm": "qbpm",
         "qutewal": "qutewal",
+        "rnix-lsp": "rnix-lsp",
         "sops-nix": "sops-nix",
         "uncommitted-go": "uncommitted-go",
         "utils": "utils_3",

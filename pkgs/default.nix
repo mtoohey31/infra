@@ -28,6 +28,7 @@ with pkgs;
   qutebrowser = callPackage ./applications/networking/browsers/qutebrowser {
     inherit (pkgs) qutebrowser;
   };
+  rnix-lsp = inputs.rnix-lsp.defaultPackage."${pkgs.system}";
   yabai = callPackage ./os-specific/darwin/yabai { };
   xcaddy = callPackage ./development/tools/xcaddy { };
   xdg-desktop-portal-wlr = callPackage ./development/libraries/xdg-desktop-portal-wlr {

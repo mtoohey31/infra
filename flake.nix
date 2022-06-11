@@ -85,6 +85,11 @@
       url = "git+https://gitlab.com/jjzmajic/qutewal";
       flake = false;
     };
+    rnix-lsp = {
+      url = "github:mtoohey31/rnix-lsp/feat/improved-format-edits";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "utils";
+    };
     uncommitted-go = {
       url = "github:mtoohey31/uncommitted-go";
       inputs.nixpkgs.follows = "nixpkgs";

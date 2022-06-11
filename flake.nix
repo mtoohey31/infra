@@ -266,8 +266,9 @@
 
         ci = mkShell {
           packages = [
-            nixpkgs-fmt
             deadnix
+            nixpkgs-fmt
+            gnumake
           ];
         };
 

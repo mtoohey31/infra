@@ -329,11 +329,11 @@
             self.stdenv.mkDerivation
               rec {
                 pname = "qutebrowser";
-                version = "2.5.0";
+                version = "2.5.1";
                 sourceRoot = "${pname}.app";
                 src = self.fetchurl {
                   url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.dmg";
-                  sha256 = "v4SdiXUS+fB4js7yf+YCDD4OGcb/5zeYaXoUwk/WwCs=";
+                  sha256 = "1Pda2gzmGgiN6f/0K4sOSUav1HvLTlzrEJd8fT9lgBw=";
                 };
                 buildInputs = [ self.undmg ];
                 installPhase = ''

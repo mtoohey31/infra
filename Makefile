@@ -1,4 +1,4 @@
-.PHONY: default install user nixos install-nixos darwin install-darwin droid cloudberry-image format format-check deadnix-check
+.PHONY: default install user nixos install-nixos darwin install-darwin droid cloudberry-image format format-check deadnix deadnix-check
 
 NIX_CMD = nix --extra-experimental-features nix-command --extra-experimental-features flakes
 
@@ -54,6 +54,9 @@ format:
 
 format-check:
 	nixpkgs-fmt --check .
+
+deadnix:
+	deadnix --edit $$(find -name '*.nix' -not -name 'hardware-configuration.nix')
 
 deadnix-check:
 	deadnix --fail $$(find -name '*.nix' -not -name 'hardware-configuration.nix')

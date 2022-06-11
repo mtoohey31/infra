@@ -166,7 +166,20 @@ inputs:
       "${g14-patches}/sys-kernel_arch-sources-g14_files-9012-Improve-usability-for-amd-pstate.patch"
     ];
 
-  services.udev.extraRules = builtins.readFile "${pkgs.arctis-9-udev-rules}/share/headsetcontrol/99-arctis-9.rules";
+  services.udev.extraRules = builtins.readFile "${pkgs.stdenv.mkDerivation rec {
+    pname = "arctis-9-udev-rules";
+    version = "0.1.0";
+    nativeBuildInputs = [ pkgs.headsetcontrol ];
+    phases = [ "installPhase" ];
+    installPhase = ''
+      mkdir -p "$out/share/headsetcontrol"
+      RULES="$(headsetcontrol -u | grep -A1 "SteelSeries Arctis 9")"
+      if test -z "$RULES"; then
+        exit 1
+      fi
+      echo "$RULES" > "$out/share/headsetcontrol/99-arctis-9.rules"
+    '';
+  }}/share/headsetcontrol/99-arctis-9.rules";
 
   # for quiet startup
   boot.consoleLogLevel = 0;

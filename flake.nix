@@ -218,179 +218,14 @@
         })
         (import ./nixOnDroid/modules/modules.nix)));
 
-      overlays.default = nixpkgs.lib.composeManyExtensions [
-        cogitri.overlays.default
-        kmonad.overlays.default
-        uncommitted-go.overlays.default
-        vimv2.overlay
+      overlays = {
+        default = (_: prev: import ./pkgs inputs prev);
 
-        (self: super: rec {
-          arctis-9-udev-rules = self.stdenv.mkDerivation rec {
-            pname = "arctis-9-udev-rules";
-            version = "0.1.0";
-            nativeBuildInputs = [ self.headsetcontrol ];
-            phases = [ "installPhase" ];
-            installPhase = ''
-              mkdir -p "$out/share/headsetcontrol"
-              RULES="$(headsetcontrol -u | grep -A1 "SteelSeries Arctis 9")"
-              if test -z "$RULES"; then
-                exit 1
-              fi
-              echo "$RULES" > "$out/share/headsetcontrol/99-arctis-9.rules"
-            '';
-          };
-          caddy-cloudflare = self.callPackage ./pkgs/servers/caddy { };
-          fileshelter = super.fileshelter.overrideAttrs
-            (oldAttrs: rec {
-              meta = oldAttrs.meta // {
-                platforms = [ oldAttrs.meta.platforms ] ++ [ "aarch64-linux" ];
-              };
-            });
-          fuzzel = super.fuzzel.overrideAttrs (_: rec {
-            version = "HEAD";
-            src = inputs.fuzzel;
-          });
-          harpoond = self.stdenv.mkDerivation rec {
-            pname = "harpoond";
-            version = "0.1.0";
-            src = inputs.harpoond;
-            nativeBuildInputs = with self; [ pkg-config libusb ];
-            installPhase = ''
-              mkdir -p "$out/bin" "$out/lib/udev/rules.d"
-              cp harpoond "$out/bin"
-              cp 99-harpoond.rules "$out/lib/udev/rules.d"
-            '';
-          };
-          helix = inputs.helix.defaultPackage."${self.system}";
-          plover = super.plover // {
-            wayland = super.plover.dev.overridePythonAttrs
-              (oldAttrs: {
-                src = self.fetchFromGitHub {
-                  owner = "openstenoproject";
-                  repo = "plover";
-                  rev = "fd5668a3ad9bd091289dd2e5e8e2c1dec063d51f";
-                  sha256 = "2xvcNcJ07q4BIloGHgmxivqGq1BuXwZY2XWPLbFrdXg=";
-                };
-                propagatedBuildInputs = oldAttrs.propagatedBuildInputs
-                ++ [
-                  python3Packages.plover-stroke
-                  python3Packages.rtf-tokenize
-                  python3Packages.pywayland_0_4_7
-                ];
-                nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [
-                  self.pkg-config
-                ];
-                doCheck = false; # TODO: get tests working
-                postPatch = ''
-                  sed -i /PyQt5/d setup.cfg
-                  substituteInPlace plover_build_utils/setup.py \
-                    --replace "/usr/share/wayland/wayland.xml" "${self.wayland}/share/wayland/wayland.xml"
-                '';
-              });
-          };
-          python3Packages = {
-            plover-stroke = self.python3Packages.buildPythonPackage rec {
-              pname = "plover_stroke";
-              version = "1.0.1";
-              src = super.python3Packages.fetchPypi {
-                inherit pname version;
-                sha256 = "t+ZM0oDEwitFDC1L4due5IxCWEPzJbF3fi27HDyto8Q=";
-              };
-            };
-            pywayland_0_4_7 = super.python3Packages.pywayland.overridePythonAttrs
-              (_: rec {
-                pname = "pywayland";
-                version = "0.4.7";
-                src = super.python3Packages.fetchPypi {
-                  inherit pname version;
-                  sha256 = "0IMNOPTmY22JCHccIVuZxDhVr41cDcKNkx8bp+5h2CU=";
-                };
-              });
-            rtf-tokenize = self.python3Packages.buildPythonPackage rec {
-              pname = "rtf_tokenize";
-              version = "1.0.0";
-              src = super.python3Packages.fetchPypi {
-                inherit pname version;
-                sha256 = "XD3zkNAEeb12N8gjv81v37Id3RuWroFUY95+HtOS1gg=";
-              };
-            };
-          } // super.python3Packages;
-          pywal =
-            if self.stdenv.hostPlatform.isDarwin then
-              super.pywal.overrideAttrs
-                (_: {
-                  prePatch = ''
-                    substituteInPlace pywal/util.py --replace pidof pgrep
-                  '';
-                })
-            else super.pywal;
-          qbpm = inputs.qbpm.defaultPackage."${self.system}";
-          qutebrowser = (if self.stdenv.hostPlatform.isDarwin then
-            self.stdenv.mkDerivation
-              rec {
-                pname = "qutebrowser";
-                version = "2.5.1";
-                sourceRoot = "${pname}.app";
-                src = self.fetchurl {
-                  url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.dmg";
-                  sha256 = "1Pda2gzmGgiN6f/0K4sOSUav1HvLTlzrEJd8fT9lgBw=";
-                };
-                buildInputs = [ self.undmg ];
-                installPhase = ''
-                  mkdir -p "$out/Applications/${pname}.app"
-                  cp -R . "$out/Applications/${pname}.app"
-                  chmod +x "$out/Applications/${pname}.app/Contents/MacOS/${pname}"
-                  mkdir "$out/bin"
-                  ln -s "$out/Applications/${pname}.app/Contents/MacOS/${pname}" "$out/bin/${pname}"
-                '';
-              } else super.qutebrowser);
-          xdg-desktop-portal-wlr = super.xdg-desktop-portal-wlr.overrideAttrs (oldAttrs: rec {
-            version = "c34d09877cb55eb353311b5e85bf50443be9439d";
-            src = self.fetchFromGitHub {
-              owner = "emersion";
-              repo = oldAttrs.pname;
-              rev = version;
-              sha256 = "I1/O3CPpbrMWhAN4Gjq7ph7WZ8Tj8xu8hoSbgHqFhXc=";
-            };
-          });
-          xcaddy = (self.buildGoModule rec {
-            pname = "xcaddy";
-            version = "0.3.0";
-            src = self.fetchFromGitHub {
-              owner = "caddyserver";
-              repo = "xcaddy";
-              rev = "v${version}";
-              sha256 = "kB2WyHaln/arvISzVjcgPLHIUC/dCzL9Ub8aEl2xL2c=";
-            };
-            vendorSha256 = "5n0OWG/grOY3tpr0P0RXxlMOg/ne3fSz30rN0zRi1Tc=";
-            nativeBuildInputs = [ self.makeWrapper ];
-            postInstall = ''
-              wrapProgram "$out/bin/xcaddy" \
-                --prefix PATH : ${self.go}/bin
-            '';
-          }).overrideAttrs (oldAttrs: {
-            disallowedReferences = builtins.filter (pkg: pkg.pname != "go")
-              oldAttrs.disallowedReferences;
-          });
-          # TODO: remove this once nixpkgs#174842 or a replacement is merged
-          yabai = self.stdenv.mkDerivation
-            rec {
-              pname = "yabai";
-              version = "4.0.1";
-              src = builtins.fetchurl {
-                url = "https://github.com/koekeishiya/${pname}/releases/download/v${version}/${pname}-v${version}.tar.gz";
-                sha256 = "1iahdi7a5b5blqdhws42f1rqmw5w70qkl2xiprrjn1swzc2lynsh";
-              };
-              dontBuild = true;
-              installPhase = ''
-                ls
-                mkdir -p "$out/bin" "$out/share/man/man1"
-                cp bin/yabai "$out/bin"
-                cp doc/yabai.1 "$out/share/man/man1"
-              '';
-            };
-        })
-      ];
+        cogtri = cogitri.overlays.default;
+        kmonad = kmonad.overlays.default;
+        uncommitted-go = uncommitted-go.overlays.default;
+        vimv2 = vimv2.overlay;
+      };
     } // (utils.lib.eachDefaultSystem (system:
     let
       pkgs =
@@ -438,6 +273,6 @@
         };
       };
 
-      packages.xcaddy = xcaddy;
+      packages = import ./pkgs inputs (import nixpkgs { inherit system; });
     }));
 }

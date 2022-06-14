@@ -522,11 +522,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1654968526,
-        "narHash": "sha256-o1MlifAdUn0Rxry8gBqJDD3/vnTpMJU0kEOlySJyXNo=",
+        "lastModified": 1655061633,
+        "narHash": "sha256-J9xgK5W/ecOCS1rikWkYETsudKc8r8AyZBUofmHRnpU=",
         "owner": "mtoohey31",
         "repo": "rnix-lsp",
-        "rev": "13c4329d4a3a5c4da06e7f7997fbd68585f95629",
+        "rev": "623ced97e4e858abf2e516defcb8d202ae1c0f8a",
         "type": "github"
       },
       "original": {

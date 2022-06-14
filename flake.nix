@@ -21,15 +21,28 @@
     };
     nix-on-droid = {
       url = "github:t184256/nix-on-droid";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
-      inputs.home-manager.follows = "home-manager";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "utils";
+        home-manager.follows = "home-manager";
+      };
+    };
+    templates = {
+      url = "github:mtoohey31/templates";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        utils.follows = "utils";
+        gow-src.follows = "gow";
+        naersk.follows = "naersk";
+      };
     };
 
     git-crypt-agessh = {
       url = "github:mtoohey31/git-crypt-agessh";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "utils";
+      };
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -38,8 +51,10 @@
 
     cogitri = {
       url = "github:Cogitri/cogitri-pkgs";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "utils";
+      };
     };
     fuzzel = {
       # TODO: update once next release hits nixpkgs
@@ -64,13 +79,21 @@
     };
     helix = {
       url = "github:mtoohey31/helix/feat/widechar-aware-vertical-move";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "utils";
+      };
     };
     kmonad = {
       url = "github:kmonad/kmonad?dir=nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "utils";
+      };
+    };
+    naersk = {
+      url = "github:nix-community/naersk";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
     };
     nixos-hardware = {
       url = "nixos-hardware";
@@ -78,8 +101,10 @@
     };
     qbpm = {
       url = "github:pvsr/qbpm";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "utils";
+      };
     };
     qutewal = {
       url = "git+https://gitlab.com/jjzmajic/qutewal";
@@ -87,18 +112,25 @@
     };
     rnix-lsp = {
       url = "github:mtoohey31/rnix-lsp/feat/improved-format-edits";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "utils";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        utils.follows = "utils";
+        naersk.follows = "naersk";
+      };
     };
     uncommitted-go = {
       url = "github:mtoohey31/uncommitted-go";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "utils";
+      };
     };
     vimv2 = {
       url = "github:mtoohey31/vimv2";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "utils";
+      };
     };
   };
 
@@ -112,6 +144,7 @@
     , nix-on-droid
     , self
     , sops-nix
+    , templates
     , uncommitted-go
     , utils
     , vimv2
@@ -243,7 +276,7 @@
         };
     in
     with pkgs; {
-      devShells = {
+      devShells = (templates.devShells."${system}") // {
         default = mkShell {
           # NOTE: some of these packages are included in the common home
           # manager module, but they are also included here in case this is
@@ -270,15 +303,6 @@
             nixpkgs-fmt
             gnumake
           ];
-        };
-
-        go = mkShell { name = "go"; packages = [ go gopls gow ]; };
-        go118 = mkShell { name = "go-1.18"; packages = [ go_1_18 gopls gow ]; };
-        rust = mkShell {
-          packages = [ cargo cargo-watch rustc rustfmt rust-analyzer ];
-          shellHook = ''
-            export RUST_SRC_PATH="${rust.packages.stable.rustPlatform.rustLibSrc}"
-          '';
         };
       };
 

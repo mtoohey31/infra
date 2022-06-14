@@ -240,6 +240,58 @@
         "type": "github"
       }
     },
+    "go": {
+      "inputs": {
+        "gow-src": [
+          "templates",
+          "gow-src"
+        ],
+        "nixpkgs": [
+          "templates",
+          "nixpkgs"
+        ],
+        "utils": [
+          "templates",
+          "utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-4THLrKcrxRNq5yZBu7uIQGkKiKSfxjcoEUrC6H4ON00=",
+        "path": "/nix/store/zndr9g66sfplm0va57vz5wd0z7i8lnwm-source/go",
+        "type": "path"
+      },
+      "original": {
+        "path": "/nix/store/zndr9g66sfplm0va57vz5wd0z7i8lnwm-source/go",
+        "type": "path"
+      }
+    },
+    "go118": {
+      "inputs": {
+        "gow-src": [
+          "templates",
+          "gow-src"
+        ],
+        "nixpkgs": [
+          "templates",
+          "nixpkgs"
+        ],
+        "utils": [
+          "templates",
+          "utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-a9mj0NvjbKZUUYQTI7XJfnvo9iLgacly3kNfvO45T5M=",
+        "path": "/nix/store/zndr9g66sfplm0va57vz5wd0z7i8lnwm-source/go118",
+        "type": "path"
+      },
+      "original": {
+        "path": "/nix/store/zndr9g66sfplm0va57vz5wd0z7i8lnwm-source/go118",
+        "type": "path"
+      }
+    },
     "gow": {
       "flake": false,
       "locked": {
@@ -340,16 +392,15 @@
     "naersk": {
       "inputs": {
         "nixpkgs": [
-          "rnix-lsp",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1639947939,
-        "narHash": "sha256-pGsM8haJadVP80GFq4xhnSpNitYNQpaXk4cnA796Cso=",
+        "lastModified": 1655042882,
+        "narHash": "sha256-9BX8Fuez5YJlN7cdPO63InoyBy7dm3VlJkkmTt6fS1A=",
         "owner": "nix-community",
         "repo": "naersk",
-        "rev": "2fc8ce9d3c025d59fee349c1f80be9785049d653",
+        "rev": "cddffb5aa211f50c4b8750adbec0bbbdfb26bb9f",
         "type": "github"
       },
       "original": {
@@ -472,6 +523,72 @@
         "type": "github"
       }
     },
+    "nixpkgs-mozilla": {
+      "locked": {
+        "lastModified": 1650459918,
+        "narHash": "sha256-sroCK+QJTmoXtcRkwZyKOP9iAYOPID2Bwdxn4GkG16w=",
+        "owner": "mozilla",
+        "repo": "nixpkgs-mozilla",
+        "rev": "e1f7540fc0a8b989fb8cf701dc4fd7fc76bcf168",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mozilla",
+        "repo": "nixpkgs-mozilla",
+        "type": "github"
+      }
+    },
+    "poetry2nix": {
+      "inputs": {
+        "flake-utils": [
+          "templates",
+          "utils"
+        ],
+        "nixpkgs": [
+          "templates",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1655106322,
+        "narHash": "sha256-X7oWgty5uKYYTg7n6gut/lShi1X5QxiOfLQNHyJ5LaM=",
+        "owner": "nix-community",
+        "repo": "poetry2nix",
+        "rev": "347ccb4ce58e7af1ece3f9743019263c4aede7b8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "poetry2nix",
+        "type": "github"
+      }
+    },
+    "python": {
+      "inputs": {
+        "nixpkgs": [
+          "templates",
+          "nixpkgs"
+        ],
+        "poetry2nix": [
+          "templates",
+          "poetry2nix"
+        ],
+        "utils": [
+          "templates",
+          "utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-tG9MJoARoi75uiOL7RGwxXmm/TCGJ72kJEeSLuIfe/I=",
+        "path": "/nix/store/zndr9g66sfplm0va57vz5wd0z7i8lnwm-source/python",
+        "type": "path"
+      },
+      "original": {
+        "path": "/nix/store/zndr9g66sfplm0va57vz5wd0z7i8lnwm-source/python",
+        "type": "path"
+      }
+    },
     "qbpm": {
       "inputs": {
         "flake-utils": [
@@ -513,7 +630,9 @@
     },
     "rnix-lsp": {
       "inputs": {
-        "naersk": "naersk",
+        "naersk": [
+          "naersk"
+        ],
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -549,6 +668,7 @@
         "helix": "helix",
         "home-manager": "home-manager",
         "kmonad": "kmonad",
+        "naersk": "naersk",
         "nix-on-droid": "nix-on-droid",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
@@ -556,9 +676,66 @@
         "qutewal": "qutewal",
         "rnix-lsp": "rnix-lsp",
         "sops-nix": "sops-nix",
+        "templates": "templates",
         "uncommitted-go": "uncommitted-go",
         "utils": "utils_3",
         "vimv2": "vimv2"
+      }
+    },
+    "rust-bin": {
+      "inputs": {
+        "naersk": [
+          "templates",
+          "naersk"
+        ],
+        "nixpkgs": [
+          "templates",
+          "nixpkgs"
+        ],
+        "nixpkgs-mozilla": [
+          "templates",
+          "nixpkgs-mozilla"
+        ],
+        "utils": [
+          "templates",
+          "utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-VjSOu8vV7Q8+ZsWfo7Fp5rCkdGm3/4iX4HDUdanukSk=",
+        "path": "/nix/store/zndr9g66sfplm0va57vz5wd0z7i8lnwm-source/rust-bin",
+        "type": "path"
+      },
+      "original": {
+        "path": "/nix/store/zndr9g66sfplm0va57vz5wd0z7i8lnwm-source/rust-bin",
+        "type": "path"
+      }
+    },
+    "rust-lib": {
+      "inputs": {
+        "nixpkgs": [
+          "templates",
+          "nixpkgs"
+        ],
+        "nixpkgs-mozilla": [
+          "templates",
+          "nixpkgs-mozilla"
+        ],
+        "utils": [
+          "templates",
+          "utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-kWxamsPIOI4iNoUcISkHQZE2TGdKXUKDjLABWK8xNn8=",
+        "path": "/nix/store/zndr9g66sfplm0va57vz5wd0z7i8lnwm-source/rust-lib",
+        "type": "path"
+      },
+      "original": {
+        "path": "/nix/store/zndr9g66sfplm0va57vz5wd0z7i8lnwm-source/rust-lib",
+        "type": "path"
       }
     },
     "rust-overlay": {
@@ -602,6 +779,42 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "templates": {
+      "inputs": {
+        "go": "go",
+        "go118": "go118",
+        "gow-src": [
+          "gow"
+        ],
+        "naersk": [
+          "naersk"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-mozilla": "nixpkgs-mozilla",
+        "poetry2nix": "poetry2nix",
+        "python": "python",
+        "rust-bin": "rust-bin",
+        "rust-lib": "rust-lib",
+        "utils": [
+          "utils"
+        ]
+      },
+      "locked": {
+        "lastModified": 1655172389,
+        "narHash": "sha256-/BL5PidOjCPuLlnuoHSQG1zl/WawiudhjvUSvP9CzXM=",
+        "owner": "mtoohey31",
+        "repo": "templates",
+        "rev": "06b384486050e766f85af902e51cc963fe0bed8a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mtoohey31",
+        "repo": "templates",
         "type": "github"
       }
     },

@@ -104,9 +104,7 @@ with lib; {
                       set dir (cat $tmp)
                       rm -f $tmp
                       if test -d "$dir"
-                          if test "$dir" != (pwd)
-                              cd $dir
-                          end
+                          cd $dir
                       end
                   end
                 '';

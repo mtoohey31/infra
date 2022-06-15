@@ -333,16 +333,15 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1654638872,
-        "narHash": "sha256-9NOO4sB+CIl6Fdj4/udvKwYUmbD8eSGbZqxUWZ52lZc=",
+        "lastModified": 1655260781,
+        "narHash": "sha256-OOlZJi+l1Ic9bb0MBm6tc6nlnlhxBCNNINuIgtZw3rk=",
         "owner": "mtoohey31",
         "repo": "helix",
-        "rev": "274746e29bd917c50b7a02e85b834fe7b1a90a92",
+        "rev": "14670ab321a731e20fc43e6c3ee998be57d0f24e",
         "type": "github"
       },
       "original": {
         "owner": "mtoohey31",
-        "ref": "feat/widechar-aware-vertical-move",
         "repo": "helix",
         "type": "github"
       }

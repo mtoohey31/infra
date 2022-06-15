@@ -78,7 +78,7 @@
       flake = false;
     };
     helix = {
-      url = "github:mtoohey31/helix/feat/widechar-aware-vertical-move";
+      url = "github:mtoohey31/helix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "utils";

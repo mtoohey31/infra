@@ -359,6 +359,20 @@ with lib; {
                   normal = "block";
                   select = "underline";
                 };
+                status-line = {
+                  left = [
+                    "file-name"
+                    "scope"
+                    "spinner"
+                  ];
+                  right = [
+                    "diagnostics"
+                    "selections"
+                    "position"
+                    "file-encoding"
+                    "file-type"
+                  ];
+                };
               };
               keys.normal = clipboard_remaps // match_remaps // save_quit_remaps // {
                 n = [ "search_next" "align_view_center" ];

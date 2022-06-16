@@ -88,7 +88,10 @@ inputs:
     enable = true;
     keyboards.default = {
       device = "/dev/input/by-id/usb-ASUSTeK_Computer_Inc._N-KEY_Device-if02-event-kbd";
-      fallthrough = true;
+      defcfg = {
+        enable = true;
+        fallthrough = true;
+      };
       config = builtins.readFile ./default.kbd;
     };
   };

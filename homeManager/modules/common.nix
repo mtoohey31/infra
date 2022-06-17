@@ -326,6 +326,12 @@ with lib; {
           languages = [{ name = "nix"; auto-format = true; }];
           settings =
             let
+              centering_remaps = {
+                m.m = [ "match_brackets" "align_view_center" ];
+                M = [ "match_brackets" "align_view_center" ];
+                "(" = [ "rotate_selections_backward" "align_view_center" ];
+                ")" = [ "rotate_selections_forward" "align_view_center" ];
+              };
               clipboard_remaps = rec {
                 p = "paste_clipboard_after";
                 P = "paste_clipboard_before";
@@ -338,9 +344,6 @@ with lib; {
                 "A-d" = "delete_selection";
                 R = "replace_selections_with_clipboard";
                 "A-R" = "replace_with_yanked";
-              };
-              match_remaps = {
-                M = "match_brackets";
               };
               save_quit_remaps = {
                 Q = ":quit!";
@@ -374,7 +377,7 @@ with lib; {
                   ];
                 };
               };
-              keys.normal = clipboard_remaps // match_remaps // save_quit_remaps // {
+              keys.normal = centering_remaps // clipboard_remaps // save_quit_remaps // {
                 n = [ "search_next" "align_view_center" ];
                 N = [ "search_prev" "align_view_center" ];
                 # TODO: debug why mode changes don't take effect until after the whole binding sequence
@@ -390,7 +393,10 @@ with lib; {
                 g."A-F" = ":set-option auto-format false";
                 G = "goto_last_line";
               };
-              keys.select = clipboard_remaps // match_remaps // save_quit_remaps;
+              keys.select = centering_remaps // clipboard_remaps // save_quit_remaps // {
+                n = [ "extend_search_next" "align_view_center" ];
+                N = [ "extend_search_prev" "align_view_center" ];
+              };
             };
         };
         # TODO: get lf working more smoothly with direnv so I don't have to do the q c-f dance

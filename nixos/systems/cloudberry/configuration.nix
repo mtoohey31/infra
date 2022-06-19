@@ -33,7 +33,6 @@ inputs:
   sops.secrets.home_assistant_secrets = {
     owner = config.users.users.hass.name;
     inherit (config.users.users.hass) group;
-    sopsFile = ./secrets.yaml;
   };
   systemd.services.home-assistant.preStart = ''
     rm -f ${config.services.home-assistant.configDir}/secrets.yaml

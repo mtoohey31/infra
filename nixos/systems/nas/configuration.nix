@@ -26,17 +26,14 @@ let inherit (config.local.primary-user) username; in
     github_token = {
       owner = username;
       group = username;
-      sopsFile = ./secrets.yaml;
     };
     hourly_cron_script = {
       owner = username;
       group = username;
-      sopsFile = ./secrets.yaml;
     };
     post_gickup_script = {
       owner = username;
       group = username;
-      sopsFile = ./secrets.yaml;
     };
   };
   services = {

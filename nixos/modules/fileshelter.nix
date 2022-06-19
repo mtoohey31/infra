@@ -3,7 +3,6 @@ _:
 
 let
   cfg = config.local.fileshelter;
-  inherit (config.networking) hostName;
 in
 with lib; {
   options.local.fileshelter.enable = mkOption {
@@ -15,7 +14,6 @@ with lib; {
     sops.secrets.cloudflare_config = {
       owner = config.users.users.caddy.name;
       inherit (config.users.users.caddy) group;
-      sopsFile = ../systems + "/${hostName}/secrets.yaml";
     };
     services.caddy = {
       enable = true;

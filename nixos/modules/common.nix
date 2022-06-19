@@ -3,7 +3,6 @@ inputs:
 
 let
   cfg = config.local.common;
-  inherit (config.networking) hostName;
 in
 with lib; {
   options.local.common.enable = mkOption {
@@ -33,10 +32,7 @@ with lib; {
 
     system.stateVersion = "21.11";
 
-    sops.secrets.root_password = {
-      neededForUsers = true;
-      sopsFile = ../systems + "/${hostName}/secrets.yaml";
-    };
+    sops.secrets.root_password.neededForUsers = true;
     users.users.root.passwordFile = config.sops.secrets.root_password.path;
 
     nix.gc = {

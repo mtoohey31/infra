@@ -35,10 +35,7 @@ with lib; {
 
   config = mkIf cfg.enable
     {
-      sops.secrets.user_password = {
-        neededForUsers = true;
-        sopsFile = ../systems + "/${hostName}/secrets.yaml";
-      };
+      sops.secrets.user_password.neededForUsers = true;
 
       users = {
         groups."${cfg.username}".gid = 1000;
@@ -56,10 +53,12 @@ with lib; {
 
       home-manager = mkIf (cfg.homeManagerCfg != null) {
         users."${cfg.username}" = { ... }@args:
-          let mergedCfg = (lib.mkMerge [
-            { local.ssh = { inherit hostName; }; }
-            (cfg.homeManagerCfg args)
-          ]); in
+          let
+            mergedCfg = (lib.mkMerge [
+              { local.ssh = { inherit hostName; }; }
+              (cfg.homeManagerCfg args)
+            ]);
+          in
           mergedCfg // {
             imports = (builtins.attrValues inputs.homeManagerModules)
             ++ (mergedCfg.imports or [ ]);

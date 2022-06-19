@@ -29,7 +29,7 @@ with lib; {
   };
 
   config = mkIf cfg.enable {
-    sops.secrets.wg_private_key.sopsFile = ../systems + "/${hostName}/secrets.yaml";
+    sops.secrets.wg_private_key = { };
 
     networking.wg-quick.interfaces.wg0 = let inherit (config.local.secrets.systems) vps; in
       {

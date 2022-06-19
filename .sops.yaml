@@ -1,6 +1,7 @@
 keys:
   - &zephyrus age103tjnlluc3q3c36y4t7yp32l2lgculhd0uqnmv9va55w8g5pf3ps5nlya0
   - &cloudberry age1hl03u9als55wk83my8crjal72caevk24d8d9ly4wuu2pu5u5t3hsj5sdeq
+  - &nas age1mexanjsnx60xcrjuzwlf7n5696l8t7q58hetnyfj652037jk8qzqhpyp4t
 creation_rules:
   - path_regex: ^nixos/systems/zephyrus/secrets\.yaml$
     key_groups:
@@ -11,3 +12,8 @@ creation_rules:
     - age:
       - *zephyrus
       - *cloudberry
+  - path_regex: ^nixos/systems/nas/secrets\.yaml$
+    key_groups:
+    - age:
+      - *zephyrus
+      - *nas

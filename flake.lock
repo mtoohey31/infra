@@ -219,6 +219,22 @@
         "type": "github"
       }
     },
+    "gickup": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1652785927,
+        "narHash": "sha256-rcSb2tMyROgG8Av2aco1scHgOQni9Izk1SheAIRhS8s=",
+        "owner": "cooperspencer",
+        "repo": "gickup",
+        "rev": "510e234e52ae018df12024259c4ad15c0cd3234a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cooperspencer",
+        "repo": "gickup",
+        "type": "github"
+      }
+    },
     "git-crypt-agessh": {
       "inputs": {
         "nixpkgs": [
@@ -661,6 +677,7 @@
         "fuzzel": "fuzzel",
         "g14-patches": "g14-patches",
         "gemoji": "gemoji",
+        "gickup": "gickup",
         "git-crypt-agessh": "git-crypt-agessh",
         "gow": "gow",
         "harpoond": "harpoond",

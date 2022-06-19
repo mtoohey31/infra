@@ -9,6 +9,9 @@ with pkgs;
     fuzzel-src = inputs.fuzzel;
     inherit (pkgs) fuzzel;
   };
+  gickup = callPackage ./applications/backup/gickup {
+    gickup-src = inputs.gickup;
+  };
   gow = callPackage ./development/tools/gow {
     gow-src = inputs.gow;
   };

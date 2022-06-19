@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "harpoond";
-  version = "0.1.0";
+  version = src.shortRev;
   src = harpoond-src;
   nativeBuildInputs = [ pkg-config libusb ];
   installPhase = ''

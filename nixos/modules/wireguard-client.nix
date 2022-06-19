@@ -17,6 +17,11 @@ with lib; {
       default = true;
     };
 
+    routeAll = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
     address = mkOption {
       type = types.str;
       default = config.local.secrets.systems."${hostName}".wg_ip + "/24";
@@ -36,7 +41,7 @@ with lib; {
         listenPort = vps.wg_port;
         peers = [
           ({
-            allowedIPs = [ "0.0.0.0/0" "::/0" ];
+            allowedIPs = if cfg.routeAll then [ "0.0.0.0/0" "::/0" ] else [ "10.0.0.0/8" ];
 
             endpoint = "${vps.public_ip}:${builtins.toString vps.wg_port}";
             publicKey = vps.wg_public_key;

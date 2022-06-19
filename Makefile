@@ -23,7 +23,7 @@ nixos:
 
 # TODO: test this with an iso
 install-nixos:
-	nixos-install --flake .#nixosConfigurations."$${INFRA_SYSTEM:-$$HOSTNAME}"	
+	nixos-install --flake .#"$${INFRA_SYSTEM:-$$HOSTNAME}"
 
 darwin:
 	$(KITTY_TERMFIX)darwin-rebuild switch --flake .#

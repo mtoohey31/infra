@@ -69,6 +69,10 @@
       url = "github:github/gemoji";
       flake = false;
     };
+    gickup = {
+      url = "github:cooperspencer/gickup";
+      flake = false;
+    };
     gow = {
       url = "github:mitranim/gow";
       flake = false;
@@ -199,6 +203,16 @@
             (nixpkgs + "/nixos/modules/installer/sd-card/sd-image-aarch64.nix")
           ];
           system = "aarch64-linux";
+        };
+        nas = nixpkgs.lib.nixosSystem {
+          modules = (builtins.attrValues self.nixosModules) ++ [
+            {
+              networking.hostName = "nas";
+              nixpkgs.overlays = builtins.attrValues self.overlays;
+            }
+            (import ./nixos/systems/nas/configuration.nix)
+          ];
+          system = "x86_64-linux";
         };
         zephyrus =
           nixpkgs.lib.nixosSystem

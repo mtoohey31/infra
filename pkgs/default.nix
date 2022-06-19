@@ -4,6 +4,9 @@ with pkgs;
 
 {
   caddy-cloudflare = callPackage ./servers/caddy { };
+  fan2go = callPackage ./os-specific/linux/fan2go {
+    fan2go-src = inputs.fan2go;
+  };
   fileshelter = callPackage ./servers/web-apps/fileshelter { };
   fuzzel = callPackage ./applications/misc/fuzzel {
     fuzzel-src = inputs.fuzzel;

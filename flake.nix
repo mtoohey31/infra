@@ -56,6 +56,10 @@
         flake-utils.follows = "utils";
       };
     };
+    fan2go = {
+      url = "github:markusressel/fan2go";
+      flake = false;
+    };
     fuzzel = {
       # TODO: update once next release hits nixpkgs
       url = "git+https://codeberg.org/dnkl/fuzzel";

@@ -140,6 +140,22 @@
         "type": "github"
       }
     },
+    "fan2go": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1654706749,
+        "narHash": "sha256-+HdRMHA0TRykMIOZX2wmH3yY9lJtaUHLfhVz3aJ8jXY=",
+        "owner": "markusressel",
+        "repo": "fan2go",
+        "rev": "1075b7bee363586cb50c9d47dd80015c53822a6d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "markusressel",
+        "repo": "fan2go",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1642700792,
@@ -674,6 +690,7 @@
       "inputs": {
         "cogitri": "cogitri",
         "darwin": "darwin",
+        "fan2go": "fan2go",
         "fuzzel": "fuzzel",
         "g14-patches": "g14-patches",
         "gemoji": "gemoji",

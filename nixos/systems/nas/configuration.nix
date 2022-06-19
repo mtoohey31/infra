@@ -5,6 +5,137 @@ let inherit (config.local.primary-user) username; in
   imports = [ ./hardware-configuration.nix ];
 
   local = {
+    fan2go = {
+      enable = true;
+      config = {
+        api = {
+          enabled = false;
+          host = "localhost";
+          port = 9001;
+        };
+        controllerAdjustmentTickRate = "200ms";
+        curves = [
+          {
+            id = "cpu_curve";
+            linear = {
+              sensor = "cpu_package";
+              steps = [
+                {
+                  "45" = 0;
+                }
+                {
+                  "55" = 50;
+                }
+                {
+                  "80" = 255;
+                }
+              ];
+            };
+          }
+          {
+            id = "gpu_curve";
+            linear = {
+              sensor = "gpu";
+              steps = [
+                {
+                  "45" = 0;
+                }
+                {
+                  "55" = 50;
+                }
+                {
+                  "80" = 255;
+                }
+              ];
+            };
+          }
+        ];
+        dbPath = "/var/db/fan2go/fan2go.db";
+        fans = [
+          {
+            curve = "gpu_curve";
+            hwmon = {
+              index = 1;
+              platform = "corsaircpro";
+            };
+            id = "front_bottom";
+            neverStop = false;
+            startPwm = 30;
+          }
+          {
+            curve = "cpu_curve";
+            hwmon = {
+              index = 2;
+              platform = "corsaircpro";
+            };
+            id = "front_middle";
+            neverStop = false;
+          }
+          {
+            curve = "cpu_curve";
+            hwmon = {
+              index = 3;
+              platform = "corsaircpro";
+            };
+            id = "front_top";
+            neverStop = false;
+          }
+          {
+            curve = "cpu_curve";
+            hwmon = {
+              index = 4;
+              platform = "corsaircpro";
+            };
+            id = "top_front";
+            neverStop = false;
+          }
+          {
+            curve = "cpu_curve";
+            hwmon = {
+              index = 5;
+              platform = "corsaircpro";
+            };
+            id = "top_back";
+            neverStop = false;
+          }
+          {
+            curve = "gpu_curve";
+            hwmon = {
+              index = 6;
+              platform = "corsaircpro";
+            };
+            id = "back";
+            neverStop = false;
+          }
+        ];
+        maxRpmDiffForSettledFan = 10;
+        rpmPollingRate = "1s";
+        rpmRollingWindowSize = 10;
+        runFanInitializationInParallel = false;
+        sensors = [
+          {
+            hwmon = {
+              index = 1;
+              platform = "coretemp";
+            };
+            id = "cpu_package";
+          }
+          {
+            hwmon = {
+              index = 1;
+              platform = "nouveau";
+            };
+            id = "gpu";
+          }
+        ];
+        statistics = {
+          enabled = false;
+          port = 9000;
+        };
+        tempRollingWindowSize = 10;
+        tempSensorPollingRate = "200ms";
+      };
+    };
     primary-user.homeManagerCfg = { ... }: { };
     sops.enable = true;
     ssh.authorizedHosts = [ "air" "pixel" "zephyrus" ];
@@ -20,23 +151,10 @@ let inherit (config.local.primary-user) username; in
     };
   };
 
-  hardware.fancontrol = {
-    enable = true;
-    config = ''
-      INTERVAL=2
-      DEVPATH=hwmon0=devices/pci0000:00/0000:00:14.0/usb1/1-12/1-12:1.0/0003:1B1C:0C10.0001
-      DEVNAME=hwmon2=coretemp hwmon0=corsaircpro
-      FCTEMPS=hwmon0/pwm1=hwmon2/temp1_input hwmon0/pwm2=hwmon2/temp1_input hwmon0/pwm3=hwmon2/temp1_input hwmon0/pwm4=hwmon2/temp1_input hwmon0/pwm5=hwmon2/temp1_input hwmon0/pwm6=hwmon2/temp1_input
-      FCFANS=hwmon0/pwm1=hwmon0/fan1_input hwmon0/pwm2=hwmon0/fan2_input hwmon0/pwm3=hwmon0/fan3_input hwmon0/pwm4=hwmon0/fan4_input hwmon0/pwm5=hwmon0/fan5_input hwmon0/pwm6=hwmon0/fan6_input
-      MINTEMP=hwmon0/pwm1=50 hwmon0/pwm2=50 hwmon0/pwm3=50 hwmon0/pwm4=50 hwmon0/pwm5=50 hwmon0/pwm6=50
-      MAXTEMP=hwmon0/pwm1=75 hwmon0/pwm2=75 hwmon0/pwm3=75 hwmon0/pwm4=75 hwmon0/pwm5=75 hwmon0/pwm6=75
-      MINSTART=hwmon0/pwm1=32 hwmon0/pwm2=32 hwmon0/pwm3=32 hwmon0/pwm4=32 hwmon0/pwm5=32 hwmon0/pwm6=32
-      MINSTOP=hwmon0/pwm1=2 hwmon0/pwm2=2 hwmon0/pwm3=2 hwmon0/pwm4=2 hwmon0/pwm5=2 hwmon0/pwm6=2
-      MINPWM=hwmon0/pwm1=0 hwmon0/pwm2=0 hwmon0/pwm3=0 hwmon0/pwm4=0 hwmon0/pwm5=0 hwmon0/pwm6=0
-    '';
+  networking = {
+    hostId = "977b87b2";
+    interfaces.enp0s31f6.wakeOnLan.enable = true;
   };
-
-  networking.hostId = "977b87b2";
 
   sops.secrets = {
     github_token = {

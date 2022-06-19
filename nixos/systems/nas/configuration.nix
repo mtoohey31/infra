@@ -20,6 +20,22 @@ let inherit (config.local.primary-user) username; in
     };
   };
 
+  hardware.fancontrol = {
+    enable = true;
+    config = ''
+      INTERVAL=2
+      DEVPATH=hwmon0=devices/pci0000:00/0000:00:14.0/usb1/1-12/1-12:1.0/0003:1B1C:0C10.0001
+      DEVNAME=hwmon2=coretemp hwmon0=corsaircpro
+      FCTEMPS=hwmon0/pwm1=hwmon2/temp1_input hwmon0/pwm2=hwmon2/temp1_input hwmon0/pwm3=hwmon2/temp1_input hwmon0/pwm4=hwmon2/temp1_input hwmon0/pwm5=hwmon2/temp1_input hwmon0/pwm6=hwmon2/temp1_input
+      FCFANS=hwmon0/pwm1=hwmon0/fan1_input hwmon0/pwm2=hwmon0/fan2_input hwmon0/pwm3=hwmon0/fan3_input hwmon0/pwm4=hwmon0/fan4_input hwmon0/pwm5=hwmon0/fan5_input hwmon0/pwm6=hwmon0/fan6_input
+      MINTEMP=hwmon0/pwm1=50 hwmon0/pwm2=50 hwmon0/pwm3=50 hwmon0/pwm4=50 hwmon0/pwm5=50 hwmon0/pwm6=50
+      MAXTEMP=hwmon0/pwm1=75 hwmon0/pwm2=75 hwmon0/pwm3=75 hwmon0/pwm4=75 hwmon0/pwm5=75 hwmon0/pwm6=75
+      MINSTART=hwmon0/pwm1=32 hwmon0/pwm2=32 hwmon0/pwm3=32 hwmon0/pwm4=32 hwmon0/pwm5=32 hwmon0/pwm6=32
+      MINSTOP=hwmon0/pwm1=2 hwmon0/pwm2=2 hwmon0/pwm3=2 hwmon0/pwm4=2 hwmon0/pwm5=2 hwmon0/pwm6=2
+      MINPWM=hwmon0/pwm1=0 hwmon0/pwm2=0 hwmon0/pwm3=0 hwmon0/pwm4=0 hwmon0/pwm5=0 hwmon0/pwm6=0
+    '';
+  };
+
   networking.hostId = "977b87b2";
 
   sops.secrets = {

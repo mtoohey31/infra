@@ -1,5 +1,5 @@
 _:
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.local.wireguard-client;
@@ -39,6 +39,9 @@ with lib; {
           "1.0.0.1"
         ];
         listenPort = vps.wg_port;
+        # to ensure the connection is started; persistentKeepalive will keep
+        # things going from here
+        postUp = mkIf (!cfg.routeAll) "${pkgs.iputils}/bin/ping -c 1 10.0.0.1";
         peers = [
           ({
             allowedIPs = if cfg.routeAll then [ "0.0.0.0/0" "::/0" ] else [ "10.0.0.0/8" ];

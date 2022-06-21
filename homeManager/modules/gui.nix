@@ -135,8 +135,6 @@ with lib; {
           keybindings = {
             "shift+enter" = "send_text all \\x1b[13;2u";
             "ctrl+enter" = "send_text all \\x1b[13;5u";
-            "ctrl+l" =
-              "combine : clear_terminal scrollback active : send_text normal,application \\x0c";
             "ctrl+shift+f" = "launch --location=hsplit --allow-remote-control kitty +kitten ${fetchTarball {
             url = "https://github.com/trygveaa/kitty-kitten-search/archive/8cc3237e6a995b6e7e101cba667fcda5439d96e2.tar.gz";
             sha256 = "0h4zryamysalv80dgdwrlfqanx45xl7llmlmag0limpa3mqs0hs3";

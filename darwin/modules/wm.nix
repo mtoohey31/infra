@@ -27,12 +27,12 @@ with lib; {
             ${mod} + shift - l : (yabai -m window --swap east && sleep 0.1 && yabai -m window --focus mouse && sleep 0.1 && yabai -m window --focus recent) || (yabai -m display --focus east && sleep 0.1 && yabai -m window --swap recent && yabai -m window --focus recent)
 
             ${mod} + shift - tab : yabai -m window --toggle float
-            ${mod} - return : osascript -e 'if application "iTerm2" is running then' -e 'tell application "iTerm2" to create window with default profile' -e 'else' -e 'tell application "iTerm2" to activate' -e 'end if'
+            ${mod} - return : pgrep kitty && ${pkgs.kitty}/bin/kitty @ --to unix:/tmp/kitty launch --type os-window || open -a kitty --args --listen-on unix:/tmp/kitty
 
             ${mod} + shift - b : yabai -m space --balance
             ${mod} + shift - y : launchctl kickstart -k gui/501/org.nixos.yabai
 
-            ${mod} - 0x2C : osascript -e 'tell application "iTerm2" to create window with default profile command "${pkgs.fish}/bin/fish -C lf"'
+            ${mod} - 0x2C : pgrep kitty && ${pkgs.kitty}/bin/kitty @ --to unix:/tmp/kitty launch --type os-window fish -C lf || open -a kitty --args --listen-on unix:/tmp/kitty fish -C lf
             ${mod} + shift - 0x2C : open ~
           '';
         };

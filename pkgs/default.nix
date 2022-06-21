@@ -22,6 +22,9 @@ with pkgs;
     harpoond-src = inputs.harpoond;
   };
   helix = inputs.helix.defaultPackage."${pkgs.system}";
+  kitty = callPackage ./applications/terminal-emulators/kitty {
+    inherit (pkgs) kitty;
+  };
   plover = pkgs.plover // {
     wayland = callPackage ./tools/inputmethods/plover/wayland.nix { };
   };

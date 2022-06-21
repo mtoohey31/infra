@@ -11,11 +11,6 @@ with lib; {
 
   config =
     let
-      kittyPackage =
-        if pkgs.stdenv.hostPlatform.isDarwin then
-          (pkgs.kitty.overrideAttrs (_: {
-            doInstallCheck = false;
-          })) else pkgs.kitty;
       qutebrowserPrefix =
         if pkgs.stdenv.hostPlatform.isDarwin
         then "${config.home.homeDirectory}/.qutebrowser"
@@ -35,9 +30,7 @@ with lib; {
 
         ibm-plex
         (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-      ] ++ (if pkgs.stdenv.hostPlatform.isDarwin then [
-        iterm2
-      ] else [
+      ] ++ (lib.optionals (!pkgs.stdenv.hostPlatform.isDarwin) [
         nsxiv
         xdg-utils
 
@@ -54,10 +47,7 @@ with lib; {
 
       home.file = {
         Downloads.source = config.lib.file.mkOutOfStoreSymlink config.home.homeDirectory;
-      } // (pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin (qutebrowserUserscripts // {
-        "Library/Preferences/com.googlecode.iterm2.plist".source =
-          ./gui/com.googlecode.iterm2.plist;
-      }));
+      } // (pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin qutebrowserUserscripts);
       xdg = {
         configFile = (pkgs.lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isDarwin) qutebrowserUserscripts) // {
           "fontconfig/fonts.conf".source = ./gui/fonts.conf;
@@ -107,7 +97,7 @@ with lib; {
         brave.enable = (!pkgs.stdenv.hostPlatform.isDarwin); # TODO: get this working on darwin, see nixos/nixpkgs#98853
         fish = rec {
           functions = {
-            ssh = mkIf (!pkgs.stdenv.hostPlatform.isDarwin) {
+            ssh = {
               body = ''
                 if test "$TERM" = "xterm-kitty"
                   TERM=xterm-256color command ssh $argv
@@ -124,21 +114,23 @@ with lib; {
           shellAliases = shellAbbrs // { nsxiv = "nsxiv -a"; };
         };
         kitty = {
-          enable = !pkgs.stdenv.hostPlatform.isDarwin;
-          package = kittyPackage;
+          enable = true;
           environment = { SHLVL = "0"; };
           settings = {
-            cursor = "none";
-            cursor_text_color = "background";
-            cursor_blink_interval = 0;
-            window_padding_width = 8;
-            hide_window_decorations = true;
+            allow_remote_control = true;
             background_opacity = "0.8";
-            remember_window_size = false;
+            confirm_os_window_close = 0;
+            cursor = "none";
+            cursor_blink_interval = 0;
+            cursor_text_color = "background";
             enable_audio_bell = false;
-            update_check_interval = 0;
+            hide_window_decorations = true;
+            macos_thicken_font = "0.25";
             macos_quit_when_last_window_closed = true;
+            remember_window_size = false;
             touch_scroll_multiplier = 9;
+            update_check_interval = 0;
+            window_padding_width = 8;
           };
           keybindings = {
             "shift+enter" = "send_text all \\x1b[13;2u";
@@ -157,7 +149,7 @@ with lib; {
               italic_font JetBrainsMono Nerd Font Mono Italic
               bold_italic_font JetBrainsMono Nerd Font Mono Bold Italic
 
-              font_size 14
+              font_size 16
             '' else ''
               font_family JetBrains Mono Regular Nerd Font Complete
               bold_font JetBrains Mono Bold Nerd Font Complete
@@ -169,10 +161,7 @@ with lib; {
               include ${config.xdg.cacheHome}/wal/colors-kitty.conf
             '';
         };
-        lf.keybindings.gC =
-          if pkgs.stdenv.hostPlatform.isDarwin
-          then ''&osascript -e 'tell application "iTerm2" to create window with default profile command "${pkgs.fish}/bin/fish -C \'cd \"'"$PWD"'\" && lf\'"' &>/dev/null''
-          else "&kitty -e fish -C lf &>/dev/null &";
+        lf.keybindings.gC = "&kitty -e fish -C lf &>/dev/null &";
         mpv = {
           enable = true;
           config = {
@@ -259,28 +248,19 @@ with lib; {
               "<Return>" = "command-accept;; set statusbar.show never";
             };
           };
-          settings = let command_prefix =
-            if pkgs.stdenv.hostPlatform.isDarwin
-            then [
-              (builtins.toString (pkgs.writeShellScript "iterm2-exec" ''
-                tmp="$(mktemp)"
-                echo "$1" > "$tmp"
-                echo "rm '$tmp'" >> "$tmp"
-                echo "kill -CONT '$$'" >> "$tmp"
-                osascript -e 'tell application "iTerm2" to create window with default profile command "${pkgs.fish}/bin/fish '"$tmp"'"'
-                kill -STOP "$$"
-              ''))
-            ]
-            else [
-              "kitty"
-              "--title"
-              "floatme"
-              "-o"
-              "background_opacity=0.8"
-              "-e"
-              "fish"
-              "-c"
-            ]; in
+          settings =
+            let
+              command_prefix = [
+                "kitty"
+                "--title"
+                "floatme"
+                "-o"
+                "background_opacity=0.8"
+                "-e"
+                "fish"
+                "-c"
+              ];
+            in
             {
               auto_save.session = true;
               colors.webpage.preferred_color_scheme = "dark";

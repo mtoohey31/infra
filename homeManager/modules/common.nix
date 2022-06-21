@@ -165,7 +165,7 @@ with lib; {
               # bind -s -M normal yy 'commandline -f kill-whole-line; fish_clipboard_copy'
 
               bind -s -M insert \cf 'set old_tty (stty -g); stty sane; lfcd; stty $old_tty; commandline -f repaint'
-              bind -s -M insert \cl 'tput reset; commandline -f repaint'
+              bind -s -M insert \cl 'tput reset; test -n "$TMUX" && tmux clear-history; commandline -f repaint'
 
               set fish_cursor_default block
               set fish_cursor_insert line

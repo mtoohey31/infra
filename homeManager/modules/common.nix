@@ -396,6 +396,7 @@ with lib; {
                 G = "goto_last_line";
               };
               keys.select = centering_remaps // clipboard_remaps // save_quit_remaps // {
+                g.c = "toggle_comments";
                 n = [ "extend_search_next" "align_view_center" ];
                 N = [ "extend_search_prev" "align_view_center" ];
               };

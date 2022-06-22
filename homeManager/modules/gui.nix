@@ -124,8 +124,10 @@ with lib; {
             cursor_blink_interval = 0;
             cursor_text_color = "background";
             enable_audio_bell = false;
-            hide_window_decorations = true;
+            hide_window_decorations = "titlebar-only";
             macos_thicken_font = "0.25";
+            # TODO: swap this once new os windows can be launched without an
+            # existing one on macos properly
             macos_quit_when_last_window_closed = true;
             remember_window_size = false;
             touch_scroll_multiplier = 9;

@@ -1,9 +1,11 @@
 # TODO: configure terminal font and other settings
 # TODO: set up photo backups
 
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
+  environment.packages = [ pkgs.ncurses ];
+
   local.primary-user = {
     hostName = "pixel";
     homeManagerCfg = { config, ... }: {

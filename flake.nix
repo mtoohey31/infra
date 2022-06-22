@@ -258,7 +258,7 @@
 
       nixOnDroidConfigurations = {
         pixel = nix-on-droid.lib.nixOnDroidConfiguration rec {
-          config = import ./nixOnDroid/devices/pixel/configuration.nix (inputs // self);
+          config = import ./nixOnDroid/devices/pixel/configuration.nix;
           extraModules = (builtins.attrValues self.nixOnDroidModules) ++ [{
             environment.sessionVariables.INFRA_DEVICE = "pixel";
           }];

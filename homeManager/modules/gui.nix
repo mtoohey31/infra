@@ -251,7 +251,7 @@ with lib; {
           settings =
             let
               command_prefix = [
-                "kitty"
+                "${pkgs.kitty}/bin/kitty"
                 "--title"
                 "floatme"
                 "-o"

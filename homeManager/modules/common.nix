@@ -242,6 +242,7 @@ with lib; {
             bv = "!git --no-pager branch -vv";
             c = "commit";
             ca = "commit --amend";
+            cd = "reset --hard HEAD~";
             cap = "!git commit --amend && git push";
             cm = ''!f() { git commit --message "$*"; }; f'';
             can = "commit --amend --no-edit";

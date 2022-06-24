@@ -3,8 +3,7 @@ inputs:
 
 # TODO: fix needing to reload on startup
 
-let cfg = config.local.wm;
-in
+let cfg = config.local.wm; in
 with lib; {
   options.local.wm.enable = mkOption {
     type = types.bool;

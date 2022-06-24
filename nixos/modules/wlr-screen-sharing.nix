@@ -1,8 +1,7 @@
 _:
 { config, lib, ... }:
 
-let cfg = config.local.wlr-screen-sharing;
-in
+let cfg = config.local.wlr-screen-sharing; in
 with lib; {
   options.local.wlr-screen-sharing.enable = mkOption {
     type = types.bool;

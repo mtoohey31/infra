@@ -2,8 +2,7 @@
 _:
 { config, lib, pkgs, ... }:
 
-let cfg = config.local.arch-emu;
-in
+let cfg = config.local.arch-emu; in
 with lib; {
   options.local.arch-emu.aarch64.enable = mkOption {
     type = types.bool;

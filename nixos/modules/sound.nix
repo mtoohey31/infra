@@ -1,8 +1,7 @@
 _:
 { config, lib, ... }:
 
-let cfg = config.local.sound;
-in
+let cfg = config.local.sound; in
 with lib; {
   options.local.sound.enable = mkOption {
     type = types.bool;

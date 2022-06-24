@@ -1,7 +1,8 @@
 _:
 { config, lib, ... }:
 
-let cfg = config.local.ssh;
+let
+  cfg = config.local.ssh;
   inherit (config.local.secrets) systems;
 in
 with lib; {

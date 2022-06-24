@@ -1,8 +1,7 @@
 _:
 { config, lib, ... }:
 
-let cfg = config.local.bluetooth;
-in
+let cfg = config.local.bluetooth; in
 with lib; {
   options.local.bluetooth.enable = mkOption {
     type = types.bool;

@@ -1,8 +1,7 @@
 _:
 { config, lib, pkgs, ... }:
 
-let cfg = config.local.gaming;
-in
+let cfg = config.local.gaming; in
 with lib; {
   options.local.gaming.enable = mkOption {
     type = types.bool;

@@ -5,7 +5,8 @@ _:
 # it's ~/.config/glib-2.0/settings/keyfile, but other things use that file too,
 # so I'm not sure how I can set make it read only with out breaking other stuff
 
-let cfg = config.local.virtualisation;
+let
+  cfg = config.local.virtualisation;
   inherit (config.local.primary-user) username;
 in
 with lib; {

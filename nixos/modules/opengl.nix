@@ -1,8 +1,7 @@
 _:
 { config, lib, ... }:
 
-let cfg = config.local.opengl;
-in
+let cfg = config.local.opengl; in
 with lib; {
   options.local.opengl.enable = mkOption {
     type = types.bool;

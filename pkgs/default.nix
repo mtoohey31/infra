@@ -1,8 +1,5 @@
 inputs: pkgs:
-
-with pkgs;
-
-{
+let inherit (pkgs) callPackage; in {
   caddy-cloudflare = callPackage ./servers/caddy { };
   fan2go = callPackage ./os-specific/linux/fan2go {
     fan2go-src = inputs.fan2go;

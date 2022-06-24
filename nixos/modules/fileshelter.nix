@@ -1,9 +1,7 @@
 _:
 { config, lib, ... }:
 
-let
-  cfg = config.local.fileshelter;
-in
+let cfg = config.local.fileshelter; in
 with lib; {
   options.local.fileshelter.enable = mkOption {
     type = types.bool;

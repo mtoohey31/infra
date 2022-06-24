@@ -1,8 +1,7 @@
 _:
 { config, lib, pkgs, ... }:
 
-let cfg = config.local.devel;
-in
+let cfg = config.local.devel; in
 with lib; {
   options.local.devel.enable = mkOption {
     type = types.bool;

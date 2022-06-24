@@ -1,8 +1,7 @@
 inputs:
 { config, lib, pkgs, ... }:
 
-let cfg = config.local.common;
-in
+let cfg = config.local.common; in
 with lib; {
   options.local.common.enable = mkOption {
     type = types.bool;

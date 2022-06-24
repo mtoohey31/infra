@@ -1,8 +1,7 @@
 _:
 { config, lib, pkgs, ... }:
 
-let cfg = config.local.harpoond;
-in
+let cfg = config.local.harpoond; in
 with lib; {
   options.local.harpoond.enable = mkOption {
     type = types.bool;

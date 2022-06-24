@@ -1,5 +1,5 @@
 inputs:
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let cfg = config.local.common;
 in
@@ -11,12 +11,15 @@ with lib; {
 
   config = mkIf cfg.enable {
     nix = {
-      nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-      package = pkgs.nixFlakes;
       extraOptions = ''
         experimental-features = nix-command flakes
         keep-outputs = true
       '';
+      gc = {
+        automatic = true;
+        options = "--delete-older-than 14d";
+      };
+      nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
     };
 
     home-manager = {

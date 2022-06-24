@@ -136,7 +136,10 @@ let inherit (config.local.primary-user) username; in
         tempSensorPollingRate = "200ms";
       };
     };
-    primary-user.homeManagerCfg = { ... }: { };
+    primary-user.homeManagerCfg = { config, ... }: {
+      home.file.music.source = config.lib.file.mkOutOfStoreSymlink
+        "/tank/media/music.git";
+    };
     sops.enable = true;
     ssh.authorizedHosts = [ "air" "pixel" "zephyrus" ];
     wireguard-client.routeAll = false;

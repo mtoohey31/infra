@@ -27,12 +27,12 @@ with lib; {
             ${mod} + shift - l : (yabai -m window --swap east && sleep 0.1 && yabai -m window --focus mouse && sleep 0.1 && yabai -m window --focus recent) || (yabai -m display --focus east && sleep 0.1 && yabai -m window --swap recent && yabai -m window --focus recent)
 
             ${mod} + shift - tab : yabai -m window --toggle float
-            ${mod} - return : pgrep kitty && ${pkgs.kitty}/bin/kitty @ --to unix:/tmp/kitty launch --type os-window || open -a ${pkgs.kitty}/Applications/kitty.app --args --listen-on unix:/tmp/kitty
+            ${mod} - return : ${pkgs.kitty-window}
 
             ${mod} + shift - b : yabai -m space --balance
             ${mod} + shift - y : launchctl kickstart -k gui/501/org.nixos.yabai
 
-            ${mod} - 0x2C : pgrep kitty && ${pkgs.kitty}/bin/kitty @ --to unix:/tmp/kitty launch --type os-window fish -C lf || open -a ${pkgs.kitty}/Applications/kitty.app --args --listen-on unix:/tmp/kitty fish -C lf
+            ${mod} - 0x2C : ${pkgs.kitty-window} fish -C lf
             ${mod} + shift - 0x2C : open ~
           '';
         };

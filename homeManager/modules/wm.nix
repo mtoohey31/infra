@@ -333,7 +333,7 @@ with lib; {
             size = 12.0;
           };
           modifier = "Mod4";
-          terminal = "kitty";
+          terminal = pkgs.kitty-window;
           gaps = {
             inner = 16;
             outer = -16;

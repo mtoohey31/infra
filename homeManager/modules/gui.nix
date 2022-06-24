@@ -161,7 +161,7 @@ with lib; {
               include ${config.xdg.cacheHome}/wal/colors-kitty.conf
             '';
         };
-        lf.keybindings.gC = "&kitty -e fish -C lf &>/dev/null &";
+        lf.keybindings.gC = "&${pkgs.kitty-window} fish -C lf &>/dev/null &";
         mpv = {
           enable = true;
           config = {
@@ -251,12 +251,9 @@ with lib; {
           settings =
             let
               command_prefix = [
-                "${pkgs.kitty}/bin/kitty"
+                "${pkgs.kitty-window}"
                 "--title"
                 "floatme"
-                "-o"
-                "background_opacity=0.8"
-                "-e"
                 "fish"
                 "-c"
               ];

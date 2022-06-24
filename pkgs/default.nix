@@ -1,6 +1,6 @@
 inputs: pkgs:
 let inherit (pkgs) callPackage; in
-{
+rec {
   caddy-cloudflare = callPackage ./servers/caddy { };
   fan2go = callPackage ./os-specific/linux/fan2go {
     fan2go-src = inputs.fan2go;
@@ -22,6 +22,9 @@ let inherit (pkgs) callPackage; in
   helix = inputs.helix.defaultPackage."${pkgs.system}";
   kitty = callPackage ./applications/terminal-emulators/kitty {
     inherit (pkgs) kitty;
+  };
+  kitty-window = callPackage ./applications/terminal-emulators/kitty-window {
+    inherit kitty;
   };
   plover = pkgs.plover // {
     wayland = callPackage ./tools/inputmethods/plover/wayland.nix { };

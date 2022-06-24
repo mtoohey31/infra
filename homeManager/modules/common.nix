@@ -235,6 +235,7 @@ with lib; {
             add = "add --verbose";
             b = "!git --no-pager branch";
             bd = "branch --delete";
+            bdd = "branch --delete --force";
             bm = "branch --move";
             br = "!git branch -m $(git rev-parse --abbrev-ref HEAD)";
             bs = "branch --set-upstream-to";
@@ -255,6 +256,7 @@ with lib; {
             ds = "diff --staged";
             dst = "diff --staged --stat";
             dt = "diff --stat";
+            dw = "diff --no-prefix --unified=99999999999999999";
             e = "rebase";
             ea = "rebase --abort";
             ec = "rebase --continue";
@@ -300,6 +302,7 @@ with lib; {
             t = "stash push --include-untracked";
             td = "stash drop";
             tl = "stash list";
+            tm = ''!f() { git stash push --include-untracked --message "$*"; }; f'';
             tp = "stash pop";
             tpp = "stash push --patch";
             ts = "stash show -p";

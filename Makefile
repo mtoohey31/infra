@@ -21,7 +21,6 @@ ci: format-check deadnix-check
 nixos:
 	nixos-rebuild switch --use-remote-sudo --flake .#
 
-# TODO: test this with an iso
 install-nixos:
 	nixos-install --flake .#"$${INFRA_SYSTEM:-$$HOSTNAME}"
 

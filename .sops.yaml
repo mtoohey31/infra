@@ -17,3 +17,7 @@ creation_rules:
     - age:
       - *zephyrus
       - *nas
+  - path_regex: ^secrets\.yaml$
+    key_groups:
+    - age:
+      - *zephyrus

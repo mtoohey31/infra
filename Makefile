@@ -1,4 +1,4 @@
-.PHONY: default install user nixos install-nixos darwin install-darwin droid cloudberry-image format format-check deadnix deadnix-check
+.PHONY: default install user nixos install-nixos darwin install-darwin droid cloudberry-image wireguard format format-check deadnix deadnix-check
 
 NIX_CMD = nix --extra-experimental-features nix-command --extra-experimental-features flakes
 
@@ -47,6 +47,13 @@ install-cloudberry-image:
 		sudo mount -o loop,offset="$$(("$$OFFSET"*512))" "$$TMP" "$$MOUNT" && sudo mkdir -p "$$MOUNT/home/$$USERNAME/.ssh" && \
 		sops -d --extract '["user_ssh_private_key"]' nixos/systems/cloudberry/secrets.yaml | sudo tee "$$MOUNT/home/$$USERNAME/.ssh/id_ed25519" >/dev/null && \
 		sudo umount "$$MOUNT" && sudo dd if="$$TMP" of="$$INFRA_OF" status=progress && sudo rm -rf "$$TMP" "$$MOUNT"
+
+wireguard:
+	test -n "$$INFRA_DEVICE" || exit 1
+	rm -f wireguard-export.zip
+	export TMP="$$(mktemp -d)" && nix eval --raw .#wireguardConfigurations."$$INFRA_DEVICE" | \
+		sed "s,@private-key@,$$(sops -d --extract "['$$INFRA_DEVICE']['wg_private_key']" secrets.yaml)," > "$$TMP/VPS.conf" && \
+		zip -j wireguard-export.zip "$$TMP/VPS.conf" && rm -rf "$$TMP"
 
 format:
 	nixpkgs-fmt .

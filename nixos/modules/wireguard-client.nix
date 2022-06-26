@@ -38,6 +38,7 @@ with lib; {
           "1.1.1.1"
           "1.0.0.1"
         ];
+        # TODO: mix these up
         listenPort = vps.wg_port;
         # to ensure the connection is started; persistentKeepalive will keep
         # things going from here

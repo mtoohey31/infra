@@ -285,6 +285,31 @@
         uncommitted-go = uncommitted-go.overlays.default;
         vimv2 = vimv2.overlay;
       };
+
+      wireguardConfigurations =
+        let
+          systems = (import ./secrets.nix).systems;
+          vps = systems.vps;
+          mkWgCfg = system: ''
+            [Interface]
+            PrivateKey = @private-key@
+            # TODO: mix these up
+            ListenPort = ${builtins.toString vps.wg_port}
+            Address = ${systems.${system}.wg_ip}/24
+            DNS = 1.1.1.1, 1.0.0.1
+
+            [Peer]
+            AllowedIPs = 0.0.0.0/0, ::/0
+            Endpoint = ${vps.public_ip}:${builtins.toString vps.wg_port}
+            PublicKey = ${vps.wg_public_key}
+          '';
+        in
+        builtins.listToAttrs (builtins.map
+          (system: {
+            name = system;
+            value = mkWgCfg system;
+          })
+          [ "ipad" "pixel" ]);
     } // (utils.lib.eachDefaultSystem (system:
     let
       pkgs =
@@ -307,6 +332,7 @@
             deadnix
             # TODO: integrate https://github.com/Mic92/nix-index-database
             nix-index
+            zip
 
             sops
             rage

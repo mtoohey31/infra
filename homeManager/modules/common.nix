@@ -271,6 +271,8 @@ with lib; {
             i = "init";
             k = "checkout";
             kb = "checkout -b";
+            kf = "checkout --force";
+            kbf = "checkout -b --force";
             l = "log";
             m = "remote --verbose";
             ma = "remote add";

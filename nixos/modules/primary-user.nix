@@ -24,7 +24,7 @@ with lib; {
 
     username = mkOption {
       type = types.str;
-      default = config.local.secrets.systems."${hostName}".username;
+      default = config.local.secrets.systems.${hostName}.username;
     };
 
     homeManagerCfg = mkOption {
@@ -38,8 +38,8 @@ with lib; {
       sops.secrets.user_password.neededForUsers = true;
 
       users = {
-        groups."${cfg.username}".gid = 1000;
-        users."${cfg.username}" = {
+        groups.${cfg.username}.gid = 1000;
+        users.${cfg.username} = {
           isNormalUser = true;
           uid = 1000;
           group = cfg.username;
@@ -52,7 +52,7 @@ with lib; {
       services.getty.autologinUser = mkIf cfg.autologin cfg.username;
 
       home-manager = mkIf (cfg.homeManagerCfg != null) {
-        users."${cfg.username}" = { ... }@args:
+        users.${cfg.username} = { ... }@args:
           let
             mergedCfg = (lib.mkMerge [
               { local.ssh = { inherit hostName; }; }

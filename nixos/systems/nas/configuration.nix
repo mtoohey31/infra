@@ -187,7 +187,7 @@ let inherit (config.local.primary-user) username; in
               exclude = [ "nixpkgs" ];
               token_file = config.sops.secrets.github_token.path;
               ssh = true;
-              sshkey = config.users.users."${username}".home
+              sshkey = config.users.users.${username}.home
                 + "/.ssh/id_ed25519";
               starred = true;
               wiki = true;

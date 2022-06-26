@@ -315,7 +315,7 @@
         };
     in
     with pkgs; {
-      devShells = (templates.devShells."${system}") // {
+      devShells = (templates.devShells.${system}) // {
         default = mkShell {
           # NOTE: some of these packages are included in the common home
           # manager module, but they are also included here in case this is
@@ -333,7 +333,7 @@
             sops
             rage
             ssh-to-age
-            git-crypt-agessh.packages."${system}".default
+            git-crypt-agessh.packages.${system}.default
           ];
         };
 

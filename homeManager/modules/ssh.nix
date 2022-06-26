@@ -18,7 +18,7 @@ with lib; {
   };
 
   config = mkIf cfg.enable {
-    home.file.".ssh/id_ed25519.pub".text = systems."${cfg.hostName}".user_ssh_public_key + "\n";
+    home.file.".ssh/id_ed25519.pub".text = systems.${cfg.hostName}.user_ssh_public_key + "\n";
 
     programs.ssh = {
       enable = true;
@@ -26,7 +26,7 @@ with lib; {
         (map
           (hostName: {
             name = hostName;
-            value = let value = systems."${hostName}"; in
+            value = let value = systems.${hostName}; in
               {
                 hostname = value.wg_ip;
                 port = value.ssh_port;
@@ -35,7 +35,7 @@ with lib; {
           })
           (filter
             (hostName:
-              let v = systems."${hostName}"; in
+              let v = systems.${hostName}; in
               (hasAttr "ssh_port" v) && (hasAttr "username" v) && (hasAttr "wg_ip" v))
             (attrNames systems)));
       userKnownHostsFile = "~/.ssh/known_hosts ${config.home.homeDirectory}/.ssh/preset_known_hosts";
@@ -44,9 +44,9 @@ with lib; {
     home.file.".ssh/preset_known_hosts".text =
       strings.concatMapStringsSep "\n"
         (hostName:
-          "${systems."${hostName}".wg_ip} ${systems."${hostName}".system_ssh_public_key}"
+          "${systems.${hostName}.wg_ip} ${systems.${hostName}.system_ssh_public_key}"
         )
-        (filter (hostName: hasAttr "system_ssh_public_key" systems."${hostName}")
+        (filter (hostName: hasAttr "system_ssh_public_key" systems.${hostName})
           (attrNames systems));
   };
 }

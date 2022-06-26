@@ -14,7 +14,7 @@ with lib; {
 
     username = mkOption {
       type = types.str;
-      default = config.local.secrets.systems."${hostName}".username;
+      default = config.local.secrets.systems.${hostName}.username;
     };
 
     homeManagerCfg = mkOption {
@@ -26,7 +26,7 @@ with lib; {
   config = mkIf cfg.enable
     {
       users = {
-        users."${cfg.username}" = {
+        users.${cfg.username} = {
           home = "/Users/${cfg.username}";
           createHome = true;
           shell = pkgs.fish;
@@ -34,7 +34,7 @@ with lib; {
       };
 
       home-manager = mkIf (cfg.homeManagerCfg != null) {
-        users."${cfg.username}" = { ... }@args: {
+        users.${cfg.username} = { ... }@args: {
           imports = builtins.attrValues inputs.homeManagerModules;
         } // (cfg.homeManagerCfg args);
       };

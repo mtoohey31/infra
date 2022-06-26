@@ -19,7 +19,7 @@ with lib; {
 
     sops.defaultSopsFile = ../systems + "/${hostName}/secrets.yaml";
     sops.age.sshKeyPaths = [
-      (config.users.users."${username}".home + "/.ssh/id_ed25519")
+      (config.users.users.${username}.home + "/.ssh/id_ed25519")
     ];
   };
 }

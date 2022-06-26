@@ -28,7 +28,7 @@ with lib; {
     # needed for ddcutil
     hardware.i2c.enable = true;
 
-    users.users."${config.local.primary-user.username}".extraGroups = [ "i2c" "kvm" "libvirt" ];
+    users.users.${config.local.primary-user.username}.extraGroups = [ "i2c" "kvm" "libvirt" ];
     users.groups.kvm = { };
     users.groups.libvirt = { };
 

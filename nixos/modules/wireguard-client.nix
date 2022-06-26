@@ -24,7 +24,7 @@ with lib; {
 
     address = mkOption {
       type = types.str;
-      default = config.local.secrets.systems."${hostName}".wg_ip + "/24";
+      default = config.local.secrets.systems.${hostName}.wg_ip + "/24";
     };
   };
 

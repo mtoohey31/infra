@@ -19,7 +19,7 @@ rec {
   harpoond = callPackage ./os-specific/linux/harpoond {
     harpoond-src = inputs.harpoond;
   };
-  helix = inputs.helix.defaultPackage."${pkgs.system}";
+  helix = inputs.helix.defaultPackage.${pkgs.system};
   kitty = callPackage ./applications/terminal-emulators/kitty {
     inherit (pkgs) kitty;
   };
@@ -34,11 +34,11 @@ rec {
     pywayland_0_4_7 = callPackage ./development/python-modules/pywayland { };
     rtf-tokenize = callPackage ./development/python-modules/rtf-tokenize { };
   };
-  qbpm = inputs.qbpm.defaultPackage."${pkgs.system}";
+  qbpm = inputs.qbpm.defaultPackage.${pkgs.system};
   qutebrowser = callPackage ./applications/networking/browsers/qutebrowser {
     inherit (pkgs) qutebrowser;
   };
-  rnix-lsp = inputs.rnix-lsp.defaultPackage."${pkgs.system}";
+  rnix-lsp = inputs.rnix-lsp.defaultPackage.${pkgs.system};
   yabai = callPackage ./os-specific/darwin/yabai { };
   xcaddy = callPackage ./development/tools/xcaddy { };
   xdg-desktop-portal-wlr = callPackage ./development/libraries/xdg-desktop-portal-wlr {

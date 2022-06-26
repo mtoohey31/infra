@@ -1,9 +1,5 @@
 # TODO: add swapfile to nixos systems
 # TODO: display active vms in status command if there are any
-# TODO: fix clearing the screen in various things:
-# - readline in kitty
-# - fish and readline in tmux
-# - lf and helix (shouldn't do anything)
 
 {
   description = "Infrastructure configuration";

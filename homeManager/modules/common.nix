@@ -479,6 +479,10 @@ with lib; {
         readline = {
           enable = true;
           variables.editing-mode = "vi";
+          # TODO: figure out why this doesn't clear the scrollback buffer, even
+          # though the docs: https://tiswww.cwru.edu/php/chet/readline/readline.html#SEC13
+          # say it should
+          bindings."\\C-l" = "clear-display";
         };
         starship = {
           enable = true;

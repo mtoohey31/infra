@@ -62,7 +62,7 @@
       flake = false;
     };
     g14-patches = {
-      url = "git+https://gitlab.com/dragonn/linux-g14?ref=5.17";
+      url = "git+https://gitlab.com/dragonn/linux-g14?ref=5.18";
       flake = false;
     };
     gemoji = {

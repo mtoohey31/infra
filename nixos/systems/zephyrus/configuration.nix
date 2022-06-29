@@ -141,7 +141,7 @@ inputs:
 
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.enable = true;
-  boot.kernelPackages = pkgs.linuxPackages_5_17;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelPatches = let inherit (inputs) g14-patches; in
     map (patch: { inherit patch; }) [
       "${g14-patches}/sys-kernel_arch-sources-g14_files-0004-5.15+--more-uarches-for-kernel.patch"
@@ -154,8 +154,8 @@ inputs:
       "${g14-patches}/sys-kernel_arch-sources-g14_files-0050-asus-flow-x13-support_sw_tablet_mode.patch"
 
       # mediatek mt7921 bt/wifi patches
-      "${g14-patches}/sys-kernel_arch-sources-g14_files-8017-mt76-mt7921-enable-VO-tx-aggregation.patch"
-      "${g14-patches}/sys-kernel_arch-sources-g14_files-8026-cfg80211-dont-WARN-if-a-self-managed-device.patch"
+      "${g14-patches}/sys-kernel_arch-sources-g14_files-8017-add_imc_networks_pid_0x3568.patch"
+
       "${g14-patches}/sys-kernel_arch-sources-g14_files-8050-r8152-fix-spurious-wakeups-from-s0i3.patch"
 
       # squashed s0ix enablement through

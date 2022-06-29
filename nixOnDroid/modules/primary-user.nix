@@ -25,10 +25,12 @@ with lib; {
 
       home-manager = mkIf (cfg.homeManagerCfg != null) {
         config = { ... }@args:
-          let mergedCfg = (lib.mkMerge [
-            { local.ssh = { inherit (cfg) hostName; }; }
-            (cfg.homeManagerCfg args)
-          ]); in
+          let
+            mergedCfg = (lib.mkMerge [
+              { local.ssh = { inherit (cfg) hostName; }; }
+              (cfg.homeManagerCfg args)
+            ]);
+          in
           mergedCfg // {
             imports = (builtins.attrValues inputs.homeManagerModules)
             ++ (mergedCfg.imports or [ ]);

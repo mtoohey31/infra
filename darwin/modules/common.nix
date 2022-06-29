@@ -42,6 +42,7 @@ with lib; {
         autohide = true;
         autohide-delay = "0.0";
         autohide-time-modifier = "0.25";
+        mru-spaces = false;
         static-only = true;
       };
       finder = {

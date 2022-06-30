@@ -148,7 +148,7 @@ with lib; {
                   end
               end
             '';
-            interactiveShellInit = ''
+            interactiveShellInit = let stty = if pkgs.stdenv.hostPlatform.isDarwin then "/bin/stty" else "stty"; in ''
               fish_vi_key_bindings
 
               # TODO: make pasting work in visual mode
@@ -163,7 +163,7 @@ with lib; {
               # bind -s -M normal V beginning-of-line begin-selection end-of-line
               # bind -s -M normal yy 'commandline -f kill-whole-line; fish_clipboard_copy'
 
-              bind -s -M insert \cf 'set old_tty (stty -g); stty sane; lfcd; stty $old_tty; commandline -f repaint'
+              bind -s -M insert \cf 'set old_tty (${stty} -g); ${stty} sane; lfcd; ${stty} $old_tty; commandline -f repaint'
               bind -s -M insert \cl '${if pkgs.stdenv.hostPlatform.isDarwin then "/usr/bin/tput reset" else "tput reset"}; test -n "$TMUX" && tmux clear-history; commandline -f repaint'
 
               set fish_cursor_default block

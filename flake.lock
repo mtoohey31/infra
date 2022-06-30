@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "Karabiner-DriverKit-VirtualHIDDevice": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1612454008,
+        "narHash": "sha256-+wdIXkZ0MkyY6J1W1QU5x0LUL0U8fHLKc/W91MfAdR4=",
+        "owner": "pqrs-org",
+        "repo": "Karabiner-DriverKit-VirtualHIDDevice",
+        "rev": "bfe93e7bdd13f766937becd640f91f4b0c02444f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pqrs-org",
+        "repo": "Karabiner-DriverKit-VirtualHIDDevice",
+        "rev": "bfe93e7bdd13f766937becd640f91f4b0c02444f",
+        "type": "github"
+      }
+    },
     "cogitri": {
       "inputs": {
         "flake-utils": [
@@ -420,6 +437,30 @@
         "type": "github"
       }
     },
+    "kmonad-darwin": {
+      "inputs": {
+        "Karabiner-DriverKit-VirtualHIDDevice": "Karabiner-DriverKit-VirtualHIDDevice",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "nix",
+        "lastModified": 1656559488,
+        "narHash": "sha256-TEFC2XjHN/jWxd73bhYduptxmhtoJtgouN1HnbW3rkI=",
+        "owner": "mtoohey31",
+        "repo": "kmonad",
+        "rev": "6f304aa3989845f4217a30fdeb18283ca3784750",
+        "type": "github"
+      },
+      "original": {
+        "dir": "nix",
+        "owner": "mtoohey31",
+        "ref": "feat/nix-darwin-module",
+        "repo": "kmonad",
+        "type": "github"
+      }
+    },
     "naersk": {
       "inputs": {
         "nixpkgs": [
@@ -701,6 +742,7 @@
         "helix": "helix",
         "home-manager": "home-manager",
         "kmonad": "kmonad",
+        "kmonad-darwin": "kmonad-darwin",
         "naersk": "naersk",
         "nix-on-droid": "nix-on-droid",
         "nixos-hardware": "nixos-hardware",

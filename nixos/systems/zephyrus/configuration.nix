@@ -92,7 +92,7 @@ inputs:
         enable = true;
         fallthrough = true;
       };
-      config = builtins.readFile ./default.kbd;
+      config = builtins.readFile ../../../default.kbd;
     };
   };
   systemd.services.kmonad-default = {

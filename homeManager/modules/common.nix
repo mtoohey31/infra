@@ -329,7 +329,8 @@ with lib; {
         };
         helix = {
           enable = true;
-          languages = [{ name = "nix"; auto-format = true; }];
+          languages = [{ name = "nix"; auto-format = true; }
+            { name = "haskell"; auto-format = true; }];
           settings =
             let
               centering_remaps = {

@@ -82,7 +82,7 @@
       flake = false;
     };
     helix = {
-      url = "github:mtoohey31/helix";
+      url = "github:helix-editor/helix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "utils";

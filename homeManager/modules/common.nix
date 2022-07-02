@@ -368,20 +368,21 @@ with lib; {
                   normal = "block";
                   select = "underline";
                 };
-                status-line = {
-                  left = [
-                    "file-name"
-                    "scope"
-                    "spinner"
-                  ];
-                  right = [
-                    "diagnostics"
-                    "selections"
-                    "position"
-                    "file-encoding"
-                    "file-type"
-                  ];
-                };
+                # TODO: uncomment this once I work on the status line again
+                # status-line = {
+                #   left = [
+                #     "file-name"
+                #     "scope"
+                #     "spinner"
+                #   ];
+                #   right = [
+                #     "diagnostics"
+                #     "selections"
+                #     "position"
+                #     "file-encoding"
+                #     "file-type"
+                #   ];
+                # };
               };
               keys.normal = centering_remaps // clipboard_remaps // save_quit_remaps // {
                 n = [ "search_next" "align_view_center" ];

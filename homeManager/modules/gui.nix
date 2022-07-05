@@ -161,7 +161,7 @@ with lib; {
               include ${config.xdg.cacheHome}/wal/colors-kitty.conf
             '';
         };
-        lf.keybindings.gC = "&${pkgs.kitty-window} fish -C lf &>/dev/null &";
+        lf.keybindings.gC = "&${pkgs.kitty-window} --cwd current fish -C lf &>/dev/null &";
         mpv = {
           enable = true;
           config = {

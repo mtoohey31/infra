@@ -41,6 +41,8 @@ with lib; {
       userKnownHostsFile = "~/.ssh/known_hosts ${config.home.homeDirectory}/.ssh/preset_known_hosts";
     };
 
+    # TODO: fix this, it's broken because it doesn't specify port numbers, and
+    # it uses the raw public key instead of the public key fingerprint
     home.file.".ssh/preset_known_hosts".text =
       strings.concatMapStringsSep "\n"
         (hostName:

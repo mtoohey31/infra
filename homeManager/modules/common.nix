@@ -59,7 +59,7 @@ with lib; {
       {
         bat = {
           enable = true;
-          config = { theme = "base16"; };
+          config = { style = "plain"; theme = "base16"; };
         };
         direnv = {
           enable = true;
@@ -132,12 +132,17 @@ with lib; {
               '';
             };
             enable = true;
-            shellInit = ''
-              export EDITOR=hx
-              export VISUAL="$EDITOR"
-              export PAGER="bat --plain"
-              export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-            '';
+            shellInit =
+              let
+                batmanPager = pkgs.writeShellScript "bat-manpager"
+                  ''col -bx | bat -l man'';
+              in
+              ''
+                export EDITOR=hx
+                export VISUAL=hx
+                export PAGER=bat
+                export MANPAGER=${batmanPager}
+              '';
             loginShellInit = ''
               if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$TMUX"
                   if test -n "$SSH_CONNECTION" -o -f /.dockerenv

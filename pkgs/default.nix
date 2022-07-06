@@ -19,7 +19,7 @@ rec {
   harpoond = callPackage ./os-specific/linux/harpoond {
     harpoond-src = inputs.harpoond;
   };
-  helix = inputs.helix.defaultPackage.${pkgs.system};
+  helix = inputs.helix.packages.${pkgs.system}.default;
   kitty = callPackage ./applications/terminal-emulators/kitty {
     inherit (pkgs) kitty;
   };

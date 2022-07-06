@@ -171,7 +171,8 @@ with lib; {
               }
               {
                 block = "time";
-                format = "%a. %b %-d  %-I:%M:%S %p";
+                format = "  %a. %b %-d  %-I:%M:%S %p";
+                icons_format = "";
                 interval = 1;
               }
             ];

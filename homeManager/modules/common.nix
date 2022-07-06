@@ -82,7 +82,6 @@ with lib; {
               da = "direnv allow";
               dr = "direnv reload";
               g = "git";
-              nfi = "nix flake init --template github:mtoohey31/templates#";
               pcp = "rsync -r --info=progress2";
               rm = "trash";
               se = "sudoedit";
@@ -210,6 +209,7 @@ with lib; {
 
               alias e "$EDITOR"
               abbr e "$EDITOR"
+              abbr cat bat
             '' + (builtins.readFile (builtins.fetchurl {
               # TODO: turn this into a flake so I can bind it to the exa version more elegantly
               url = "https://github.com/mtoohey31/lf-exa-icons/releases/download/v${pkgs.exa.version}/icons";

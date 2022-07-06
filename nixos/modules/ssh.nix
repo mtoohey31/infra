@@ -13,11 +13,6 @@ with lib; {
       type = types.bool;
       default = true;
     };
-
-    authorizedHosts = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-    };
   };
 
   config = mkIf cfg.enable {
@@ -34,6 +29,8 @@ with lib; {
     };
     sops.secrets.system_ssh_private_key = { };
 
-    users.users.${username}.openssh.authorizedKeys.keys = map (hostName: systems.${hostName}.user_ssh_public_key) cfg.authorizedHosts;
+    users.users.${username}.openssh.authorizedKeys.keys = map
+      (h: h.user_ssh_public_key)
+      systems.${hostName}.authorized_hosts;
   };
 }

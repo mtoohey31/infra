@@ -141,7 +141,6 @@ let inherit (config.local.primary-user) username; in
         "/tank/media/music.git";
     };
     sops.enable = true;
-    ssh.authorizedHosts = [ "air" "pixel" "zephyrus" ];
     wireguard-client.routeAll = false;
   };
 

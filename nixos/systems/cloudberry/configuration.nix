@@ -8,7 +8,6 @@ inputs:
 
   local = {
     primary-user.homeManagerCfg = { ... }: { };
-    ssh.authorizedHosts = [ "air" "pixel" "zephyrus" ];
     sops.enable = true;
   };
 

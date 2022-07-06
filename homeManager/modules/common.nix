@@ -463,6 +463,8 @@ with lib; {
           settings = {
             dirfirst = false;
             icons = true;
+            promptfmt = ''\033[1;33m%u\033[0m in \033[1;36m%d\033[0m'';
+            timefmt = "";
             smartcase = true;
             shell = "fish";
             scrolloff = 7;

@@ -364,6 +364,8 @@ with lib; {
               };
             in
             {
+              # TODO: set black to be the theme's black instead of solid black,
+              # see https://github.com/kovidgoyal/kitty/issues/3185
               theme = "base16_terminal_kitty";
               editor = {
                 idle-timeout = 0;
@@ -374,6 +376,9 @@ with lib; {
                   normal = "block";
                   select = "underline";
                 };
+                rulers = [ 80 100 120 160 ];
+                color-modes = true;
+                indent-guides.render = true;
                 # TODO: uncomment this once I work on the status line again
                 # status-line = {
                 #   left = [

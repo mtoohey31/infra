@@ -410,6 +410,7 @@ with lib; {
                 g.F = ":format";
                 g."A-F" = ":set-option auto-format false";
                 G = "goto_last_line";
+                J = [ "extend_to_line_end" "join_selections" ];
               };
               keys.select = centering_remaps // clipboard_remaps // save_quit_remaps // {
                 g.c = "toggle_comments";

@@ -34,6 +34,7 @@ with lib; {
         enableGitCredentialHelper = true;
         settings = { git_protocol = "ssh"; };
       };
+      git.difftastic.enable = true;
     };
 
     home.sessionVariables.GOPATH = "${config.home.homeDirectory}/.go";

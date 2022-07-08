@@ -10,5 +10,5 @@ buildGo118Module rec {
   '';
   CGO_CFLAGS = "-I ${lm_sensors}/include";
   CGO_LDFLAGS = "-L ${lm_sensors}/lib";
-  vendorSha256 = "Yl/QO4nSaNGZkeFVFXdz6UBT0gRc2ddAPhw8iLojVsw=";
+  vendorSha256 = "FvgA6L4qrOBRMa+q4omlrwauJcFnJfmQVycrP1LN8jc=";
 }

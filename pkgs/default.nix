@@ -13,6 +13,7 @@ rec {
   gickup = callPackage ./applications/backup/gickup {
     gickup-src = inputs.gickup;
   };
+  gotop = callPackage ./tools/system/gotop { inherit (pkgs) gotop; };
   gow = callPackage ./development/tools/gow {
     gow-src = inputs.gow;
   };

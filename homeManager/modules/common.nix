@@ -24,7 +24,8 @@ with lib; {
       ffmpeg
       comma
       pywal
-    ] ++ pkgs.lib.optional (!pkgs.stdenv.hostPlatform.isDarwin) gotop;
+      gotop
+    ];
 
     home.file = {
       ".hushlogin" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin { text = ""; };

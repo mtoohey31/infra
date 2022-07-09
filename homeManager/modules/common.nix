@@ -291,8 +291,9 @@ with lib; {
             ms = "remote set-url";
             mso = "remote set-url origin";
             msu = "remote set-url upstream";
-            o = "clone";
+            o = "clone --recursive";
             ob = "clone --bare";
+            onr = "clone";
             p = "push";
             pf = "push --force";
             pu = "!git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)";

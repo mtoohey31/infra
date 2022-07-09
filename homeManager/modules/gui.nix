@@ -251,7 +251,8 @@ with lib; {
           settings =
             let
               command_prefix = [
-                "${pkgs.kitty-window}"
+                # TODO: make this work with kitty-window
+                "${pkgs.kitty}/bin/kitty"
                 "--title"
                 "floatme"
                 "fish"
@@ -274,6 +275,7 @@ with lib; {
               ];
               fileselect = {
                 handler = "external";
+                # TODO: set LF_ICONS
                 single_file.command = command_prefix ++ [
                   "cat '${config.xdg.cacheHome}/wal/sequences' && lf -command 'map <enter> \${{echo \\\"$f\\\" > {}; lf -remote \\\"send $id quit\\\"}}'"
                 ];

@@ -15,11 +15,37 @@ with lib; {
       (lib.hm.assertions.assertPlatform "modules.wm" pkgs lib.platforms.linux)
     ];
 
-    xdg.desktopEntries.emoji-picker = {
-      type = "Application";
-      name = "Emoji Picker";
-      exec = "emoji";
-      terminal = false;
+    xdg.desktopEntries = {
+      emoji-picker = {
+        type = "Application";
+        name = "Emoji Picker";
+        exec = "emoji";
+        terminal = false;
+      };
+      poweroff = {
+        type = "Application";
+        name = "Poweroff";
+        exec = "poweroff";
+        terminal = false;
+      };
+      reboot = {
+        type = "Application";
+        name = "Reboot";
+        exec = "reboot";
+        terminal = false;
+      };
+      sleep = {
+        type = "Application";
+        name = "Sleep";
+        exec = "systemctl suspend";
+        terminal = false;
+      };
+      suspend = {
+        type = "Application";
+        name = "Suspend";
+        exec = "systemctl suspend";
+        terminal = false;
+      };
     };
 
     home = {

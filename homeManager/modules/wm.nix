@@ -95,7 +95,7 @@ with lib; {
         };
         shellAliases = shellAbbrs;
         loginShellInit = ''
-          if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$SSH_CONNECTION" -a ! -f /.dockerenv
+          if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$SSH_CONNECTION"
             exec sway
           end
         '';

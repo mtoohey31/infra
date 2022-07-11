@@ -145,7 +145,7 @@ with lib; {
               '';
             loginShellInit = ''
               if test -z "$DISPLAY" -a -z "$WAYLAND_DISPLAY" -a -z "$TMUX"
-                  if test -n "$SSH_CONNECTION" -o -f /.dockerenv
+                  if test -n "$SSH_CONNECTION"
                       exec tmux
                   else if test -n "$ANDROID_DATA"
                       cat ${config.xdg.cacheHome}/wal/sequences
@@ -487,9 +487,9 @@ with lib; {
           config = {
             "text/*" = "bat --paging=never --color=always --style=auto --wrap=character --terminal-width=%pistol-extra0% --line-range=1:%pistol-extra1% %pistol-filename%";
             "application/json" = "bat --paging=never --color=always --style=auto --wrap=character --terminal-width=%pistol-extra0% --line-range=1:%pistol-extra1% %pistol-filename%";
-            "image/*" = ''sh: if [ -z "$SSH_CONNECTION" ] || [ -f "/.dockerenv" ]; then kitty +kitten icat --transfer-mode file --place %pistol-extra0%x%pistol-extra1%@%pistol-extra2%x%pistol-extra3% %pistol-filename% && exit 1; else chafa --format symbols --size %pistol-extra0%x%pistol-extra1% %pistol-filename%; fi'';
-            "video/*" = ''sh: if [ -z "$SSH_CONNECTION" ] || [ -f "/.dockerenv" ]; then ffmpeg -ss 0 -i %pistol-filename% -vframes 1 -f image2 pipe:1 | kitty +kitten icat --transfer-mode file --place %pistol-extra0%x%pistol-extra1%@%pistol-extra2%x%pistol-extra3% && exit 1; else chafa --format symbols --size %pistol-extra0%x%pistol-extra1% <(ffmpeg -ss 0 -i %pistol-filename% -vframes 1 -f image2 pipe:1); fi'';
-            "application/pdf" = ''sh: if [ -z "$SSH_CONNECTION" ] || [ -f "/.dockerenv" ]; then pdftoppm -f 1 -l 1 %pistol-filename% -png | kitty +kitten icat --transfer-mode file --place %pistol-extra0%x%pistol-extra1%@%pistol-extra2%x%pistol-extra3% && exit 1; else chafa --format symbols --size %pistol-extra0%x%pistol-extra1% <(pdftoppm -f 1 -l 1 %pistol-filename% -png); fi'';
+            "image/*" = ''sh: if [ -z "$SSH_CONNECTION" ]; then kitty +kitten icat --transfer-mode file --place %pistol-extra0%x%pistol-extra1%@%pistol-extra2%x%pistol-extra3% %pistol-filename% && exit 1; else chafa --format symbols --size %pistol-extra0%x%pistol-extra1% %pistol-filename%; fi'';
+            "video/*" = ''sh: if [ -z "$SSH_CONNECTION" ]; then ffmpeg -ss 0 -i %pistol-filename% -vframes 1 -f image2 pipe:1 | kitty +kitten icat --transfer-mode file --place %pistol-extra0%x%pistol-extra1%@%pistol-extra2%x%pistol-extra3% && exit 1; else chafa --format symbols --size %pistol-extra0%x%pistol-extra1% <(ffmpeg -ss 0 -i %pistol-filename% -vframes 1 -f image2 pipe:1); fi'';
+            "application/pdf" = ''sh: if [ -z "$SSH_CONNECTION" ]; then pdftoppm -f 1 -l 1 %pistol-filename% -png | kitty +kitten icat --transfer-mode file --place %pistol-extra0%x%pistol-extra1%@%pistol-extra2%x%pistol-extra3% && exit 1; else chafa --format symbols --size %pistol-extra0%x%pistol-extra1% <(pdftoppm -f 1 -l 1 %pistol-filename% -png); fi'';
 
           };
         };
@@ -577,10 +577,6 @@ with lib; {
             };
             cmd_duration.format = "for [$duration]($style) ";
             conda.symbol = " ";
-            custom.docker = {
-              format = "in [ ]($style) ";
-              when = "test -f /.dockerenv";
-            };
             dart.symbol = " ";
             directory.format = "in [$path]($style) ";
             docker_context.symbol = " ";

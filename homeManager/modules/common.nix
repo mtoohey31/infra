@@ -571,9 +571,12 @@ with lib; {
               discharging_symbol = "";
             };
             character = {
-              success_symbol = "[>](blue)";
+              success_symbol = "[>](green)";
               error_symbol = "[>](red)";
-              vicmd_symbol = "[<](green)";
+              vimcmd_symbol = "[<](blue)";
+              vimcmd_visual_symbol = "[<](yellow)";
+              vimcmd_replace_one_symbol = "[<](cyan)";
+              vimcmd_replace_symbol = "[<](cyan)";
             };
             cmd_duration.format = "for [$duration]($style) ";
             conda.symbol = " ";

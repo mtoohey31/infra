@@ -1,4 +1,4 @@
-_:
+inputs:
 { config, lib, pkgs, ... }:
 
 let cfg = config.local.devel; in
@@ -13,8 +13,13 @@ with lib; {
       uncommitted-go
       docker
 
+      nix-index
       rnix-lsp
     ];
+
+    home.file.".cache/nix-index/files".source = lib.mkIf
+      (builtins.hasAttr pkgs.system inputs.nix-index-database.legacyPackages)
+      inputs.nix-index-database.legacyPackages.${pkgs.system}.database;
 
     programs = {
       fish = rec {

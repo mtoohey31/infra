@@ -107,6 +107,7 @@
       url = "github:nix-community/naersk";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-index-database.url = "github:Mic92/nix-index-database";
     nixos-hardware = {
       url = "nixos-hardware";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -335,8 +336,6 @@
             nixpkgs-fmt
             gnumake
             deadnix
-            # TODO: integrate https://github.com/Mic92/nix-index-database
-            nix-index
             zip
 
             sops

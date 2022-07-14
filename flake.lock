@@ -464,6 +464,21 @@
         "type": "github"
       }
     },
+    "nix-index-database": {
+      "locked": {
+        "lastModified": 1657425481,
+        "narHash": "sha256-b1mkwAjb5QpYZh+y6SxA3eXI5Lp0pcSyVHeU+zJzvDU=",
+        "owner": "Mic92",
+        "repo": "nix-index-database",
+        "rev": "ad72b2b28c730ec0c18d9607aadb0c266d41d6c5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "nix-index-database",
+        "type": "github"
+      }
+    },
     "nix-on-droid": {
       "inputs": {
         "flake-utils": [
@@ -727,6 +742,7 @@
         "kmonad": "kmonad",
         "kmonad-darwin": "kmonad-darwin",
         "naersk": "naersk",
+        "nix-index-database": "nix-index-database",
         "nix-on-droid": "nix-on-droid",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",

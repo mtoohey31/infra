@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   };
   dontBuild = true;
   installPhase = ''
-    ls
     mkdir -p "$out/bin" "$out/share/man/man1"
     cp bin/yabai "$out/bin"
     cp doc/yabai.1 "$out/share/man/man1"

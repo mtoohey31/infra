@@ -10,7 +10,6 @@ inputs:
     opengl.enable = true;
     primary-user = {
       autologin = true;
-      # TODO: add .desktop entries for disabling and enabling wireguard
       homeManagerCfg = { config, ... }: {
         local = {
           devel.enable = true;
@@ -30,10 +29,22 @@ inputs:
         ];
 
         xdg = {
-          desktopEntries.discord = {
-            name = "Discord";
-            exec = "brave --profile-directory=Profile\\s2 --app=https://discord.com/app";
-            terminal = false;
+          desktopEntries = {
+            discord = {
+              name = "Discord";
+              exec = "brave --profile-directory=Profile\\s2 --app=https://discord.com/app";
+              terminal = false;
+            };
+            startWireguard = {
+              name = "Start Wireguard";
+              exec = ''${pkgs.kitty-window} --title floatme fish -C "systemctl start wg-quick-wg0 && exit"'';
+              terminal = false;
+            };
+            stopWireguard = {
+              name = "Stop Wireguard";
+              exec = ''${pkgs.kitty-window} --title floatme fish -C "systemctl stop wg-quick-wg0 && exit"'';
+              terminal = false;
+            };
           };
           mimeApps = {
             enable = true;

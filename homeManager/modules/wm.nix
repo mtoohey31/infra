@@ -130,6 +130,18 @@ with lib; {
               {
                 block = "custom";
                 command = ''
+                  set -e vms
+                  set -a vms (virsh list | tail -n +3 | head -n -1 | awk '{ print $2 }')
+                  if count $vms > /dev/null
+                    echo "  $(string join ', ' $vms)"
+                  end
+                '';
+                hide_when_empty = true;
+                interval = 60;
+              }
+              {
+                block = "custom";
+                command = ''
                   set free_size "$(df -h / | tail -n1 | cut -d' ' -f4)"
                   if test "$(echo "$free_size" | tr -d '[:alpha:]')" -le 100
                       echo " $free_size"

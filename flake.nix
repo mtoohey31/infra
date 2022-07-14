@@ -1,5 +1,4 @@
 # TODO: add swapfile to nixos systems
-# TODO: display active vms in status command if there are any
 
 {
   description = "Infrastructure configuration";

@@ -10,6 +10,7 @@ inputs:
     opengl.enable = true;
     primary-user = {
       autologin = true;
+      # TODO: add .desktop entries for disabling and enabling wireguard
       homeManagerCfg = { config, ... }: {
         local = {
           devel.enable = true;

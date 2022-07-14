@@ -52,6 +52,7 @@
         flake-utils.follows = "utils";
       };
     };
+    # TODO: create nixpkgs PR
     fan2go = {
       url = "github:markusressel/fan2go";
       flake = false;

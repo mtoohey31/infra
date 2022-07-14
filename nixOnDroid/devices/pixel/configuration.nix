@@ -1,5 +1,4 @@
 # TODO: configure terminal font and other settings
-# TODO: set up photo backups
 
 { lib, pkgs, ... }:
 

@@ -1,22 +1,5 @@
 {
   "nodes": {
-    "Karabiner-DriverKit-VirtualHIDDevice": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1612454008,
-        "narHash": "sha256-+wdIXkZ0MkyY6J1W1QU5x0LUL0U8fHLKc/W91MfAdR4=",
-        "owner": "pqrs-org",
-        "repo": "Karabiner-DriverKit-VirtualHIDDevice",
-        "rev": "bfe93e7bdd13f766937becd640f91f4b0c02444f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "pqrs-org",
-        "repo": "Karabiner-DriverKit-VirtualHIDDevice",
-        "rev": "bfe93e7bdd13f766937becd640f91f4b0c02444f",
-        "type": "github"
-      }
-    },
     "cogitri": {
       "inputs": {
         "flake-utils": [
@@ -406,42 +389,21 @@
       },
       "locked": {
         "dir": "nix",
-        "lastModified": 1656914615,
-        "narHash": "sha256-XrBCppEVnzh+RH2fz4+k/kqmUP3AEn8PP+IfF05CS14=",
-        "owner": "kmonad",
-        "repo": "kmonad",
-        "rev": "ac3c0db4f7fca0f66980d1b76a64630a66a36c21",
-        "type": "github"
+        "lastModified": 1657852315,
+        "narHash": "sha256-TP6O6Zrvk60UtnGfFsTjdcC5wILsEUnAMUxLolwXcBM=",
+        "ref": "feat/nix-darwin-support",
+        "rev": "9b67ef148320ae746538167b6164d6c99a7ce0a6",
+        "revCount": 691,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/mtoohey31/kmonad?dir=nix"
       },
       "original": {
         "dir": "nix",
-        "owner": "kmonad",
-        "repo": "kmonad",
-        "type": "github"
-      }
-    },
-    "kmonad-darwin": {
-      "inputs": {
-        "Karabiner-DriverKit-VirtualHIDDevice": "Karabiner-DriverKit-VirtualHIDDevice",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "dir": "nix",
-        "lastModified": 1656559488,
-        "narHash": "sha256-TEFC2XjHN/jWxd73bhYduptxmhtoJtgouN1HnbW3rkI=",
-        "owner": "mtoohey31",
-        "repo": "kmonad",
-        "rev": "6f304aa3989845f4217a30fdeb18283ca3784750",
-        "type": "github"
-      },
-      "original": {
-        "dir": "nix",
-        "owner": "mtoohey31",
-        "ref": "feat/nix-darwin-module",
-        "repo": "kmonad",
-        "type": "github"
+        "ref": "feat/nix-darwin-support",
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/mtoohey31/kmonad?dir=nix"
       }
     },
     "naersk": {
@@ -740,7 +702,6 @@
         "helix": "helix",
         "home-manager": "home-manager",
         "kmonad": "kmonad",
-        "kmonad-darwin": "kmonad-darwin",
         "naersk": "naersk",
         "nix-index-database": "nix-index-database",
         "nix-on-droid": "nix-on-droid",

@@ -89,14 +89,7 @@
       };
     };
     kmonad = {
-      url = "github:kmonad/kmonad?dir=nix";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "utils";
-      };
-    };
-    kmonad-darwin = {
-      url = "github:mtoohey31/kmonad/feat/nix-darwin-module?dir=nix";
+      url = "git+https://github.com/mtoohey31/kmonad?submodules=1&dir=nix&ref=feat/nix-darwin-support";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "utils";
@@ -152,7 +145,6 @@
     , git-crypt-agessh
     , home-manager
     , kmonad
-    , kmonad-darwin
     , nixpkgs
     , nix-on-droid
     , self
@@ -176,7 +168,6 @@
       };
       darwinModules = self.modules //
       home-manager.darwinModules //
-      kmonad-darwin.darwinModules //
       (builtins.listToAttrs (map
         (path: {
           name = builtins.baseNameOf path;
@@ -287,6 +278,7 @@
         default = (_: prev: import ./pkgs inputs prev);
 
         cogtri = cogitri.overlays.default;
+        kmonad = kmonad.overlays.default;
         uncommitted-go = uncommitted-go.overlays.default;
         vimv2 = vimv2.overlay;
       };

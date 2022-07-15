@@ -21,12 +21,16 @@ rec {
     harpoond-src = inputs.harpoond;
   };
   helix = inputs.helix.packages.${pkgs.system}.default;
+  Karabiner-DriverKit-VirtualHIDDevice = callPackage
+    ./os-specific/darwin/Karabiner-DriverKit-VirtualHIDDevice
+    { Karabiner-DriverKit-VirtualHIDDevice-src = inputs.kmonad + "/c_src/mac/Karabiner-DriverKit-VirtualHIDDevice"; };
   kitty = callPackage ./applications/terminal-emulators/kitty {
     inherit (pkgs) kitty;
   };
   kitty-window = callPackage ./applications/terminal-emulators/kitty-window {
     inherit kitty;
   };
+  kmonad-daemon-shim = callPackage ./os-specific/darwin/kmonad-daemon-shim { };
   plover = pkgs.plover // {
     wayland = callPackage ./tools/inputmethods/plover/wayland.nix { };
   };

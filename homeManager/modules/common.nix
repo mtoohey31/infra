@@ -381,21 +381,21 @@ with lib; {
                 rulers = [ 80 100 120 160 ];
                 color-modes = true;
                 indent-guides.render = true;
-                # TODO: uncomment this once I work on the status line again
-                # status-line = {
-                #   left = [
-                #     "file-name"
-                #     "scope"
-                #     "spinner"
-                #   ];
-                #   right = [
-                #     "diagnostics"
-                #     "selections"
-                #     "position"
-                #     "file-encoding"
-                #     "file-type"
-                #   ];
-                # };
+                statusline = {
+                  left = [
+                    "file-name"
+                    # TODO: uncomment this once I work on the statusline again
+                    # "scope"
+                    "spinner"
+                  ];
+                  right = [
+                    "diagnostics"
+                    "selections"
+                    "position"
+                    "file-encoding"
+                    "file-type"
+                  ];
+                };
               };
               keys.normal = centering_remaps // clipboard_remaps // save_quit_remaps // {
                 n = [ "search_next" "align_view_center" ];

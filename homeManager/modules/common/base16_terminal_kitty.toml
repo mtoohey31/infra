@@ -31,23 +31,23 @@
 "ui.cursor.match" = { fg = "light-yellow", modifiers = ["underlined"] }
 "ui.cursor.primary" = { fg = "light-gray", modifiers = ["reversed"] }
 "ui.gutter" = { bg = "black" }
-"ui.help" = { fg = "white", bg = "opaque-black" }
+"ui.help" = { fg = "white", bg = "black" }
 "ui.linenr" = { fg = "gray", bg = "black" }
 "ui.linenr.selected" = { fg = "white", bg = "black", modifiers = ["bold"] }
-"ui.menu" = { fg = "light-gray", bg = "opaque-black" }
+"ui.menu" = { fg = "light-gray", bg = "black" }
 "ui.menu.selected" = { modifiers = ["reversed"] }
-"ui.popup" = { bg = "opaque-black" }
+"ui.popup" = { bg = "black" }
 "ui.selection" = { fg = "black", bg = "blue" }
 "ui.selection.primary" = { fg = "white", bg = "blue" }
-"ui.statusline" = { fg = "white", bg = "opaque-black" }
-"ui.statusline" = { fg = "white", bg = "opaque-black" }
-"ui.statusline.inactive" = { fg = "white", bg = "opaque-black", modifiers = ["dim"] }
-"ui.statusline.normal" = { fg = "blue", bg = "opaque-black" }
-"ui.statusline.insert" = { fg = "green", bg = "opaque-black" }
-"ui.statusline.select" = { fg = "yellow", bg = "opaque-black" }
-"ui.virtual.ruler" = { bg = "opaque-black" }
+"ui.statusline" = { fg = "white", bg = "black" }
+"ui.statusline" = { fg = "white", bg = "black" }
+"ui.statusline.inactive" = { fg = "white", bg = "black", modifiers = ["dim"] }
+"ui.statusline.normal" = { fg = "blue", bg = "black" }
+"ui.statusline.insert" = { fg = "green", bg = "black" }
+"ui.statusline.select" = { fg = "yellow", bg = "black" }
+"ui.virtual.ruler" = { bg = "black" }
 "ui.virtual.indent-guide" = { fg = "gray", modifiers = ["dim"] }
-"ui.window" = { bg = "opaque-black" }
+"ui.window" = { bg = "black" }
 
 "warning" = "yellow"
 "error" = "light-red"
@@ -55,6 +55,3 @@
 "hint" = "gray"
 
 "diagnostic" = { modifiers = ["underlined"] }
-
-[palette]
-opaque-black = "#000000"

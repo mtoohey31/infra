@@ -1,0 +1,27 @@
+From a53e45f82f90fc286b46327e86a4ec229f93d1ee Mon Sep 17 00:00:00 2001
+From: Matthew Toohey <contact@mtoohey.com>
+Date: Mon, 18 Jul 2022 23:38:51 -0400
+Subject: [PATCH] Revert "Use actual color value comparison when detecting
+ default background color"
+
+This reverts commit 2045055ae37eddf05aaa4c200c5552023d07cb8d.
+---
+ kitty/cell_vertex.glsl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kitty/cell_vertex.glsl b/kitty/cell_vertex.glsl
+index 799e1edc..7c17ceaf 100644
+--- a/kitty/cell_vertex.glsl
++++ b/kitty/cell_vertex.glsl
+@@ -207,7 +207,7 @@ void main() {
+ 
+     // Background {{{
+ #ifdef NEEDS_BACKROUND
+-    float cell_has_non_default_bg = step(1, float(abs(bg_as_uint - default_colors[1])));
++    float cell_has_non_default_bg = step(1, colors[1] & BYTE_MASK);
+     draw_bg = 1;
+ 
+ #if defined(BACKGROUND)
+-- 
+2.36.1
+

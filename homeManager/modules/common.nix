@@ -467,7 +467,13 @@ with lib; {
             gi = "cd ~/.infra";
             gr = "cd ~/repos";
           };
-          previewer = { source = "${pkgs.pistol}/bin/pistol"; };
+          previewer.source = pkgs.writeShellScript "lf-previewer" ''
+            ${pkgs.pistol}/bin/pistol "$@"
+
+            # this prevents caching, which is desirable so that previews are
+            # redrawn when the window is resized
+            exit 1
+          '';
           settings = {
             dirfirst = false;
             icons = true;

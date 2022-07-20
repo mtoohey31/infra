@@ -19,6 +19,16 @@ with lib; {
         options = "--delete-older-than 14d";
       };
       nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+      registry.nixpkgs = {
+        from = {
+          type = "indirect";
+          id = "nixpkgs";
+        };
+        to = {
+          type = "path";
+          path = inputs.nixpkgs;
+        };
+      };
     };
 
     home-manager = {

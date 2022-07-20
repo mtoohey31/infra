@@ -1,4 +1,4 @@
-_:
+inputs:
 { config, lib, pkgs, ... }:
 
 let cfg = config.local.common; in
@@ -49,6 +49,17 @@ with lib; {
       };
       "helix/themes/base16_terminal_kitty.toml".source = ./common/base16_terminal_kitty.toml;
       "libvirt/libvirt.conf".text = ''uri_default = "qemu:///system"'';
+    };
+
+    nix.registry.nixpkgs = {
+      from = {
+        type = "indirect";
+        id = "nixpkgs";
+      };
+      to = {
+        type = "path";
+        path = inputs.nixpkgs;
+      };
     };
 
     home.sessionVariables.DIRENV_LOG_FORMAT = "";

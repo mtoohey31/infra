@@ -47,6 +47,7 @@ rec {
     inherit (pkgs) qutebrowser;
   };
   rnix-lsp = inputs.rnix-lsp.defaultPackage.${pkgs.system};
+  tinkle = callPackage ./os-specific/darwin/tinkle { };
   yabai = callPackage ./os-specific/darwin/yabai { };
   xcaddy = callPackage ./development/tools/xcaddy { };
   xdg-desktop-portal-wlr = callPackage ./development/libraries/xdg-desktop-portal-wlr {

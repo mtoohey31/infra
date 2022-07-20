@@ -39,6 +39,9 @@ rec {
     pywayland_0_4_7 = callPackage ./development/python-modules/pywayland { };
     rtf-tokenize = callPackage ./development/python-modules/rtf-tokenize { };
   };
+  pywal = callPackage ./development/python-modules/pywal {
+    inherit (pkgs) pywal;
+  };
   qbpm = inputs.qbpm.packages.${pkgs.system}.default;
   qutebrowser = callPackage ./applications/networking/browsers/qutebrowser {
     inherit (pkgs) qutebrowser;

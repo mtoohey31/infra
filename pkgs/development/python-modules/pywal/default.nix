@@ -1,10 +1,12 @@
-{ isDarwin, pywal }:
+{ gnugrep, procps, pywal, stdenv, writeShellScript }:
 
-if self.stdenv.hostPlatform.isDarwin then
-  super.pywal.overrideAttrs
+if stdenv.hostPlatform.isDarwin then
+  pywal.overrideAttrs
     (_: {
       prePatch = ''
-        substituteInPlace pywal/util.py --replace pidof pgrep
+        substituteInPlace pywal/util.py --replace pidof ${writeShellScript "pgrep" ''
+          exec ${gnugrep}/bin/grep "''${@: -1}" <(${procps}/bin/ps -eo cmd)
+        ''}
       '';
     })
-else super.pywal
+else pywal

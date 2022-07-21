@@ -114,10 +114,9 @@ with lib; {
         };
         kitty = {
           enable = true;
-          environment = { SHLVL = "0"; };
+          environment.SHLVL = "0";
           settings = {
             allow_remote_control = true;
-            background_opacity = "0.8";
             confirm_os_window_close = 0;
             cursor = "none";
             cursor_blink_interval = 0;
@@ -159,6 +158,7 @@ with lib; {
               font_size 12
             '') + ''
               include ${config.xdg.cacheHome}/wal/colors-kitty.conf
+              background_opacity 0.8
             '';
         };
         lf.keybindings.gC = "&${pkgs.kitty-window} --cwd current fish -C lf &>/dev/null &";

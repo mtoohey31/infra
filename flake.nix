@@ -175,7 +175,8 @@
         })
         (import ./darwin/modules/modules.nix)));
 
-      homeManagerModules = (builtins.listToAttrs (map
+      homeManagerModules = self.modules //
+      (builtins.listToAttrs (map
         (path: {
           name = builtins.baseNameOf path;
           value = import path (inputs // self);

@@ -1,4 +1,4 @@
-(import ../../modules/modules.nix) ++ [
+[
   ./common.nix
   ./devel.nix
   ./gui.nix

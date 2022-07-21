@@ -1,4 +1,4 @@
-(import ../../modules/modules.nix) ++ [
+[
   ./arch-emu.nix
   ./bluetooth.nix
   ./common.nix

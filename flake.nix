@@ -40,8 +40,10 @@
       };
     };
     sops-nix = {
-      url = "github:Mic92/sops-nix";
+      url = "github:mtoohey31/sops-nix/feat/home-manager-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-21_11.follows = "";
+      inputs.nixpkgs-22_05.follows = "";
     };
 
     cogitri = {
@@ -176,6 +178,7 @@
         (import ./darwin/modules/modules.nix)));
 
       homeManagerModules = self.modules //
+      sops-nix.homeManagerModules //
       (builtins.listToAttrs (map
         (path: {
           name = builtins.baseNameOf path;

@@ -1,13 +1,15 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   local = {
     primary-user.homeManagerCfg = { ... }: {
       local = {
         devel.enable = true;
+        gh.enable = true;
         gui.enable = true;
         music.enable = true;
-        ssh.hostName = "air";
+        sops.enable = true;
+        ssh = { inherit (config.networking) hostName; };
       };
     };
     wm.enable = true;

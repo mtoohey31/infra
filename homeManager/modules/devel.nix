@@ -32,13 +32,6 @@ with lib; {
         };
         shellAliases = shellAbbrs;
       };
-      # TODO: get this working properly so authentication is already set up,
-      # or at least doesn't have issues getting set up
-      gh = {
-        enable = true;
-        enableGitCredentialHelper = true;
-        settings = { git_protocol = "ssh"; };
-      };
       git.difftastic.enable = true;
     };
 

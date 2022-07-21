@@ -1,8 +1,14 @@
 keys:
-  - &zephyrus age103tjnlluc3q3c36y4t7yp32l2lgculhd0uqnmv9va55w8g5pf3ps5nlya0
+  - &air age1ekey9zn0vdgd9jchdnqv5y9x2f6csl585zdm7v8968qg2jte2ppqjc67r7
   - &cloudberry age1hl03u9als55wk83my8crjal72caevk24d8d9ly4wuu2pu5u5t3hsj5sdeq
   - &nas age1mexanjsnx60xcrjuzwlf7n5696l8t7q58hetnyfj652037jk8qzqhpyp4t
+  - &zephyrus age103tjnlluc3q3c36y4t7yp32l2lgculhd0uqnmv9va55w8g5pf3ps5nlya0
 creation_rules:
+  - path_regex: ^homeManager/secrets\.yaml$
+    key_groups:
+    - age:
+      - *air
+      - *zephyrus
   - path_regex: ^nixos/systems/zephyrus/secrets\.yaml$
     key_groups:
     - age:

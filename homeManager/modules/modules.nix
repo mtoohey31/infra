@@ -1,8 +1,10 @@
 [
   ./common.nix
   ./devel.nix
+  ./gh.nix
   ./gui.nix
   ./music.nix
+  ./sops.nix
   ./ssh.nix
   ./wm.nix
 ]

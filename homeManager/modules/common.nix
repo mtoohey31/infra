@@ -359,13 +359,11 @@ with lib; {
             { name = "haskell"; auto-format = true; }];
           settings =
             let
-              centering_remaps = {
+              shared_remaps = rec {
                 m.m = [ "match_brackets" "align_view_center" ];
                 M = [ "match_brackets" "align_view_center" ];
                 "(" = [ "rotate_selections_backward" "align_view_center" ];
                 ")" = [ "rotate_selections_forward" "align_view_center" ];
-              };
-              clipboard_remaps = rec {
                 p = "paste_clipboard_after";
                 P = "paste_clipboard_before";
                 "A-p" = "paste_after";
@@ -377,11 +375,12 @@ with lib; {
                 "A-d" = "delete_selection";
                 R = "replace_selections_with_clipboard";
                 "A-R" = "replace_with_yanked";
-              };
-              save_quit_remaps = {
                 Q = ":quit!";
                 W = [ ":write" "align_view_center" ];
                 Z = ":write-quit";
+                "C-w"."|" = [ "vsplit_new" "file_picker" ];
+                "C-w".minus = [ "hsplit_new" "file_picker" ];
+                "C-w"."_" = [ "hsplit_new" "file_picker" ];
               };
             in
             {
@@ -416,7 +415,7 @@ with lib; {
                   ];
                 };
               };
-              keys.normal = centering_remaps // clipboard_remaps // save_quit_remaps // {
+              keys.normal = shared_remaps // {
                 n = [ "search_next" "align_view_center" ];
                 N = [ "search_prev" "align_view_center" ];
                 # TODO: debug why mode changes don't take effect until after the whole binding sequence
@@ -433,7 +432,7 @@ with lib; {
                 G = "goto_last_line";
                 J = [ "extend_to_line_end" "join_selections" ];
               };
-              keys.select = centering_remaps // clipboard_remaps // save_quit_remaps // {
+              keys.select = shared_remaps // {
                 g.c = "toggle_comments";
                 n = [ "extend_search_next" "align_view_center" ];
                 N = [ "extend_search_prev" "align_view_center" ];

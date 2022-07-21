@@ -273,6 +273,14 @@ with lib; {
             dst = "diff --staged --stat";
             dt = "diff --stat";
             dw = "diff --no-prefix --unified=99999999999999999";
+            dn = "diff --no-ext-diff";
+            dhn = "diff --no-ext-diff .";
+            dln = "diff --no-ext-diff HEAD~ HEAD";
+            dltn = "diff --no-ext-diff --stat HEAD~ HEAD";
+            dsn = "diff --no-ext-diff --staged";
+            dstn = "diff --no-ext-diff --staged --stat";
+            dtn = "diff --no-ext-diff --stat";
+            dwn = "diff --no-ext-diff --no-prefix --unified=99999999999999999";
             e = "rebase";
             ea = "rebase --abort";
             ec = "rebase --continue";

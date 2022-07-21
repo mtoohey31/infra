@@ -33,6 +33,7 @@ with lib; {
         };
       };
 
+      # TODO: update this to automatically pull in ssh like the nixos module
       home-manager = mkIf (cfg.homeManagerCfg != null) {
         users.${cfg.username} = { ... }@args: {
           imports = builtins.attrValues inputs.homeManagerModules;

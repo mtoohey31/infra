@@ -19,7 +19,7 @@ with lib; {
       extraOptions = ''
         extra-platforms = aarch64-linux i686-linux
       '';
-      sandboxPaths = [ "/run/binfmt" "${pkgs.qemu}" ];
+      settings.extra-sandbox-paths = [ "/run/binfmt" "${pkgs.qemu}" ];
     };
   };
 }

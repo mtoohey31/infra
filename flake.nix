@@ -7,8 +7,9 @@
     utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:mtoohey31/home-manager";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "utils";
     };
     darwin = {
       url = "github:lnl7/nix-darwin";
@@ -36,7 +37,7 @@
       url = "github:mtoohey31/git-crypt-agessh";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "utils";
+        utils.follows = "utils";
       };
     };
     sops-nix = {
@@ -118,7 +119,8 @@
     rnix-lsp = {
       url = "github:mtoohey31/rnix-lsp/feat/improved-format-edits";
       inputs = {
-        nixpkgs.follows = "nixpkgs";
+        # TODO: re-follow once this doesn't require nix_2_4 anymore
+        # nixpkgs.follows = "nixpkgs";
         utils.follows = "utils";
         naersk.follows = "naersk";
       };
@@ -127,7 +129,7 @@
       url = "github:mtoohey31/uncommitted-go";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "utils";
+        utils.follows = "utils";
       };
     };
     vimv2 = {

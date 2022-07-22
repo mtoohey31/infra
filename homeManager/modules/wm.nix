@@ -333,23 +333,34 @@ with lib; {
       {
         enable = true;
         extraOptions = [ "--unsupported-gpu" ];
-        extraConfigEarly = ''
-          include ${config.xdg.cacheHome}/wal/colors-sway
-          include ${config.xdg.cacheHome}/wal/colors-sway-stripped
-          exec_always rm -f ${wobsock}; mkfifo ${wobsock} && tail -f ${wobsock} | wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
-          exec_always pkill mako; mako --background-color "$background"CC --text-color "$foreground"
-        '';
         extraSessionCommands = ''
           export _JAVA_AWT_WM_NONREPARENTING=1
           export WLR_RENDERER_ALLOW_SOFTWARE=1
         '';
         extraConfig = ''
+          include ${config.xdg.cacheHome}/wal/colors-sway
+          include ${config.xdg.cacheHome}/wal/colors-sway-stripped
+
+          bar {
+            font pango:JetBrainsMono Nerd Font Regular 12.000000
+            mode hide
+            position top
+            status_command i3status-rs '${config.xdg.configHome}/i3status-rust/config-default.toml'
+            colors {
+              background $background
+              statusline $foreground
+              separator $foreground
+              focused_workspace $foreground $foreground $background
+              active_workspace $background $background $foreground
+              inactive_workspace $background $background $foreground
+              urgent_workspace $color1 $color1 $background
+              binding_mode $background $background $foreground
+            }
+            height 22
+          }
+
           default_border none
           mouse_warping container
-          exec_always pkill swayidle; swayidle before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
-          exec_always pkill flashfocus; flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
-          exec_always pkill autotiling; autotiling
-          exec_always systemctl restart --user kanshi
 
           bindsym --locked XF86MonBrightnessUp exec light -A 2 && light -G | cut -d'.' -f1 > ${wobsock}
           bindsym --locked XF86MonBrightnessDown exec light -U 2 && light -G | cut -d'.' -f1 > ${wobsock}
@@ -364,6 +375,13 @@ with lib; {
 
           for_window [title="floatme"] floating enable
           for_window [title="Bitwarden"] floating enable
+
+          exec_always rm -f ${wobsock}; mkfifo ${wobsock} && tail -f ${wobsock} | wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
+          exec_always pkill mako; mako --background-color "$background"CC --text-color "$foreground"
+          exec_always pkill swayidle; swayidle before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
+          exec_always pkill flashfocus; flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
+          exec_always pkill autotiling; autotiling
+          exec_always systemctl restart --user kanshi
         '';
         config = rec {
           fonts = {
@@ -377,12 +395,10 @@ with lib; {
             inner = 16;
             outer = -16;
           };
-          focus = { followMouse = true; };
-          seat = {
-            "*" = {
-              hide_cursor = "1000";
-              xcursor_theme = "Vanilla-DMZ 24";
-            };
+          focus.followMouse = true;
+          seat."*" = {
+            hide_cursor = "1000";
+            xcursor_theme = "Vanilla-DMZ 24";
           };
           output."*".bg = "${config.xdg.cacheHome}/wallpaper fill";
           keybindings = {
@@ -403,21 +419,10 @@ with lib; {
             (s: i:
               s // {
                 "${modifier}+${toString i}" = "workspace number ${toString i}";
+                "${modifier}+Shift+${toString i}" = "move container to workspace number ${toString i}, workspace number ${toString i}";
               })
             { }
-            (lib.range 0 9)) // (foldl'
-            (s: i:
-              s // {
-                "${modifier}+Shift+${toString i}" =
-                  "move container to workspace number ${
-                toString i
-              }, workspace number ${toString i}";
-              })
-            { }
-            (lib.range 0 9)) //
-
-          {
-
+            (lib.range 0 9)) // {
             "${modifier}+Shift+tab" = "floating toggle";
             "${modifier}+tab" = "focus mode_toggle";
 
@@ -477,43 +482,7 @@ with lib; {
             };
             passthrough = { "${modifier}+Escape" = ''mode "default"''; };
           };
-          bars = [{
-            inherit fonts;
-            mode = "hide";
-            position = "top";
-            statusCommand = "i3status-rs '${config.xdg.configHome}/i3status-rust/config-default.toml'";
-            colors = {
-              background = "$background";
-              statusline = "$foreground";
-              separator = "$foreground";
-              focusedWorkspace = {
-                border = "$foreground";
-                background = "$foreground";
-                text = "$background";
-              };
-              activeWorkspace = {
-                border = "$background";
-                background = "$background";
-                text = "$foreground";
-              };
-              inactiveWorkspace = {
-                border = "$background";
-                background = "$background";
-                text = "$foreground";
-              };
-              urgentWorkspace = {
-                border = "$color1";
-                background = "$color1";
-                text = "$background";
-              };
-              bindingMode = {
-                border = "$background";
-                background = "$background";
-                text = "$foreground";
-              };
-            };
-            extraConfig = "height 22";
-          }];
+          bars = [ ];
           input = {
             "type:touchpad" = {
               tap = "enabled";

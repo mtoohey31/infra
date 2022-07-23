@@ -46,6 +46,15 @@ with lib; {
         exec = "systemctl suspend";
         terminal = false;
       };
+      lock = {
+        type = "Application";
+        name = "Lock";
+        exec = builtins.toString (pkgs.writeShellScript "lock" ''
+          . ${config.xdg.cacheHome}/wal/colors-stripped.sh
+          exec swaylock -f --screenshots --font "JetBrainsMono Nerd Font" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color "$foreground" --line-color 00000000 --inside-color "$background"CC --separator-color 00000000
+        '');
+        terminal = false;
+      };
     };
 
     home = {

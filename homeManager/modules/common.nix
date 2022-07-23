@@ -354,7 +354,7 @@ with lib; {
             ya = "cherry-pick --abort";
             yc = "cherry-pick --continue";
           } // (pkgs.lib.optionalAttrs (builtins.hasAttr "copy" config.programs.fish.shellAliases)
-            { h = "!git rev-parse HEAD | sed -z 's/\\n$//' | ${config.programs.fish.shellAliases.copy}"; });
+            { h = "!git rev-parse HEAD | ${pkgs.gnused}/bin/sed -z 's/\\n$//' | ${config.programs.fish.shellAliases.copy}"; });
         };
         helix = {
           enable = true;

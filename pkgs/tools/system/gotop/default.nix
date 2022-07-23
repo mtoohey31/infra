@@ -6,7 +6,7 @@ if stdenv.hostPlatform.isDarwin then
     buildGoModule = args: buildGoModule (args // {
       meta = args.meta // { broken = false; };
       patches = [ ./0001-fix-bump-gopsutil-to-fix-darwin-compatability.patch ];
-      vendorSha256 = "G/hFpiOMgJfUiJfplpgtkcJKZMqM7WodrEl5wE0jgbY=";
+      vendorSha256 = "oZjPs7d+fLduIozShiyGXQZU1LjrmORgoZ/I3/HoSsw=";
     });
   }
 else gotop

@@ -62,7 +62,10 @@ with lib; {
       };
     };
 
-    home.sessionVariables.DIRENV_LOG_FORMAT = "";
+    home.sessionVariables = {
+      DIRENV_LOG_FORMAT = "";
+      LESS = "-i --incsearch";
+    };
     programs =
       let
         # source: https://github.com/andreafrancia/trash-cli/issues/107#issuecomment-479241828

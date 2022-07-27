@@ -64,7 +64,7 @@ with lib; {
 
     home.sessionVariables = {
       DIRENV_LOG_FORMAT = "";
-      LESS = "-i --incsearch";
+      LESS = "-Ri --incsearch";
     };
     programs =
       let

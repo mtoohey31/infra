@@ -119,8 +119,7 @@
     rnix-lsp = {
       url = "github:mtoohey31/rnix-lsp/feat/improved-format-edits";
       inputs = {
-        # TODO: re-follow once this doesn't require nix_2_4 anymore
-        # nixpkgs.follows = "nixpkgs";
+        nixpkgs.follows = "nixpkgs";
         utils.follows = "utils";
         naersk.follows = "naersk";
       };

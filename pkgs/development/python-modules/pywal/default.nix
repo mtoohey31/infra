@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, pywal, stdenv }:
+{ fetchFromGitHub, imagemagick, lib, makeWrapper, pywal, stdenv }:
 
 pywal.overrideAttrs (oldAttrs: {
   version = "3.3.0-dev";
@@ -9,6 +9,11 @@ pywal.overrideAttrs (oldAttrs: {
     sha256 = "La6ErjbGcUbk0D2G1eriu02xei3Ki9bjNme44g4jAF0=";
   };
   patches = [ ];
+  buildInputs = (oldAttrs.buildInputs or [ ]) ++ [ makeWrapper ];
+  postFixup = oldAttrs.postFixup + ''
+    wrapProgram $out/bin/wal \
+      --prefix PATH : ${imagemagick}/bin
+  '';
   doInstallCheck = false;
 } // (lib.optionalAttrs stdenv.hostPlatform.isDarwin {
   prePatch = ''

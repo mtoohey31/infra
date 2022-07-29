@@ -96,6 +96,11 @@ with lib; {
       };
     };
 
+    i18n.inputMethod = {
+      enabled = "fcitx5";
+      fcitx5.addons = with pkgs; [ fcitx5-mozc ];
+    };
+
     programs = {
       fish = rec {
         shellAbbrs = {
@@ -336,6 +341,15 @@ with lib; {
         color14='{color14.strip}'
         color15='{color15.strip}'
       '';
+      # necessary so ~/.config/fcitx5 is read-only, which prevents fcitx5 from
+      # overwriting ~/.config/fcitx5/profile when it's a read-only symlink
+      "fcitx5".source = ./wm/fcitx5-config;
+      "plover/plover.cfg".text = ''
+        [Machine Configuration]
+        auto_start = True
+        [Startup]
+        start minimized = True
+      '';
     };
     wayland.windowManager.sway =
       let wobsock = "$XDG_RUNTIME_DIR/wob.sock"; in
@@ -385,12 +399,12 @@ with lib; {
           for_window [title="floatme"] floating enable
           for_window [title="Bitwarden"] floating enable
 
+          exec_always systemctl restart --user kanshi
+          exec_always pkill autotiling; autotiling
+          exec_always pkill flashfocus; flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
           exec_always rm -f ${wobsock}; mkfifo ${wobsock} && tail -f ${wobsock} | wob -o 0 -b 0 -p 6 -H 28 --background-color "$foreground"CC --bar-color "$background"CC --overflow-background-color "$color1"CC --overflow-bar-color "$background"CC
           exec_always pkill mako; mako --background-color "$background"CC --text-color "$foreground"
           exec_always pkill swayidle; swayidle before-sleep "swaylock -f --screenshots --font \\"JetBrainsMono Nerd Font\\" --effect-blur 32x5 --effect-vignette 0.5:0.5 --ring-color \\"$foreground\\" --line-color 00000000 --inside-color \\"$backgroundCC\\" --separator-color 00000000"
-          exec_always pkill flashfocus; flashfocus --flash-opacity 0.9 --time 200 --ntimepoints 30
-          exec_always pkill autotiling; autotiling
-          exec_always systemctl restart --user kanshi
         '';
         config = rec {
           fonts = {
@@ -443,6 +457,11 @@ with lib; {
             "${modifier}+Shift+r" = "reload";
             "${modifier}+q" = "kill";
             "${modifier}+w" = "kill";
+
+            "${modifier}+i" = "exec fcitx5";
+            "${modifier}+Shift+i" = "exec pkill fcitx5";
+            "${modifier}+o" = "exec plover";
+            "${modifier}+Shift+o" = "exec pkill plover";
 
             "${modifier}+Shift+d" = "exec systemctl restart --user kanshi";
 

@@ -376,18 +376,48 @@ with lib; {
           enable = true;
           languages = [{ name = "nix"; auto-format = true; }
             { name = "haskell"; auto-format = true; }];
-          settings =
-            let
-              shared_remaps = rec {
-                m.m = [ "match_brackets" "align_view_center" ];
-                M = [ "match_brackets" "align_view_center" ];
-                "(" = [ "rotate_selections_backward" "align_view_center" ];
-                ")" = [ "rotate_selections_forward" "align_view_center" ];
+          settings = {
+            # TODO: set black to be the theme's black instead of solid black,
+            # see https://github.com/kovidgoyal/kitty/issues/3185
+            theme = "base16_terminal_kitty";
+            editor = {
+              idle-timeout = 0;
+              scrolloff = 7;
+              line-number = "relative";
+              cursor-shape = {
+                insert = "bar";
+                normal = "block";
+                select = "underline";
+              };
+              rulers = [ 80 100 120 160 ];
+              color-modes = true;
+              indent-guides.render = true;
+              statusline = {
+                left = [
+                  "file-name"
+                  # TODO: uncomment this once I work on the statusline again
+                  # "scope"
+                  "spinner"
+                ];
+                right = [
+                  "diagnostics"
+                  "selections"
+                  "position"
+                  "file-encoding"
+                  "file-type"
+                ];
+              };
+            };
+            keys = rec {
+              select = rec {
+                G = "goto_last_line";
+                M = "match_brackets";
                 p = "paste_clipboard_after";
                 P = "paste_clipboard_before";
                 "A-p" = "paste_after";
                 "A-P" = "paste_before";
                 y = "yank_main_selection_to_clipboard";
+                Y = "yank_joined_to_clipboard";
                 "A-y" = "yank";
                 c = "change_selection_noyank";
                 d = [ y "delete_selection" ];
@@ -401,62 +431,13 @@ with lib; {
                 "C-w".minus = [ "hsplit_new" "file_picker" ];
                 "C-w"."_" = [ "hsplit_new" "file_picker" ];
               };
-            in
-            {
-              # TODO: set black to be the theme's black instead of solid black,
-              # see https://github.com/kovidgoyal/kitty/issues/3185
-              theme = "base16_terminal_kitty";
-              editor = {
-                idle-timeout = 0;
-                scrolloff = 7;
-                line-number = "relative";
-                cursor-shape = {
-                  insert = "bar";
-                  normal = "block";
-                  select = "underline";
-                };
-                rulers = [ 80 100 120 160 ];
-                color-modes = true;
-                indent-guides.render = true;
-                statusline = {
-                  left = [
-                    "file-name"
-                    # TODO: uncomment this once I work on the statusline again
-                    # "scope"
-                    "spinner"
-                  ];
-                  right = [
-                    "diagnostics"
-                    "selections"
-                    "position"
-                    "file-encoding"
-                    "file-type"
-                  ];
-                };
-              };
-              keys.normal = shared_remaps // {
-                n = [ "search_next" "align_view_center" ];
-                N = [ "search_prev" "align_view_center" ];
-                # TODO: debug why mode changes don't take effect until after the whole binding sequence
-                # B = [ "select_mode" "move_prev_word_end" "normal_mode" ];
-                # E = [ "select_mode" "move_next_word_end" "normal_mode" ];
-                g.c = "toggle_comments";
-                g.R = "rename_symbol";
-                g.a = "code_action";
-                g.v = "hover";
-                g.n = "goto_next_diag";
-                g.N = "goto_prev_diag";
-                g.F = ":format";
-                g."A-F" = ":set-option auto-format false";
-                G = "goto_last_line";
+              normal = select // {
+                space.m = ":format";
+                space.M = ":set-option auto-format false";
                 J = [ "extend_to_line_end" "join_selections" ];
               };
-              keys.select = shared_remaps // {
-                g.c = "toggle_comments";
-                n = [ "extend_search_next" "align_view_center" ];
-                N = [ "extend_search_prev" "align_view_center" ];
-              };
             };
+          };
         };
         # TODO: get lf working more smoothly with direnv so I don't have to do the q c-f dance
         # TODO: make lfcd remember the position of the file browser on reentry so I don't have to scroll back and forth

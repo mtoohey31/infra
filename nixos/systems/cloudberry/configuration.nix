@@ -49,7 +49,6 @@ inputs:
       "homekit_controller"
       "met"
       "tplink"
-      "wake_on_lan"
     ];
     openFirewall = true;
     config = {
@@ -84,18 +83,6 @@ inputs:
         name = "!secret traffic_cam_name";
         still_image_url = "!secret traffic_cam_url";
       }];
-      wake_on_lan = { };
-      switch = [
-        {
-          # TODO: get this working
-          platform = "wake_on_lan";
-          name = "NAS";
-          mac = "!secret server_mac";
-          host = "!secret server_ip";
-          turn_off.service = "shell_command.turn_off_nas";
-        }
-      ];
-      shell_command.turn_off_nas = "!secret server_off_command";
       homekit = [{
         name = "Home Assistant Bridge";
         filter = {
@@ -103,19 +90,16 @@ inputs:
             "switch.chandelier"
             "switch.lamp"
             "switch.outside_lights"
-            "switch.nas"
           ];
         };
         entity_config = {
           "switch.chandelier".name = "Chandelier";
           "switch.lamp".name = "Lamp";
           "switch.outside_lights".name = "Lights";
-          "switch.nas".name = "NAS";
         };
       }];
       homeassistant = {
         customize = {
-          "switch.nas".icon = "mdi:nas";
           "switch.chandelier".icon = "mdi:ceiling-light";
           "switch.lamp".icon = "mdi:floor-lamp";
           "switch.outside_lights".icon = "mdi:lightbulb-group";
@@ -222,36 +206,6 @@ inputs:
           mode = "single";
           trigger = [{
             at = "23:30:00";
-            platform = "time";
-          }];
-        }
-        {
-          action = [{
-            service = "switch.turn_on";
-            target.entity_id = "switch.nas";
-          }];
-          alias = "Server On";
-          condition = [ ];
-          description = "";
-          id = "1622914949754";
-          mode = "single";
-          trigger = [{
-            at = "7:00";
-            platform = "time";
-          }];
-        }
-        {
-          action = [{
-            service = "switch.turn_off";
-            target.entity_id = "switch.nas";
-          }];
-          alias = "Server Off";
-          condition = [ ];
-          description = "";
-          id = "1622915011141";
-          mode = "single";
-          trigger = [{
-            at = "00:00";
             platform = "time";
           }];
         }

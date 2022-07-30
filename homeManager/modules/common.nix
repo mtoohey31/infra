@@ -483,6 +483,7 @@ with lib; {
             x = ''!unzip "$f"'';
             ge = "bottom";
             gi = "cd ~/.infra";
+            gn = "cd ~/notes";
             gr = "cd ~/repos";
           };
           previewer.source = pkgs.writeShellScript "lf-previewer" ''
